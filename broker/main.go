@@ -1,10 +1,11 @@
 package main
 
 import (
-	"broker/server"
+	"broker/sensor"
 	"broker/utils"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 )
@@ -12,7 +13,25 @@ import (
 func main() {
 	showWelcomeMsg()
 
-	server.Init()
+	conn, err := sensor.NewSensorConn("localhost:3333")
+	if err != nil {
+		fmt.Println("Error connecting to server:", err)
+		return
+	}
+
+	defer conn.Close()
+
+	conn.Send("Hello, server!")
+
+	counter := 0
+	conn.OnDataReceived(func(data string) {
+		fmt.Println("Received:", data)
+		time.Sleep(1 * time.Second)
+		counter++
+		conn.Send(fmt.Sprintf("Hello, server! %d", counter))
+	}, 1024)
+
+	// server.Init()
 }
 
 func showWelcomeMsg() {
