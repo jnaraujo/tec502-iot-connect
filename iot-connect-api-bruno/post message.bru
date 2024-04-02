@@ -1,0 +1,18 @@
+meta {
+  name: post message
+  type: http
+  seq: 2
+}
+
+post {
+  url: 127.0.0.1:8080/message
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "sensor_id": "123",
+    "content": "duiahjsdbasd"
+  }
+}
