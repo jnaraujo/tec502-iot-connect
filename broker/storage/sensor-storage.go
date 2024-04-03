@@ -6,7 +6,7 @@ import (
 )
 
 type SensorStorage struct {
-	sensors []sensor.Sensor
+	sensors map[string]sensor.Sensor
 	mutex   sync.RWMutex
 }
 
@@ -15,7 +15,7 @@ var sensorStorage *SensorStorage
 func GetSensorStorage() *SensorStorage {
 	if sensorStorage == nil {
 		sensorStorage = &SensorStorage{}
-		sensorStorage.sensors = []sensor.Sensor{}
+		sensorStorage.sensors = make(map[string]sensor.Sensor)
 	}
 
 	return sensorStorage
@@ -25,14 +25,19 @@ func (s *SensorStorage) AddSensor(sensor sensor.Sensor) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
-	s.sensors = append(s.sensors, sensor)
+	s.sensors[sensor.Address] = sensor
 }
 
 func (s *SensorStorage) GetSensors() []sensor.Sensor {
 	s.mutex.RLock()
 	defer s.mutex.RUnlock()
 
-	return s.sensors
+	sensors := make([]sensor.Sensor, 0, len(s.sensors))
+	for _, sensor := range s.sensors {
+		sensors = append(sensors, sensor)
+	}
+
+	return sensors
 }
 
 func (s *SensorStorage) FindSensorByName(name string) *sensor.Sensor {
@@ -52,22 +57,15 @@ func (s *SensorStorage) DeleteSensorByAddress(addr string) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
-	for i, sensor := range s.sensors {
-		if sensor.Address == addr {
-			s.sensors = append(s.sensors[:i], s.sensors[i+1:]...)
-			break
-		}
-	}
+	delete(s.sensors, addr)
 }
 
 func (s *SensorStorage) FindSensorByAddress(addr string) *sensor.Sensor {
 	s.mutex.RLock()
 	defer s.mutex.RUnlock()
 
-	for _, sensor := range s.sensors {
-		if sensor.Address == addr {
-			return &sensor
-		}
+	if sensor, ok := s.sensors[addr]; ok {
+		return &sensor
 	}
 
 	return nil
