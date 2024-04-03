@@ -4,7 +4,6 @@ import (
 	"broker/errors"
 	"broker/sensor"
 	"broker/storage"
-	"broker/types"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -34,15 +33,14 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if sensor := storage.GetSensorStorage().FindSensorByAddress(newSensor.Address); sensor != nil {
-		sensor.Conn.Close()
-		storage.GetSensorStorage().DeleteSensorByAddress(newSensor.Address)
+	if storage.GetSensorStorage().FindSensorNameByAddress(newSensor.Address) != "" {
+		w.WriteHeader(http.StatusConflict)
+		resp["message"] = "Sensor already registered"
+		json.NewEncoder(w).Encode(resp)
+		return
 	}
 
-	sensor, err := sensor.NewSensorConn(types.NewSensor{
-		Name:    newSensor.Name,
-		Address: newSensor.Address,
-	})
+	_, err = sensor.NewSensorConn(newSensor.Address)
 
 	if err != nil {
 		switch {
@@ -61,7 +59,7 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	storage.GetSensorStorage().AddSensor(*sensor)
+	storage.GetSensorStorage().AddSensor(newSensor.Name, newSensor.Address)
 
 	w.WriteHeader(http.StatusCreated)
 

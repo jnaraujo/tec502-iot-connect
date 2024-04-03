@@ -1,13 +1,12 @@
 package storage
 
 import (
-	"broker/sensor"
 	"sync"
 )
 
 type SensorStorage struct {
-	sensors map[string]sensor.Sensor
-	mutex   sync.RWMutex
+	addrs map[string]string
+	mutex sync.RWMutex
 }
 
 var sensorStorage *SensorStorage
@@ -15,58 +14,61 @@ var sensorStorage *SensorStorage
 func GetSensorStorage() *SensorStorage {
 	if sensorStorage == nil {
 		sensorStorage = &SensorStorage{}
-		sensorStorage.sensors = make(map[string]sensor.Sensor)
+		sensorStorage.addrs = make(map[string]string)
 	}
 
 	return sensorStorage
 }
 
-func (s *SensorStorage) AddSensor(sensor sensor.Sensor) {
+func (s *SensorStorage) AddSensor(name string, addr string) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
-	s.sensors[sensor.Address] = sensor
+	s.addrs[addr] = name
 }
 
-func (s *SensorStorage) GetSensors() []sensor.Sensor {
+func (s *SensorStorage) GetSensors() []string {
 	s.mutex.RLock()
 	defer s.mutex.RUnlock()
 
-	sensors := make([]sensor.Sensor, 0, len(s.sensors))
-	for _, sensor := range s.sensors {
-		sensors = append(sensors, sensor)
+	var sensors []string
+
+	for addr, name := range s.addrs {
+		sensors = append(sensors, name+" "+addr)
 	}
 
 	return sensors
 }
 
-func (s *SensorStorage) FindSensorByName(name string) *sensor.Sensor {
+func (s *SensorStorage) FindSensorAddrByName(name string) string {
 	s.mutex.RLock()
 	defer s.mutex.RUnlock()
 
-	for _, sensor := range s.sensors {
-		if sensor.Name == name {
-			return &sensor
+	for addr, sensorName := range s.addrs {
+		if sensorName == name {
+			return addr
 		}
 	}
 
-	return nil
+	return ""
 }
 
 func (s *SensorStorage) DeleteSensorByAddress(addr string) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
-	delete(s.sensors, addr)
+	delete(s.addrs, addr)
 }
 
-func (s *SensorStorage) FindSensorByAddress(addr string) *sensor.Sensor {
+func (s *SensorStorage) FindSensorNameByAddress(addr string) string {
 	s.mutex.RLock()
 	defer s.mutex.RUnlock()
 
-	if sensor, ok := s.sensors[addr]; ok {
-		return &sensor
+	for sensorAddr, sensorName := range s.addrs {
+		if sensorAddr == addr {
+			return sensorName
+		}
 	}
 
-	return nil
+	return ""
 }

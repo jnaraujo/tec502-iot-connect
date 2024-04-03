@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"broker/sensor"
 	"broker/storage"
 	"encoding/json"
 	"fmt"
@@ -34,16 +35,16 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sensor := storage.GetSensorStorage().FindSensorByName(message.SensorID)
+	addr := storage.GetSensorStorage().FindSensorAddrByName(message.SensorID)
 
-	if sensor == nil {
+	if addr == "" {
 		w.WriteHeader(http.StatusNotFound)
 		resp["message"] = "Sensor not found"
 		json.NewEncoder(w).Encode(resp)
 		return
 	}
 
-	err = sensor.Send(message.Command, message.Content)
+	conn, err := sensor.NewSensorConn(addr)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -53,18 +54,19 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sensorResBuf := make([]byte, 1024)
-	n, err := sensor.Read(sensorResBuf)
+	defer conn.Close()
+
+	response, err := conn.Request(message.Command, message.Content)
 
 	if err != nil {
+		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
-		resp["message"] = "Error reading response from sensor"
+		resp["message"] = "Error sending message to sensor"
 		json.NewEncoder(w).Encode(resp)
 		return
 	}
 
-	sensorRes := string(sensorResBuf[:n])
-	sensorResArr := strings.Split(sensorRes, "\n\n")
+	sensorResArr := strings.Split(response, "\n\n")
 
 	w.WriteHeader(http.StatusOK)
 	resp["command"] = strings.Split(sensorResArr[0], ": ")[1]
