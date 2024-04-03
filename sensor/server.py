@@ -27,7 +27,7 @@ class Server:
     
   def handle_connections(self):
     while True:
-      print('Waiting for a connections...')
+      print('Waiting for connection...')
       conn, client_address = self.sock.accept()
       
       print('Connection from:', client_address)
