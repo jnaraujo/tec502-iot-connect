@@ -44,13 +44,6 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 		Address: newSensor.Address,
 	})
 
-	if err == errors.ErrValidationFailed {
-		w.WriteHeader(http.StatusUnauthorized)
-		resp["message"] = "Sensor validation failed"
-		json.NewEncoder(w).Encode(resp)
-		return
-	}
-
 	if err != nil {
 		switch {
 		case err == errors.ErrTimeout:
