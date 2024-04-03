@@ -5,10 +5,9 @@ import (
 	"sync"
 )
 
-var mutex = sync.RWMutex{}
-
 type SensorStorage struct {
 	sensors []sensor.Sensor
+	mutex   sync.RWMutex
 }
 
 var sensorStorage *SensorStorage
@@ -23,20 +22,22 @@ func GetSensorStorage() *SensorStorage {
 }
 
 func (s *SensorStorage) AddSensor(sensor sensor.Sensor) {
-	mutex.Lock()
-	defer mutex.Unlock()
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
 	s.sensors = append(s.sensors, sensor)
 }
 
 func (s *SensorStorage) GetSensors() []sensor.Sensor {
-	mutex.RLock()
-	defer mutex.RUnlock()
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
+
 	return s.sensors
 }
 
 func (s *SensorStorage) FindSensorByAddress(addr string) *sensor.Sensor {
-	mutex.RLock()
-	defer mutex.RUnlock()
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
 
 	for _, sensor := range s.sensors {
 		if sensor.Address == addr {
