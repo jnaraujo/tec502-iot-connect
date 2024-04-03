@@ -1,6 +1,7 @@
 package sensor
 
 import (
+	"broker/types"
 	"encoding/json"
 	"errors"
 	"net"
@@ -12,12 +13,7 @@ type Sensor struct {
 	Conn    net.Conn
 }
 
-type NewSensor struct {
-	Name    string
-	Address string
-}
-
-func NewSensorConn(newSensor NewSensor) (*Sensor, error) {
+func NewSensorConn(newSensor types.NewSensor) (*Sensor, error) {
 	conn, err := net.Dial("tcp", newSensor.Address)
 	if err != nil {
 		return nil, err

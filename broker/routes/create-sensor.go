@@ -3,6 +3,7 @@ package routes
 import (
 	"broker/sensor"
 	"broker/storage"
+	"broker/types"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -39,7 +40,7 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sensor, err := sensor.NewSensorConn(sensor.NewSensor{
+	sensor, err := sensor.NewSensorConn(types.NewSensor{
 		Name:    newSensor.Name,
 		Address: newSensor.Address,
 	})
