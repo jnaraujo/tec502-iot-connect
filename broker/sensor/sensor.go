@@ -1,16 +1,24 @@
 package sensor
 
 import (
+	"encoding/json"
 	"errors"
 	"net"
 )
 
-type SensorConn struct {
-	Conn net.Conn
+type Sensor struct {
+	Name    string
+	Address string
+	Conn    net.Conn
 }
 
-func NewSensorConn(address string) (*SensorConn, error) {
-	conn, err := net.Dial("tcp", address)
+type NewSensor struct {
+	Name    string
+	Address string
+}
+
+func NewSensorConn(newSensor NewSensor) (*Sensor, error) {
+	conn, err := net.Dial("tcp", newSensor.Address)
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +27,11 @@ func NewSensorConn(address string) (*SensorConn, error) {
 		return nil, errors.New("handshake failed")
 	}
 
-	return &SensorConn{Conn: conn}, nil
+	return &Sensor{
+		Name:    newSensor.Name,
+		Address: newSensor.Address,
+		Conn:    conn,
+	}, nil
 }
 
 func ValidateHandshake(conn net.Conn) bool {
@@ -34,7 +46,7 @@ func ValidateHandshake(conn net.Conn) bool {
 	return string(buffer[:n]) == "hello, server!"
 }
 
-func (s *SensorConn) OnDataReceived(
+func (s *Sensor) OnDataReceived(
 	handle func(string), bufferSize_optional ...int,
 ) {
 	bufferSize := 1024
@@ -54,14 +66,21 @@ func (s *SensorConn) OnDataReceived(
 	}
 }
 
-func (s *SensorConn) Close() error {
+func (s *Sensor) Close() error {
 	return s.Conn.Close()
 }
 
-func (s *SensorConn) Send(data string) (int, error) {
+func (s *Sensor) Send(data string) (int, error) {
 	return s.Conn.Write([]byte(data))
 }
 
-func (s *SensorConn) Read(data []byte) (int, error) {
+func (s *Sensor) Read(data []byte) (int, error) {
 	return s.Conn.Read(data)
+}
+
+func (s *Sensor) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"name":    s.Name,
+		"address": s.Address,
+	})
 }
