@@ -30,26 +30,32 @@ class Server:
       
       print('Connection from:', client_address)
       
-      if not self.validate_connection(conn):
+      try:
+        if not self.validate_connection(conn):
+          conn.close()
+          continue
+        
+        while True:
+          data = conn.recv(1024)
+          
+          if not data:
+            conn.close()
+            break
+          
+          try:
+            data = self.decode_data(data)
+            self.handle_command(data, conn)
+          except Exception as e:
+            conn.sendall(
+              bytes('Cmd: error\n\n' \
+              'Error: Invalid data', encoding='utf8')
+            )
+            print('Error:', e)
+      except Exception as e:
+        print('Error:', e)
+      finally:
         conn.close()
-        continue
-      
-      while True:
-        data = conn.recv(1024)
-        
-        if not data:
-          break
-        
-        try:
-          data = self.decode_data(data)
-          self.handle_command(data, conn)
-        except Exception as e:
-          conn.sendall(
-            bytes('Cmd: error\n\n' \
-            'Error: Invalid data', encoding='utf8')
-          )
-          print('Error:', e)
-          raise e
+        print('Connection closed')
         
   def handle_command(self, data: dict, conn: socket.socket):
     command = data['command']
