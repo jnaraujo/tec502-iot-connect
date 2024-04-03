@@ -1,4 +1,6 @@
 import socket
+from threading import Thread
+import cmd_data
 
 class Server:
   HANDSHAKE_RECEIVED = b'hello, sensor!'
@@ -12,7 +14,7 @@ class Server:
   def start(self):
     self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     self.sock.bind((self.host, self.port))
-    self.sock.listen(1)
+    self.sock.listen(2)
     
     try:
       self.handle_connections()
@@ -35,70 +37,37 @@ class Server:
           conn.close()
           continue
         
-        while True:
-          data = conn.recv(1024)
-          
-          if not data:
-            conn.close()
-            break
-          
-          try:
-            data = self.decode_data(data)
-            self.handle_command(data, conn)
-          except Exception as e:
-            conn.sendall(
-              bytes('Cmd: error\n\n' \
-              'Error: Invalid data', encoding='utf8')
-            )
-            print('Error:', e)
+        Thread(target=self.handle_connection, args=(conn,), daemon=True).start()
       except Exception as e:
         print('Error:', e)
-      finally:
-        conn.close()
-        print('Connection closed')
+        
+  def handle_connection(self, conn: socket.socket):    
+    data = conn.recv(1024)
+    print('Received:', data)
+    if not data:
+      conn.close()
+      return
+    
+    try:
+      data = cmd_data.decode(data)
+      self.handle_command(data, conn)
+    except Exception as e:
+      conn.sendall(cmd_data.encode('error', 'Invalid data'))
+      print('Error:', e) 
+      
+    conn.close()
         
   def handle_command(self, data: dict, conn: socket.socket):
     command = data['command']
     content = data['content']
     
     if command not in self.commands:
-      conn.sendall(
-        bytes('Cmd: error\n\n' \
-        'Error: Command not found', encoding='utf8')
-      )
+      conn.sendall(cmd_data.encode('error', 'Command not found'))
       return
     
     res = self.commands[command](data)
     
-    conn.sendall(
-      bytes(f'Cmd: {res["command"]}\n\n' \
-      f'{res["content"]}', encoding='utf8')
-    )
-      
-  def decode_data(self, data: bytes):
-    """
-      Data format:
-      
-      ```
-      Cmd: <comando>
-
-      <conteúdo (opcional)>
-      ```
-    """
-    
-    data = data.decode('utf-8')
-    data = data.split('\n\n')
-    
-    if len(data) < 1:
-      raise ValueError('Invalid data')
-
-    if not data[0].startswith('Cmd: '):
-      raise ValueError('Data must start with "Cmd: "')
-    
-    return {
-      'command': data[0].split(': ')[1],
-      'content': '\n'.join(data[1:])
-    }
+    conn.sendall(cmd_data.encode(res["command"], res["content"]))
       
   def validate_connection(self, conn: socket.socket) -> bool:
     data = conn.recv(len(self.HANDSHAKE_RECEIVED))
