@@ -14,6 +14,9 @@ type NewSensor struct {
 }
 
 func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	resp := make(map[string]string)
+
 	var newSensor NewSensor
 
 	err := json.NewDecoder(r.Body).Decode(&newSensor)
@@ -31,7 +34,8 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 
 	if storage.GetSensorStorage().FindSensorByAddress(newSensor.Address) != nil {
 		w.WriteHeader(http.StatusConflict)
-		fmt.Fprintf(w, "Sensor already registered")
+		resp["message"] = "Sensor already registered"
+		json.NewEncoder(w).Encode(resp)
 		return
 	}
 
@@ -42,16 +46,15 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Invalid sensor address")
+		resp["message"] = "Error registering sensor"
+		json.NewEncoder(w).Encode(resp)
 		return
 	}
 
 	storage.GetSensorStorage().AddSensor(*sensor)
 
-	resp := make(map[string]string)
-	resp["message"] = "Sensor registered"
-
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+
+	resp["message"] = "Sensor registered"
 	json.NewEncoder(w).Encode(resp)
 }
