@@ -81,7 +81,7 @@ class Server:
     """
     
     data = data.decode('utf-8')
-    data = data.split('\n')
+    data = data.split('\n\n')
     
     if len(data) < 1:
       raise ValueError('Invalid data')
