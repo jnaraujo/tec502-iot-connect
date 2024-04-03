@@ -6,11 +6,8 @@ import (
 )
 
 func GetRootHandler(w http.ResponseWriter, r *http.Request) {
-	resp := make(map[string]string)
-
-	resp["message"] = "Hello, world!"
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(resp)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Welcome to the Broker API! 😘🤞"})
 }

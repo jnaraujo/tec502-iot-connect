@@ -17,7 +17,6 @@ type Message struct {
 
 func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	resp := make(map[string]string)
 
 	var message Message
 	err := json.NewDecoder(r.Body).Decode(&message)
@@ -30,8 +29,9 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 
 	if message.SensorID == "" || message.Command == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		resp["message"] = "Invalid request body"
-		json.NewEncoder(w).Encode(resp)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "Invalid request body",
+		})
 		return
 	}
 
@@ -39,8 +39,9 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 
 	if addr == "" {
 		w.WriteHeader(http.StatusNotFound)
-		resp["message"] = "Sensor not found"
-		json.NewEncoder(w).Encode(resp)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "Sensor not found",
+		})
 		return
 	}
 
@@ -49,8 +50,9 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Println(err)
-		resp["message"] = "Error sending message to sensor"
-		json.NewEncoder(w).Encode(resp)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "Error sending message to sensor",
+		})
 		return
 	}
 
@@ -61,15 +63,17 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
-		resp["message"] = "Error sending message to sensor"
-		json.NewEncoder(w).Encode(resp)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "Error sending message to sensor",
+		})
 		return
 	}
 
 	sensorResArr := strings.Split(response, "\n\n")
 
 	w.WriteHeader(http.StatusOK)
-	resp["command"] = strings.Split(sensorResArr[0], ": ")[1]
-	resp["content"] = sensorResArr[1]
-	json.NewEncoder(w).Encode(resp)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message":  strings.Split(sensorResArr[0], ": ")[1],
+		"response": sensorResArr[1],
+	})
 }
