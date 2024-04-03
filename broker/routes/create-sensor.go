@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"broker/errors"
 	"broker/sensor"
 	"broker/storage"
 	"broker/types"
@@ -45,9 +46,26 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 		Address: newSensor.Address,
 	})
 
+	if err == errors.ErrValidationFailed {
+		w.WriteHeader(http.StatusUnauthorized)
+		resp["message"] = "Sensor validation failed"
+		json.NewEncoder(w).Encode(resp)
+		return
+	}
+
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		resp["message"] = "Error registering sensor"
+		switch {
+		case err == errors.ErrTimeout:
+			w.WriteHeader(http.StatusServiceUnavailable)
+			resp["message"] = "Time exceeded while trying to connect to sensor"
+		case err == errors.ErrValidationFailed:
+			w.WriteHeader(http.StatusUnauthorized)
+			resp["message"] = "Sensor validation failed"
+		default:
+			w.WriteHeader(http.StatusInternalServerError)
+			resp["message"] = "Internal server error"
+		}
+
 		json.NewEncoder(w).Encode(resp)
 		return
 	}

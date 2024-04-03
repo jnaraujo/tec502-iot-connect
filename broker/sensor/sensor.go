@@ -1,10 +1,12 @@
 package sensor
 
 import (
+	"broker/errors"
 	"broker/types"
 	"encoding/json"
-	"errors"
 	"net"
+	"os"
+	"time"
 )
 
 type Sensor struct {
@@ -13,14 +15,27 @@ type Sensor struct {
 	Conn    net.Conn
 }
 
+const (
+	timeout = 1 * time.Second
+
+	handshakeSent     = "hello, sensor!"
+	handshakeReceived = "hello, server!"
+)
+
 func NewSensorConn(newSensor types.NewSensor) (*Sensor, error) {
-	conn, err := net.Dial("tcp", newSensor.Address)
+	conn, err := net.DialTimeout("tcp", newSensor.Address, timeout)
+
 	if err != nil {
-		return nil, err
+		switch {
+		case os.IsTimeout(err):
+			return nil, errors.ErrTimeout
+		default:
+			return nil, err
+		}
 	}
 
-	if !ValidateHandshake(conn) {
-		return nil, errors.New("handshake failed")
+	if !ValidateConnection(conn) {
+		return nil, errors.ErrValidationFailed
 	}
 
 	return &Sensor{
@@ -30,16 +45,16 @@ func NewSensorConn(newSensor types.NewSensor) (*Sensor, error) {
 	}, nil
 }
 
-func ValidateHandshake(conn net.Conn) bool {
-	conn.Write([]byte("hello, sensor!"))
-	buffer := make([]byte, 1024)
+func ValidateConnection(conn net.Conn) bool {
+	conn.Write([]byte(handshakeSent))
+	buffer := make([]byte, len(handshakeReceived))
 	n, err := conn.Read(buffer)
 
 	if err != nil {
 		return false
 	}
 
-	return string(buffer[:n]) == "hello, server!"
+	return string(buffer[:n]) == handshakeReceived
 }
 
 func (s *Sensor) OnDataReceived(
