@@ -48,12 +48,12 @@ func (s *SensorStorage) FindSensorByName(name string) *sensor.Sensor {
 	return nil
 }
 
-func (s *SensorStorage) DeleteSensorByName(name string) {
+func (s *SensorStorage) DeleteSensorByAddress(addr string) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
 	for i, sensor := range s.sensors {
-		if sensor.Name == name {
+		if sensor.Address == addr {
 			s.sensors = append(s.sensors[:i], s.sensors[i+1:]...)
 			break
 		}

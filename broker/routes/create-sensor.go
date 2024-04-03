@@ -36,7 +36,7 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 
 	if sensor := storage.GetSensorStorage().FindSensorByAddress(newSensor.Address); sensor != nil {
 		sensor.Conn.Close()
-		storage.GetSensorStorage().DeleteSensorByName(newSensor.Address)
+		storage.GetSensorStorage().DeleteSensorByAddress(newSensor.Address)
 	}
 
 	sensor, err := sensor.NewSensorConn(types.NewSensor{

@@ -78,10 +78,6 @@ func (s *Sensor) OnDataReceived(
 	}
 }
 
-func (s *Sensor) Close() error {
-	return s.Conn.Close()
-}
-
 func (s *Sensor) Send(command string, content string) error {
 	_, err := s.Conn.Write([]byte(fmt.Sprintf(
 		"Cmd: %s\n\n"+
