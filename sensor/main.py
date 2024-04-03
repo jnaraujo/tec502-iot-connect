@@ -1,16 +1,23 @@
 from server import Server
 import datetime
 import socket
+import sys
 
-SERVER_ADDR = ('0.0.0.0', 3333)
+
 
 def init():
+  IP_ADDR = "0.0.0.0"
+  IP_PORT = 3333
+  
+  if len(sys.argv) > 1:
+    IP_PORT = int(sys.argv[1])
+  
   print("="*30)
   print("Sensor Server")
-  print(f'Sensor IP: {get_current_ip()}:{SERVER_ADDR[1]}')
+  print(f'Sensor IP: {get_current_ip()}:{IP_PORT}')
   print("="*30)
   
-  server = Server(*SERVER_ADDR)
+  server = Server(IP_ADDR, IP_PORT)
   
   server.register_command("get_time", get_time_cmd)
   server.register_command("get_ip", get_ip_cmd)
