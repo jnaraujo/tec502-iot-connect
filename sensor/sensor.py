@@ -1,6 +1,6 @@
 import socket
 
-server_address = ('127.0.0.1', 3333)
+server_address = ('0.0.0.0', 3333)
 
 def init():
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -10,12 +10,27 @@ def init():
   while True:
     print('Waiting for a connection...')
     connection, client_address = sock.accept()
+
+    if not validateHandshake(connection):
+      connection.close()
+      continue
+
     try:
       handleConnection(connection, client_address)
     except Exception as e:
       print('Error:', e)
     finally:
       connection.close()
+
+def validateHandshake(conn: socket.socket) -> bool:
+  data = conn.recv(1024)
+  
+  if data == b'hello, sensor!':
+    conn.sendall(b'hello, server!')
+    return True
+  else:
+    conn.sendall(b'invalid handshake')
+    return False
 
 def handleConnection(conn: socket.socket, addr: tuple):
   print('Connection from', addr)

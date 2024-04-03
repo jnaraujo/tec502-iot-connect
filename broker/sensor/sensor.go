@@ -1,6 +1,9 @@
 package sensor
 
-import "net"
+import (
+	"errors"
+	"net"
+)
 
 type SensorConn struct {
 	Conn net.Conn
@@ -12,7 +15,23 @@ func NewSensorConn(address string) (*SensorConn, error) {
 		return nil, err
 	}
 
+	if !ValidateHandshake(conn) {
+		return nil, errors.New("handshake failed")
+	}
+
 	return &SensorConn{Conn: conn}, nil
+}
+
+func ValidateHandshake(conn net.Conn) bool {
+	conn.Write([]byte("hello, sensor!"))
+	buffer := make([]byte, 1024)
+	n, err := conn.Read(buffer)
+
+	if err != nil {
+		return false
+	}
+
+	return string(buffer[:n]) == "hello, server!"
 }
 
 func (s *SensorConn) OnDataReceived(
