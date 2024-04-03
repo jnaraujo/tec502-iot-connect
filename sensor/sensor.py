@@ -10,6 +10,10 @@ def init():
   sock.bind(server_address)
   sock.listen(1)
 
+  hostname = socket.gethostname()
+  IPAddr = socket.gethostbyname(hostname)
+  print(f'Listen on {IPAddr}:{server_address[1]}')
+
   while True:
     print('Waiting for a connection...')
     connection, client_address = sock.accept()
