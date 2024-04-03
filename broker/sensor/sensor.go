@@ -4,6 +4,7 @@ import (
 	"broker/errors"
 	"broker/types"
 	"encoding/json"
+	"fmt"
 	"net"
 	"os"
 	"time"
@@ -81,8 +82,13 @@ func (s *Sensor) Close() error {
 	return s.Conn.Close()
 }
 
-func (s *Sensor) Send(data string) (int, error) {
-	return s.Conn.Write([]byte(data))
+func (s *Sensor) Send(command string, content string) error {
+	_, err := s.Conn.Write([]byte(fmt.Sprintf(
+		"Cmd: %s\n\n"+
+			"%s",
+		command, content,
+	)))
+	return err
 }
 
 func (s *Sensor) Read(data []byte) (int, error) {

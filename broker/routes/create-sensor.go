@@ -34,11 +34,9 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if storage.GetSensorStorage().FindSensorByAddress(newSensor.Address) != nil {
-		w.WriteHeader(http.StatusConflict)
-		resp["message"] = "Sensor already registered"
-		json.NewEncoder(w).Encode(resp)
-		return
+	if sensor := storage.GetSensorStorage().FindSensorByAddress(newSensor.Address); sensor != nil {
+		sensor.Conn.Close()
+		storage.GetSensorStorage().DeleteSensorByName(newSensor.Address)
 	}
 
 	sensor, err := sensor.NewSensorConn(types.NewSensor{

@@ -35,6 +35,31 @@ func (s *SensorStorage) GetSensors() []sensor.Sensor {
 	return s.sensors
 }
 
+func (s *SensorStorage) FindSensorByName(name string) *sensor.Sensor {
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
+
+	for _, sensor := range s.sensors {
+		if sensor.Name == name {
+			return &sensor
+		}
+	}
+
+	return nil
+}
+
+func (s *SensorStorage) DeleteSensorByName(name string) {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	for i, sensor := range s.sensors {
+		if sensor.Name == name {
+			s.sensors = append(s.sensors[:i], s.sensors[i+1:]...)
+			break
+		}
+	}
+}
+
 func (s *SensorStorage) FindSensorByAddress(addr string) *sensor.Sensor {
 	s.mutex.RLock()
 	defer s.mutex.RUnlock()
