@@ -12,11 +12,25 @@ def init():
   
   server = Server(*SERVER_ADDR)
   
-  server.register_command("get_time", get_time)
+  server.register_command("get_time", get_time_cmd)
+  server.register_command("get_ip", get_ip_cmd)
+  server.register_command("test", test_cmd)
   
   server.start()
   
-def get_time(req: dict):
+def test_cmd(req: dict):
+  return {
+    'command': 'test',
+    'content': req
+  }
+  
+def get_ip_cmd(req: dict):
+  return {
+    'command': 'get_ip',
+    'content': get_current_ip()
+  }
+  
+def get_time_cmd(req: dict):
   return {
     'command': 'get_time',
     'content': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
