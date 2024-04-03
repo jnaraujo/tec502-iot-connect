@@ -47,6 +47,7 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Println(err)
 		resp["message"] = "Error sending message to sensor"
 		json.NewEncoder(w).Encode(resp)
 		return
