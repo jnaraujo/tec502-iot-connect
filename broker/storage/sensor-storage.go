@@ -27,14 +27,17 @@ func (s *SensorStorage) AddSensor(name string, addr string) {
 	s.addrs[addr] = name
 }
 
-func (s *SensorStorage) GetSensors() []string {
+func (s *SensorStorage) GetSensors() []map[string]string {
 	s.mutex.RLock()
 	defer s.mutex.RUnlock()
 
-	var sensors []string
+	var sensors []map[string]string
 
 	for addr, name := range s.addrs {
-		sensors = append(sensors, name+" "+addr)
+		sensors = append(sensors, map[string]string{
+			"name":    name,
+			"address": addr,
+		})
 	}
 
 	return sensors
