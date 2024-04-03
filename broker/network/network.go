@@ -71,5 +71,5 @@ func checkTcpPort(address string) bool {
 
 	defer conn.Close()
 
-	return sensor.ValidateHandshake(conn)
+	return sensor.ValidateConnection(conn)
 }
