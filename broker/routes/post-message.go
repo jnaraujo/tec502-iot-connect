@@ -27,8 +27,10 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("Received message from sensor %s: %s\n", message.SensorID, message.Content)
+	resp := make(map[string]string)
+	resp["message"] = "Message received"
 
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
-	fmt.Fprintf(w, "Message received")
+	json.NewEncoder(w).Encode(resp)
 }

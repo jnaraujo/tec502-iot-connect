@@ -48,6 +48,10 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 
 	storage.GetSensorStorage().AddSensor(*sensor)
 
+	resp := make(map[string]string)
+	resp["message"] = "Sensor registered"
+
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	fmt.Fprintf(w, "Sensor registered")
+	json.NewEncoder(w).Encode(resp)
 }
