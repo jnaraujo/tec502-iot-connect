@@ -6,10 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 )
 
-type Message struct {
+type CommandRequest struct {
 	SensorID string `json:"sensor_id"`
 	Command  string `json:"command"`
 	Content  string `json:"content"`
@@ -18,8 +17,8 @@ type Message struct {
 func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var message Message
-	err := json.NewDecoder(r.Body).Decode(&message)
+	var command CommandRequest
+	err := json.NewDecoder(r.Body).Decode(&command)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -27,7 +26,7 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if message.SensorID == "" || message.Command == "" {
+	if command.SensorID == "" || command.Command == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{
 			"message": "Invalid request body",
@@ -35,7 +34,7 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	addr := storage.GetSensorStorage().FindSensorAddrByName(message.SensorID)
+	addr := storage.GetSensorStorage().FindSensorAddrByName(command.SensorID)
 
 	if addr == "" {
 		w.WriteHeader(http.StatusNotFound)
@@ -46,7 +45,6 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	conn, err := sensor.NewSensorConn(addr)
-
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Println(err)
@@ -58,7 +56,7 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 
 	defer conn.Close()
 
-	response, err := conn.Request(message.Command, message.Content)
+	_, err = conn.Request(command.Command, command.Content)
 
 	if err != nil {
 		fmt.Println(err)
@@ -69,11 +67,10 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sensorResArr := strings.Split(response, "\n\n")
+	storage.GetSensorDataStorage().Create(command.SensorID, command.Command, command.Content)
 
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(map[string]string{
-		"message":  strings.Split(sensorResArr[0], ": ")[1],
-		"response": sensorResArr[1],
+		"message": "Message sent",
 	})
 }

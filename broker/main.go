@@ -1,12 +1,15 @@
 package main
 
 import (
+	"broker/cmd_parser"
 	"broker/routes"
+	"broker/storage"
 	"broker/udp"
 	"broker/utils"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/fatih/color"
@@ -27,12 +30,33 @@ func main() {
 
 func handleUdpServer() {
 	fmt.Println("Starting UDP server on port", udoServerPort)
-	udpServer := udp.NewUDPServer(fmt.Sprintf(":%d", udoServerPort))
 
+	udpServer := udp.NewUDPServer(fmt.Sprintf(":%d", udoServerPort))
 	defer udpServer.Close()
 
 	udpServer.HandleRequest(func(msg string, reply func(string) error) {
-		fmt.Println("Received message:", msg)
+		cmd, err := cmd_parser.DecodeCmd(msg)
+
+		if err != nil {
+			reply("Invalid command")
+			return
+		}
+
+		numId, err := strconv.Atoi(cmd.ID)
+
+		if err != nil {
+			reply("Invalid sensor ID")
+			return
+		}
+
+		data := storage.GetSensorDataStorage().FindByID(numId)
+
+		if data == nil {
+			reply("Sensor not found")
+			return
+		}
+
+		storage.GetSensorDataStorage().UpdateResponse(data.ID, cmd.Content)
 
 		reply("Message received")
 	})
@@ -51,6 +75,7 @@ func handleServer() {
 	r.HandleFunc("/message", routes.PostMessageHandler).Methods("POST")
 	r.HandleFunc("/sensor", routes.CreateSensorHandler).Methods("POST")
 	r.HandleFunc("/sensor", routes.FindAllSensorsHandler).Methods("GET")
+	r.HandleFunc("/sensor/data", routes.FindAllSensorDataHandler).Methods("GET")
 
 	fmt.Println("Server started on port", defaultPort)
 
