@@ -2,8 +2,10 @@ package main
 
 import (
 	"broker/routes"
+	"broker/udp"
 	"broker/utils"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -12,13 +14,34 @@ import (
 )
 
 const (
-	defaultPort = 8080
+	defaultPort   = 8080
+	udoServerPort = 5310
 )
 
 func main() {
 	showWelcomeMsg()
 
+	go handleUdpServer()
 	handleServer()
+}
+
+func handleUdpServer() {
+	fmt.Println("Starting UDP server on port", udoServerPort)
+	udpServer := udp.NewUDPServer(fmt.Sprintf(":%d", udoServerPort))
+
+	defer udpServer.Close()
+
+	udpServer.HandleRequest(func(msg string, reply func(string) error) {
+		fmt.Println("Received message:", msg)
+
+		reply("Message received")
+	})
+
+	err := udpServer.Listen()
+
+	if err != nil {
+		log.Fatal("Error starting UDP server:", err)
+	}
 }
 
 func handleServer() {
