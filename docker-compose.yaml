@@ -4,5 +4,18 @@ services:
   broker:
     build:
       context: ./broker
+    networks:
+      - iot-network
     ports:
       - "8080:8080"
+  sensor:
+    build:
+      context: ./sensor
+    networks:
+      - iot-network
+    ports:
+      - "3333:3333"
+
+networks:
+  iot-network:
+    driver: bridge

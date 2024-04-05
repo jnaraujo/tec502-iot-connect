@@ -5,6 +5,7 @@ import time
 from server import Server
 from cmd_data import Cmd
 from broker_service import BrokerService
+from threading import Thread
 
 bs = BrokerService(('localhost', 5310))
 
@@ -33,7 +34,7 @@ def init():
   server.register_command("set_temp", set_temp_cmd)
   server.register_command("get_temp", get_temp_cmd)
   
-  server.start()
+  Thread(target=server.start).start()
   
 def not_found_cmd(cmd: Cmd):
   res = Cmd(cmd.id, cmd.content, "Command not found")
@@ -70,5 +71,4 @@ def get_current_ip():
   IPAddr = socket.gethostbyname(socket.gethostname())
   return IPAddr
 
-if __name__ == '__main__':
-  init()
+init()

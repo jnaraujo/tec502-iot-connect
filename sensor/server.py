@@ -14,13 +14,9 @@ class Server:
   def start(self):
     self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     self.sock.bind((self.host, self.port))
-    self.sock.listen(2)
+    self.sock.listen(1)
     
-    try:
-      self.handle_connections()
-    except KeyboardInterrupt:
-      self.stop()
-      print('Server stopped')
+    self.handle_connections()
   
   def stop(self):
     self.sock.close()
