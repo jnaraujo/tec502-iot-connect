@@ -72,6 +72,13 @@ func handleUdpServer() {
 func handleServer() {
 	r := mux.NewRouter()
 
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			next.ServeHTTP(w, r)
+		})
+	})
+
 	r.HandleFunc("/", routes.GetRootHandler).Methods("GET")
 	r.HandleFunc("/message", routes.PostMessageHandler).Methods("POST")
 	r.HandleFunc("/sensor", routes.CreateSensorHandler).Methods("POST")
