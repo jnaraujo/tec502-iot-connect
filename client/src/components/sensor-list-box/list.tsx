@@ -38,63 +38,7 @@ const data: Array<Sensor> = [
     name: "temp1",
   },
   {
-    address: "localhost:3333",
-    name: "temp2",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp1",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp2",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp1",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp2",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp1",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp2",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp1",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp2",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp1",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp2",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp1",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp2",
-  },
-  {
-    address: "localhost:3333",
-    name: "temp1",
-  },
-  {
-    address: "localhost:3333",
+    address: "localhost:3334",
     name: "temp2",
   },
 ]
