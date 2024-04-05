@@ -48,60 +48,6 @@ const data: Array<Sensor> = [
     created_at: "2024-04-05T11:27:03.8902475-03:00",
     received_at: "2024-04-05T11:27:03.8910043-03:00",
   },
-  {
-    id: 0,
-    sensor_id: "temp1",
-    command: "get_timed",
-    content: "",
-    response: "Command not found",
-    created_at: "2024-04-05T11:25:48.7342823-03:00",
-    received_at: "2024-04-05T11:25:48.735409-03:00",
-  },
-  {
-    id: 2,
-    sensor_id: "temp1",
-    command: "get_time",
-    content: "test",
-    response: "2024-04-05 11:26:45",
-    created_at: "2024-04-05T11:26:45.2796895-03:00",
-    received_at: "2024-04-05T11:26:45.2818259-03:00",
-  },
-  {
-    id: 3,
-    sensor_id: "temp1",
-    command: "test",
-    content: "",
-    response: "Hello from sensor!",
-    created_at: "2024-04-05T11:27:03.8902475-03:00",
-    received_at: "2024-04-05T11:27:03.8910043-03:00",
-  },
-  {
-    id: 0,
-    sensor_id: "temp1",
-    command: "get_timed",
-    content: "",
-    response: "Command not found",
-    created_at: "2024-04-05T11:25:48.7342823-03:00",
-    received_at: "2024-04-05T11:25:48.735409-03:00",
-  },
-  {
-    id: 2,
-    sensor_id: "temp1",
-    command: "get_time",
-    content: "test",
-    response: "2024-04-05 11:26:45",
-    created_at: "2024-04-05T11:26:45.2796895-03:00",
-    received_at: "2024-04-05T11:26:45.2818259-03:00",
-  },
-  {
-    id: 3,
-    sensor_id: "temp2",
-    command: "test2222",
-    content: "",
-    response: "Hello from sensor!",
-    created_at: "2024-04-05T11:27:03.8902475-03:00",
-    received_at: "2024-04-05T11:27:03.8910043-03:00",
-  },
 ]
 
 export function List() {
@@ -137,8 +83,8 @@ export function List() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-8">Sensor ID</TableHead>
-              <TableHead className="w-[100px]">Comando</TableHead>
+              <TableHead className="w-[100px]">Sensor ID</TableHead>
+              <TableHead>Comando</TableHead>
               <TableHead className="text-right">Resposta</TableHead>
             </TableRow>
           </TableHeader>

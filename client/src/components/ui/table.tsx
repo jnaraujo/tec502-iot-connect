@@ -1,6 +1,5 @@
-import * as React from "react"
-
 import { cn } from "@/lib/utils"
+import * as React from "react"
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -43,8 +42,8 @@ const TableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
-      className
+      "bg-muted/50 border-t font-medium [&>tr]:last:border-b-0",
+      className,
     )}
     {...props}
   />
@@ -58,8 +57,8 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
-      className
+      "hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
+      className,
     )}
     {...props}
   />
@@ -73,8 +72,8 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
-      className
+      "text-muted-foreground h-12 px-4 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0",
+      className,
     )}
     {...props}
   />
@@ -99,7 +98,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-4 text-sm text-muted-foreground", className)}
+    className={cn("text-muted-foreground mt-4 text-sm", className)}
     {...props}
   />
 ))
