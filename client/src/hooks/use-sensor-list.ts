@@ -18,7 +18,7 @@ export function useSensorList() {
       return (await resp.json()).sensors as Array<Sensor>
     },
     queryKey: ["getSensors"],
-    refetchInterval: 1_000,
+    refetchInterval: 10_000,
     staleTime: 5_000,
   })
 }
