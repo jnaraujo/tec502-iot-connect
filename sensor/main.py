@@ -1,7 +1,8 @@
-from server import Server
 import datetime
 import socket
 import sys
+import time
+from server import Server
 from cmd_data import Cmd
 from broker_service import BrokerService
 
@@ -26,11 +27,17 @@ def init():
   server.register_command("get_time", get_time_cmd)
   server.register_command("get_ip", get_ip_cmd)
   server.register_command("test", test_cmd)
+  server.register_command("delay", delay)
   
   server.start()
   
 def not_found_cmd(cmd: Cmd):
   res = Cmd(cmd.id, cmd.content, "Command not found")
+  bs.send(res)
+  
+def delay(cmd: Cmd):
+  time.sleep(5)
+  res = Cmd(cmd.id, cmd.content, "Delayed response")
   bs.send(res)
   
 def test_cmd(cmd: Cmd):
