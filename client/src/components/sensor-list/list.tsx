@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/tooltip"
 import { Plus } from "lucide-react"
 import { useState } from "react"
-import { toast } from "react-hot-toast"
 
 interface Sensor {
   address: string
@@ -44,23 +43,14 @@ const data: Array<Sensor> = [
   },
 ]
 
-export function List() {
-  const [open, setOpen] = useState(false)
+interface Props {
+  onAddNewSensor: (event: React.FormEvent<HTMLFormElement>) => void
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+export function List(props: Props) {
   const [search, setSearch] = useState("")
-
-  function addNewSensor(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    const formData = new FormData(event.currentTarget)
-
-    const address = formData.get("address")
-    const name = formData.get("name")
-
-    toast.success("Sensor adicionado!")
-    setOpen(false)
-
-    console.log(address, name)
-  }
 
   const filteredData = data
     .filter((sensor) => {
@@ -87,7 +77,7 @@ export function List() {
           className="h-8"
         />
 
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={props.open} onOpenChange={props.onOpenChange}>
           <Tooltip>
             <TooltipTrigger asChild>
               <DialogTrigger asChild>
@@ -102,7 +92,7 @@ export function List() {
           </Tooltip>
 
           <DialogContent className="sm:max-w-[425px]">
-            <form onSubmit={addNewSensor}>
+            <form onSubmit={props.onAddNewSensor}>
               <DialogHeader>
                 <DialogTitle>Adicionar novo sensor</DialogTitle>
                 <DialogDescription>
