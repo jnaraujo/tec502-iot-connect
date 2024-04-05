@@ -3,18 +3,28 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useSendCommand } from "@/hooks/use-send-command"
+import { useSensorList } from "@/hooks/use-sensor-list"
 import { cn } from "@/lib/utils"
+import { useState } from "react"
 import toast from "react-hot-toast"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select"
 
 export function SendCommandBox() {
+  const [sensorId, setSensorId] = useState("")
   const { mutate: sendCommand, error } = useSendCommand()
+  const { data: sensors } = useSensorList()
 
   function handleSendCommand(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
 
-    const sensorId = (formData.get("sensor_id") as string) || ""
     const command = (formData.get("command") as string) || ""
     const content = (formData.get("content") as string) || ""
 
@@ -44,13 +54,18 @@ export function SendCommandBox() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-0.5">
               <Label htmlFor="sensor_id">Sensor ID:</Label>
-              <Input
-                id="sensor_id"
-                name="sensor_id"
-                placeholder="Ex: temp1"
-                className="col-span-3"
-                required
-              />
+              <Select onValueChange={setSensorId} defaultValue={sensorId}>
+                <SelectTrigger id="sensor_id">
+                  <SelectValue placeholder="Sensor" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sensors?.map((sensor) => (
+                    <SelectItem key={sensor.name} value={sensor.name}>
+                      {sensor.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-0.5">
               <Label htmlFor="command">Comando:</Label>
