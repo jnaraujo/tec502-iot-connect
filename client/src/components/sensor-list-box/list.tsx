@@ -24,24 +24,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { useSensorList } from "@/hooks/use-sensor-list"
 import { Plus } from "lucide-react"
 import { useState } from "react"
-
-interface Sensor {
-  address: string
-  name: string
-}
-
-const data: Array<Sensor> = [
-  {
-    address: "localhost:3333",
-    name: "temp1",
-  },
-  {
-    address: "localhost:3334",
-    name: "temp2",
-  },
-]
 
 interface Props {
   onAddNewSensor: (event: React.FormEvent<HTMLFormElement>) => void
@@ -50,10 +35,11 @@ interface Props {
 }
 
 export function List(props: Props) {
+  const { data } = useSensorList()
   const [search, setSearch] = useState("")
 
   const filteredData = data
-    .filter((sensor) => {
+    ?.filter((sensor) => {
       const term = search.toLowerCase()
 
       return (
@@ -141,7 +127,7 @@ export function List(props: Props) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredData.map((sensor) => (
+            {filteredData?.map((sensor) => (
               <TableRow key={sensor.name}>
                 <TableCell className="font-medium">{sensor.name}</TableCell>
                 <TableCell className="text-right">{sensor.address}</TableCell>
