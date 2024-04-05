@@ -6,10 +6,19 @@ class BrokerService:
     self.address = address
   
   def send(self, cmd: cmd_data.Cmd):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.connect(self.address)
-    
-    data = cmd_data.encode(cmd)
-    sock.sendall(data)
-    
-    sock.close()
+    try:
+      sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+      print("test")
+      sock.connect(self.address)
+      print("after connect")
+      
+      data = cmd_data.encode(cmd)
+      sock.sendall(data)
+      print("after sendall")
+      
+      sock.close()
+      
+      return True
+    except Exception as e:
+      print('Error sending data:', e)
+      return False

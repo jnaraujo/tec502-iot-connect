@@ -4,13 +4,17 @@ services:
   broker:
     build:
       context: ./broker
+    hostname: broker
     networks:
       - iot-network
     ports:
       - "8080:8080"
+      - "5310:5310"
   sensor:
     build:
       context: ./sensor
+    environment:
+      - BROKER_URL=broker:5310
     networks:
       - iot-network
     ports:

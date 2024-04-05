@@ -2,12 +2,16 @@ import datetime
 import socket
 import sys
 import time
+import os
+from threading import Thread
 from server import Server
 from cmd_data import Cmd
 from broker_service import BrokerService
-from threading import Thread
 
-bs = BrokerService(('localhost', 5310))
+broker_url = os.environ.get('BROKER_URL', 'localhost:5173')
+broker_addr = (broker_url.split(':')[0], int(broker_url.split(':')[1]))
+
+bs = BrokerService(broker_addr)
 
 data = {}
 

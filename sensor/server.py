@@ -33,7 +33,7 @@ class Server:
           conn.close()
           continue
         
-        Thread(target=self.handle_connection, args=(conn,), daemon=True).start()
+        Thread(target=self.handle_connection, args=(conn,)).start()
       except Exception as e:
         print('Error handling connection:', e)
         
