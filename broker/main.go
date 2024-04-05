@@ -58,6 +58,7 @@ func handleUdpServer() {
 
 		storage.GetSensorDataStorage().UpdateResponse(data.ID, cmd.Content)
 
+		fmt.Println("Received response from request", data.ID)
 		reply("Message received")
 	})
 

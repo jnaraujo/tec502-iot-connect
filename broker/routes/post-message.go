@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"broker/cmd_parser"
 	"broker/sensor"
 	"broker/storage"
 	"encoding/json"
@@ -56,7 +57,13 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 
 	defer conn.Close()
 
-	_, err = conn.Request(command.Command, command.Content)
+	sensorData := storage.GetSensorDataStorage().Create(command.SensorID, command.Command, command.Content)
+
+	_, err = conn.Request(cmd_parser.Cmd{
+		ID:      fmt.Sprintf("%d", sensorData.ID),
+		Command: command.Command,
+		Content: command.Content,
+	})
 
 	if err != nil {
 		fmt.Println(err)
@@ -66,8 +73,6 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-
-	storage.GetSensorDataStorage().Create(command.SensorID, command.Command, command.Content)
 
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(map[string]string{

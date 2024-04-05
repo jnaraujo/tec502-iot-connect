@@ -1,3 +1,12 @@
+class Cmd:
+  def __init__(self, id: str, command: str, content: str = ''):
+    self.id = id
+    self.command = command
+    self.content = content
+  
+  def __getitem__(self, key):
+    return getattr(self, key)
+
 def decode(data: bytes):
   """
     Data format:
@@ -27,11 +36,11 @@ def decode(data: bytes):
   if not header[1].startswith('Cmd: '):
     raise ValueError('Header must start with "Cmd: "')
   
-  return {
-    'id': header[0].split(': ')[1],
-    'command': header[1].split(': ')[1],
-    'content': '\n'.join(data[1:])
-  }
+  return Cmd(
+    id=header[0][4:],
+    command=header[1][5:],
+    content=data[1] if len(data) > 1 else ''
+  )
   
-def encode(id: str, command: str, content: str = ''):
-  return f'Id: {id}\nCmd: {command}\n\n{content}'.encode('utf-8')
+def encode(cmd: Cmd):
+  return f'Id: {cmd.id}\nCmd: {cmd.command}\n\n{cmd.content}'.encode('utf-8')

@@ -1,8 +1,8 @@
 package sensor
 
 import (
+	"broker/cmd_parser"
 	"broker/errors"
-	"fmt"
 	"net"
 	"os"
 	"time"
@@ -52,32 +52,20 @@ func ValidateConnection(conn net.Conn) bool {
 	return string(buffer[:n]) == handshakeReceived
 }
 
-func (s *Sensor) Request(command string, content string) (string, error) {
-	err := s.Send(command, content)
+func (s *Sensor) Request(cmd cmd_parser.Cmd) (string, error) {
+	_, err := s.Conn.Write([]byte(cmd_parser.EncodeCmd(cmd)))
+
 	if err != nil {
-		return "nil", err
+		return "", err
 	}
 
 	buffer := make([]byte, 1024)
-	n, err := s.Read(buffer)
+	n, err := s.Conn.Read(buffer)
 	if err != nil {
 		return "", err
 	}
 
 	return string(buffer[:n]), nil
-}
-
-func (s *Sensor) Send(command string, content string) error {
-	_, err := s.Conn.Write([]byte(fmt.Sprintf(
-		"Cmd: %s\n\n"+
-			"%s",
-		command, content,
-	)))
-	return err
-}
-
-func (s *Sensor) Read(data []byte) (int, error) {
-	return s.Conn.Read(data)
 }
 
 func (s *Sensor) Close() {

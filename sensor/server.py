@@ -39,7 +39,7 @@ class Server:
         
         Thread(target=self.handle_connection, args=(conn,), daemon=True).start()
       except Exception as e:
-        print('Error:', e)
+        print('Error handling connection:', e)
         
   def handle_connection(self, conn: socket.socket):    
     data = conn.recv(1024)
@@ -49,25 +49,25 @@ class Server:
       return
     
     try:
-      data = cmd_data.decode(data)
-      self.handle_command(data, conn)
+      cmd = cmd_data.decode(data)
+      self.handle_command(cmd, conn)
     except Exception as e:
-      conn.sendall(cmd_data.encode('error', 'Invalid data'))
-      print('Error:', e) 
+      conn.sendall(b'error decoding data')
+      print('Error decoding data:', e)
       
     conn.close()
         
-  def handle_command(self, data: dict, conn: socket.socket):
+  def handle_command(self, data: cmd_data.Cmd, conn: socket.socket):
     command = data['command']
-    content = data['content']
     
     if command not in self.commands:
-      conn.sendall(cmd_data.encode('error', 'Command not found'))
+      if 'not_found' in self.commands:
+        self.commands['not_found'](data)
+      conn.sendall(b'command not found')
       return
     
-    res = self.commands[command](data)
-    
-    conn.sendall(cmd_data.encode(res["command"], res["content"]))
+    conn.sendall(b'command received')
+    self.commands[command](data)
       
   def validate_connection(self, conn: socket.socket) -> bool:
     data = conn.recv(len(self.HANDSHAKE_RECEIVED))
@@ -78,7 +78,9 @@ class Server:
     else:
       conn.sendall(b'invalid handshake')
       return False
-    
+  
+  def register_not_found(self, callback: callable):
+    self.commands['not_found'] = callback
   
   def register_command(self, command: str, callback: callable):
     self.commands[command] = callback
