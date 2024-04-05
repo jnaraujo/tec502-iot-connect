@@ -1,13 +1,14 @@
 package routes
 
 import (
-	"encoding/json"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func GetRootHandler(w http.ResponseWriter, r *http.Request) {
+func GetRootHandler(c *gin.Context) {
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Welcome to the Broker API! 😘🤞"})
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Welcome to the Broker API",
+	})
 }

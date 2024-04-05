@@ -4,8 +4,9 @@ import (
 	"broker/errors"
 	"broker/sensor"
 	"broker/storage"
-	"encoding/json"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type NewSensor struct {
@@ -13,32 +14,27 @@ type NewSensor struct {
 	Name    string `json:"name"`
 }
 
-func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
+func CreateSensorHandler(c *gin.Context) {
 	var newSensor NewSensor
 
-	err := json.NewDecoder(r.Body).Decode(&newSensor)
+	err := c.BindJSON(&newSensor)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 		})
 		return
 	}
 
 	if newSensor.Address == "" || newSensor.Name == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 		})
 		return
 	}
 
 	if storage.GetSensorStorage().FindSensorNameByAddress(newSensor.Address) != "" {
-		w.WriteHeader(http.StatusConflict)
-		json.NewEncoder(w).Encode(map[string]string{
-			"message": "Sensor already registered",
+		c.JSON(http.StatusConflict, gin.H{
+			"message": "Sensor already exists",
 		})
 		return
 	}
@@ -46,30 +42,26 @@ func CreateSensorHandler(w http.ResponseWriter, r *http.Request) {
 	_, err = sensor.NewSensorConn(newSensor.Address)
 
 	if err != nil {
-		var msg string
-
 		switch {
 		case err == errors.ErrTimeout:
-			w.WriteHeader(http.StatusServiceUnavailable)
-			msg = "Time exceeded while trying to connect to sensor"
+			c.JSON(http.StatusRequestTimeout, gin.H{
+				"message": "Sensor connection timeout",
+			})
 		case err == errors.ErrValidationFailed:
-			w.WriteHeader(http.StatusUnauthorized)
-			msg = "Sensor validation failed"
+			c.JSON(http.StatusBadRequest, gin.H{
+				"message": "Invalid sensor address",
+			})
 		default:
-			w.WriteHeader(http.StatusInternalServerError)
-			msg = "Error connecting to sensor"
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Error connecting to sensor",
+			})
 		}
-
-		json.NewEncoder(w).Encode(map[string]string{
-			"message": msg,
-		})
 		return
 	}
 
 	storage.GetSensorStorage().AddSensor(newSensor.Name, newSensor.Address)
 
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{
+	c.JSON(http.StatusCreated, gin.H{
 		"message": "Sensor created",
 	})
 }

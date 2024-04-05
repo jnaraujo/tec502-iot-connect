@@ -2,14 +2,13 @@ package routes
 
 import (
 	"broker/storage"
-	"encoding/json"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func FindAllSensorDataHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
+func FindAllSensorDataHandler(c *gin.Context) {
 	data := storage.GetSensorDataStorage().FindAll()
 
-	json.NewEncoder(w).Encode(data)
+	c.JSON(http.StatusOK, data)
 }

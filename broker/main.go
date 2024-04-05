@@ -8,12 +8,11 @@ import (
 	"broker/utils"
 	"fmt"
 	"log"
-	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -70,24 +69,18 @@ func handleUdpServer() {
 }
 
 func handleServer() {
-	r := mux.NewRouter()
+	router := gin.Default()
 
-	r.Use(func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-			next.ServeHTTP(w, r)
-		})
-	})
-
-	r.HandleFunc("/", routes.GetRootHandler).Methods("GET")
-	r.HandleFunc("/message", routes.PostMessageHandler).Methods("POST")
-	r.HandleFunc("/sensor", routes.CreateSensorHandler).Methods("POST")
-	r.HandleFunc("/sensor", routes.FindAllSensorsHandler).Methods("GET")
-	r.HandleFunc("/sensor/data", routes.FindAllSensorDataHandler).Methods("GET")
+	router.GET("/", routes.GetRootHandler)
+	router.POST("/message", routes.PostMessageHandler)
+	router.POST("/sensor", routes.CreateSensorHandler)
+	router.GET("/sensor", routes.FindAllSensorsHandler)
+	router.GET("/sensor/data", routes.FindAllSensorDataHandler)
 
 	fmt.Println("Server started on port", defaultPort)
 
-	err := http.ListenAndServe(fmt.Sprintf(":%d", defaultPort), r)
+	err := router.Run(fmt.Sprintf(":%d", defaultPort))
+
 	if err != nil {
 		fmt.Println("Error starting server:", err)
 	}

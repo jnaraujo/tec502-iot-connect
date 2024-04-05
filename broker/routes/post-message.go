@@ -4,9 +4,10 @@ import (
 	"broker/cmd_parser"
 	"broker/sensor"
 	"broker/storage"
-	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type CommandRequest struct {
@@ -15,21 +16,20 @@ type CommandRequest struct {
 	Content  string `json:"content"`
 }
 
-func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
+func PostMessageHandler(c *gin.Context) {
 	var command CommandRequest
-	err := json.NewDecoder(r.Body).Decode(&command)
+
+	err := c.BindJSON(&command)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Invalid request body")
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid request body",
+		})
 		return
 	}
 
 	if command.SensorID == "" || command.Command == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 		})
 		return
@@ -38,8 +38,7 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 	addr := storage.GetSensorStorage().FindSensorAddrByName(command.SensorID)
 
 	if addr == "" {
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(map[string]string{
+		c.JSON(http.StatusNotFound, gin.H{
 			"message": "Sensor not found",
 		})
 		return
@@ -47,10 +46,9 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := sensor.NewSensorConn(addr)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Println(err)
-		json.NewEncoder(w).Encode(map[string]string{
-			"message": "Error sending message to sensor",
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Error connecting to sensor",
 		})
 		return
 	}
@@ -67,15 +65,15 @@ func PostMessageHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]string{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Error sending message to sensor",
 		})
 		return
 	}
 
-	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode(map[string]string{
-		"message": "Message sent",
+	c.JSON(http.StatusOK, gin.H{
+		"sensor":  command.SensorID,
+		"command": command.Command,
+		"content": command.Content,
 	})
 }
