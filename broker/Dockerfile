@@ -24,9 +24,6 @@ WORKDIR /root/
 # Copia o binário do builder para o diretório de trabalho
 COPY --from=builder /app/broker .
 
-# Define a porta de exposição
-EXPOSE 8080
-
 # Define a variável de ambiente GIN_MODE para release
 ENV GIN_MODE=release
 
