@@ -83,7 +83,7 @@ export function SensorResponseList() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-8">Sensor</TableHead>
+              <TableHead className="w-8">Sensor ID</TableHead>
               <TableHead className="w-[100px]">Comando</TableHead>
               <TableHead className="text-right">Resposta</TableHead>
             </TableRow>
