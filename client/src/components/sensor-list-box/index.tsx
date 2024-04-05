@@ -2,7 +2,7 @@ import { useState } from "react"
 import { toast } from "react-hot-toast"
 import { List } from "./list"
 
-export function SensorList() {
+export function SensorListBox() {
   const [open, setOpen] = useState(false)
 
   function addNewSensor(event: React.FormEvent<HTMLFormElement>) {

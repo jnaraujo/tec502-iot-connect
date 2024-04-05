@@ -1,5 +1,5 @@
 import { SendCommandBox } from "@/components/send-command"
-import { SensorList } from "@/components/sensor-list"
+import { SensorListBox } from "@/components/sensor-list-box"
 import { SensorResponseList } from "@/components/sensor-response-list"
 
 export function Home() {
@@ -8,7 +8,7 @@ export function Home() {
       <section className="grid h-fit grid-cols-2">
         <SendCommandBox />
 
-        <SensorList />
+        <SensorListBox />
       </section>
 
       <article className="bg-background h-full space-y-4 overflow-hidden rounded-lg border p-6">
