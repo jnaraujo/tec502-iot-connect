@@ -69,7 +69,7 @@ export function List() {
     })
 
   return (
-    <div className="flex h-full w-full flex-col space-y-2 overflow-auto">
+    <div className="flex h-full w-full flex-col space-y-2 overflow-auto p-1">
       <Input
         placeholder="Pesquisa"
         value={search}

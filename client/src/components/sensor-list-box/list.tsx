@@ -66,7 +66,7 @@ export function List(props: Props) {
     })
 
   return (
-    <div className="flex h-full w-full flex-col space-y-2 overflow-auto">
+    <div className="flex h-full w-full flex-col space-y-2 overflow-auto p-1">
       <div className="flex shrink-0 gap-4">
         <Input
           placeholder="Pesquisa"
