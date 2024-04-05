@@ -8,4 +8,4 @@ WORKDIR /app
 COPY . .
 
 # Define o comando de execução
-CMD ["python", "main.py"]
+CMD ["python", "air_cond.main.py"]

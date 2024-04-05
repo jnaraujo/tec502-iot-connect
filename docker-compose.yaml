@@ -10,15 +10,30 @@ services:
     ports:
       - "8080:8080"
       - "5310:5310"
-  sensor:
+
+  temp_sensor:
     build:
       context: ./sensor
+      dockerfile: TempSensor.Dockerfile
     environment:
       - BROKER_URL=broker:5310
+      - SENSOR_PORT=3333
     networks:
       - iot-network
     ports:
       - "3333:3333"
+  
+  air_cond_sensor:
+    build:
+      context: ./sensor
+      dockerfile: AirCond.Dockerfile
+    environment:
+      - BROKER_URL=broker:5310
+      - SENSOR_PORT=3334
+    networks:
+      - iot-network
+    ports:
+      - "3334:3334"
 
 networks:
   iot-network:
