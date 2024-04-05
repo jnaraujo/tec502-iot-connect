@@ -258,7 +258,7 @@ export function SensorResponseList() {
     })
 
   return (
-    <div className="mt-4 h-full w-full space-y-2">
+    <div className="h-full w-full space-y-2">
       <Input
         placeholder="Pesquisa"
         value={search}
