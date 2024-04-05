@@ -1,15 +1,4 @@
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Table,
@@ -27,11 +16,10 @@ import {
 import { useSensorList } from "@/hooks/use-sensor-list"
 import { Plus } from "lucide-react"
 import { useState } from "react"
+import { Input } from "../ui/input"
 
 interface Props {
-  onAddNewSensor: (event: React.FormEvent<HTMLFormElement>) => void
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  onCreateSensorClick: () => void
 }
 
 export function List(props: Props) {
@@ -63,59 +51,19 @@ export function List(props: Props) {
           className="h-8"
         />
 
-        <Dialog open={props.open} onOpenChange={props.onOpenChange}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <DialogTrigger asChild>
-                <Button className="size-8 shrink-0 p-0">
-                  <Plus size={18} />
-                </Button>
-              </DialogTrigger>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Adicionar novo sensor</p>
-            </TooltipContent>
-          </Tooltip>
-
-          <DialogContent className="sm:max-w-[425px]">
-            <form onSubmit={props.onAddNewSensor}>
-              <DialogHeader>
-                <DialogTitle>Adicionar novo sensor</DialogTitle>
-                <DialogDescription>
-                  Ao adicionar um novo sensor ao sistema, ele estará disponível
-                  à todos os usuários e poderá ser usado para enviar e receber
-                  comandos.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name">Nome do sensor:</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    placeholder="Ex: sensor_temperatura"
-                    className="col-span-3"
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="address">Endereço ip</Label>
-                  <Input
-                    id="address"
-                    name="address"
-                    placeholder="Ex: 127.0.0.1:3333"
-                    className="col-span-3"
-                    required
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Adicionar sensor</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              className="size-8 shrink-0 p-0"
+              onClick={props.onCreateSensorClick}
+            >
+              <Plus size={18} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Adicionar novo sensor</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
 
       <ScrollArea className="flex-1 pr-2">
