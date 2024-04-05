@@ -1,10 +1,13 @@
+import { SendCommandBox } from "@/components/send-command"
 import { SensorList } from "@/components/sensor-list"
 import { SensorResponseList } from "@/components/sensor-response-list"
 
 export function Home() {
   return (
     <main className="container grid h-screen grid-cols-[1fr_400px] gap-6 py-6">
-      <section>
+      <section className="grid h-fit grid-cols-2">
+        <SendCommandBox />
+
         <SensorList />
       </section>
 
