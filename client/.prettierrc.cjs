@@ -1,8 +1,8 @@
 module.exports = {
   "root": true,
   "plugins": [
-    import("prettier-plugin-tailwindcss"),
-    import("@ianvs/prettier-plugin-sort-imports")
+    import("@ianvs/prettier-plugin-sort-imports"),
+    import("prettier-plugin-tailwindcss")
   ],
   "printWidth": 80,
   "tabWidth": 2,
