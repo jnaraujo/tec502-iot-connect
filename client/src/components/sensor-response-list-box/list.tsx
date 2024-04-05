@@ -48,9 +48,63 @@ const data: Array<Sensor> = [
     created_at: "2024-04-05T11:27:03.8902475-03:00",
     received_at: "2024-04-05T11:27:03.8910043-03:00",
   },
+  {
+    id: 0,
+    sensor_id: "temp1",
+    command: "get_timed",
+    content: "",
+    response: "Command not found",
+    created_at: "2024-04-05T11:25:48.7342823-03:00",
+    received_at: "2024-04-05T11:25:48.735409-03:00",
+  },
+  {
+    id: 2,
+    sensor_id: "temp1",
+    command: "get_time",
+    content: "test",
+    response: "2024-04-05 11:26:45",
+    created_at: "2024-04-05T11:26:45.2796895-03:00",
+    received_at: "2024-04-05T11:26:45.2818259-03:00",
+  },
+  {
+    id: 3,
+    sensor_id: "temp1",
+    command: "test",
+    content: "",
+    response: "Hello from sensor!",
+    created_at: "2024-04-05T11:27:03.8902475-03:00",
+    received_at: "2024-04-05T11:27:03.8910043-03:00",
+  },
+  {
+    id: 0,
+    sensor_id: "temp1",
+    command: "get_timed",
+    content: "",
+    response: "Command not found",
+    created_at: "2024-04-05T11:25:48.7342823-03:00",
+    received_at: "2024-04-05T11:25:48.735409-03:00",
+  },
+  {
+    id: 2,
+    sensor_id: "temp1",
+    command: "get_time",
+    content: "test",
+    response: "2024-04-05 11:26:45",
+    created_at: "2024-04-05T11:26:45.2796895-03:00",
+    received_at: "2024-04-05T11:26:45.2818259-03:00",
+  },
+  {
+    id: 3,
+    sensor_id: "temp2",
+    command: "test2222",
+    content: "",
+    response: "Hello from sensor!",
+    created_at: "2024-04-05T11:27:03.8902475-03:00",
+    received_at: "2024-04-05T11:27:03.8910043-03:00",
+  },
 ]
 
-export function SensorResponseList() {
+export function List() {
   const [search, setSearch] = useState("")
 
   const filteredData = data
@@ -69,7 +123,7 @@ export function SensorResponseList() {
     })
 
   return (
-    <div className="h-full w-full space-y-2">
+    <div className="flex h-full w-full flex-col space-y-2 overflow-auto">
       <Input
         placeholder="Pesquisa"
         value={search}
@@ -79,7 +133,7 @@ export function SensorResponseList() {
         className="h-8 max-w-sm shrink-0"
       />
 
-      <ScrollArea className="h-full pb-4 pr-2">
+      <ScrollArea className="flex-1 pr-2">
         <Table>
           <TableHeader>
             <TableRow>

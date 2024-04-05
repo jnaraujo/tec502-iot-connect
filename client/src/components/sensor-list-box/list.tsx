@@ -41,6 +41,62 @@ const data: Array<Sensor> = [
     address: "localhost:3333",
     name: "temp2",
   },
+  {
+    address: "localhost:3333",
+    name: "temp1",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp2",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp1",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp2",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp1",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp2",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp1",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp2",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp1",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp2",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp1",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp2",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp1",
+  },
+  {
+    address: "localhost:3333",
+    name: "temp2",
+  },
 ]
 
 interface Props {
@@ -66,8 +122,8 @@ export function List(props: Props) {
     })
 
   return (
-    <div className="flex h-full w-full flex-col space-y-2">
-      <div className="flex gap-4">
+    <div className="flex h-full w-full flex-col space-y-2 overflow-auto">
+      <div className="flex shrink-0 gap-4">
         <Input
           placeholder="Pesquisa"
           value={search}
