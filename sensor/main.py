@@ -8,6 +8,8 @@ from broker_service import BrokerService
 
 bs = BrokerService(('localhost', 5310))
 
+data = {}
+
 def init():
   IP_ADDR = "0.0.0.0"
   IP_PORT = 3333
@@ -28,11 +30,23 @@ def init():
   server.register_command("get_ip", get_ip_cmd)
   server.register_command("test", test_cmd)
   server.register_command("delay", delay)
+  server.register_command("set_temp", set_temp_cmd)
+  server.register_command("get_temp", get_temp_cmd)
   
   server.start()
   
 def not_found_cmd(cmd: Cmd):
   res = Cmd(cmd.id, cmd.content, "Command not found")
+  bs.send(res)
+  
+def set_temp_cmd(cmd: Cmd):
+  data['temp'] = cmd.content
+  res = Cmd(cmd.id, cmd.content, "Temperature set")
+  bs.send(res)
+  
+def get_temp_cmd(cmd: Cmd):
+  temp = data.get('temp', 'N/A')
+  res = Cmd(cmd.id, cmd.content, temp)
   bs.send(res)
   
 def delay(cmd: Cmd):
