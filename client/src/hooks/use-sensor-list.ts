@@ -15,7 +15,7 @@ export function useSensorList() {
         throw new Error("Não foi possível listar os sensores")
       }
 
-      return (await resp.json()) as Array<Sensor>
+      return (await resp.json()).sensors as Array<Sensor>
     },
     queryKey: ["getSensors"],
     refetchInterval: 1_000,

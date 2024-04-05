@@ -17,7 +17,7 @@ export function useSensorDataList() {
       const resp = await fetch(`${env.VITE_BROKER_URL}/sensor/data`)
 
       if (!resp.ok) {
-        throw new Error("Não foi possível listar os dados dos sensores")
+        throw await resp.json()
       }
 
       return (await resp.json()) as Array<Sensor>
