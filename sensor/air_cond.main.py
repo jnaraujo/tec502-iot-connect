@@ -9,7 +9,7 @@ from cmd_data import Cmd
 from broker_service import BrokerService
 from random import randint
 
-broker_url = os.environ.get('BROKER_URL', 'localhost:5173')
+broker_url = os.environ.get('BROKER_URL', 'localhost:5310')
 broker_addr = (broker_url.split(':')[0], int(broker_url.split(':')[1]))
 
 bs = BrokerService(broker_addr)
