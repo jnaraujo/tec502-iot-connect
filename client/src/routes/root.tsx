@@ -8,7 +8,7 @@ const queryClient = new QueryClient()
 
 export function Root() {
   return (
-    <div className="bg-muted flex min-h-[100svh] flex-col font-sans">
+    <div className="flex min-h-[100svh] flex-col bg-muted font-sans">
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <Home />
