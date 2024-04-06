@@ -1,7 +1,7 @@
 package udpserver
 
 import (
-	"broker/internal/cmdparser"
+	"broker/internal/cmd"
 	"broker/internal/storage"
 	"fmt"
 	"log"
@@ -15,7 +15,7 @@ func NewServer(addr string, port int) {
 	defer udpServer.Close()
 
 	udpServer.HandleRequest(func(msg string, reply func(string) error) {
-		cmd, err := cmdparser.DecodeCmd(msg)
+		cmd, err := cmd.Encode(msg)
 		if err != nil {
 			reply("Invalid command")
 			return

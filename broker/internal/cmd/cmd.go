@@ -1,4 +1,4 @@
-package cmdparser
+package cmd
 
 import (
 	"broker/internal/errors"
@@ -12,7 +12,15 @@ type Cmd struct {
 	Content string
 }
 
-func DecodeCmd(data string) (*Cmd, error) {
+func New(id, command, content string) *Cmd {
+	return &Cmd{
+		ID:      id,
+		Command: command,
+		Content: content,
+	}
+}
+
+func Encode(data string) (*Cmd, error) {
 	dataMap := strings.Split(data, "\n\n")
 
 	if len(dataMap) <= 1 {
@@ -36,6 +44,6 @@ func DecodeCmd(data string) (*Cmd, error) {
 	}, nil
 }
 
-func EncodeCmd(cmd Cmd) string {
+func (cmd *Cmd) Decode() string {
 	return fmt.Sprintf("Id: %s\nCmd: %s\n\n%s", cmd.ID, cmd.Command, cmd.Content)
 }

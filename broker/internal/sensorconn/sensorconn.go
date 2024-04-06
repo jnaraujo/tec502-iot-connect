@@ -1,7 +1,7 @@
 package sensorconn
 
 import (
-	"broker/internal/cmdparser"
+	"broker/internal/cmd"
 	"broker/internal/errors"
 	"net"
 	"os"
@@ -70,7 +70,7 @@ Exemplo de uso:
 
 	fmt.Println(response)
 */
-func Request(addr string, cmd cmdparser.Cmd) (string, error) {
+func Request(addr string, cmd *cmd.Cmd) (string, error) {
 	conn, err := New(addr)
 	if err != nil {
 		return "", err
@@ -78,7 +78,7 @@ func Request(addr string, cmd cmdparser.Cmd) (string, error) {
 
 	defer conn.Conn.Close()
 
-	_, err = conn.Conn.Write([]byte(cmdparser.EncodeCmd(cmd)))
+	_, err = conn.Conn.Write([]byte(cmd.Decode()))
 	if err != nil {
 		return "", err
 	}

@@ -1,10 +1,10 @@
-package cmdparser
+package cmd
 
 import (
 	"testing"
 )
 
-func TestEncodeCmd(t *testing.T) {
+func TestDecodeCmd(t *testing.T) {
 	cmd := Cmd{
 		ID:      "test_id",
 		Command: "test_command",
@@ -12,14 +12,14 @@ func TestEncodeCmd(t *testing.T) {
 	}
 
 	expected := "Id: test_id\nCmd: test_command\n\ntest_content"
-	got := EncodeCmd(cmd)
+	got := cmd.Decode()
 
 	if got != expected {
 		t.Error("Error encoding cmd")
 	}
 }
 
-func TestDecodeCmd(t *testing.T) {
+func TestEncode(t *testing.T) {
 	data := "Id: test_id\nCmd: test_command\n\ntest_content"
 
 	expected := Cmd{
@@ -28,7 +28,7 @@ func TestDecodeCmd(t *testing.T) {
 		Content: "test_content",
 	}
 
-	got, err := DecodeCmd(data)
+	got, err := Encode(data)
 
 	if err != nil {
 		t.Error("Error decoding cmd")

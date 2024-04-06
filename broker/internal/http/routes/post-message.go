@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"broker/internal/cmdparser"
+	"broker/internal/cmd"
 	"broker/internal/sensorconn"
 	"broker/internal/storage"
 	"fmt"
@@ -46,11 +46,8 @@ func PostMessageHandler(c *gin.Context) {
 
 	sensorData := storage.GetSensorDataStorage().Create(command.SensorID, command.Command, command.Content)
 
-	_, err = sensorconn.Request(addr, cmdparser.Cmd{
-		ID:      fmt.Sprintf("%d", sensorData.ID),
-		Command: command.Command,
-		Content: command.Content,
-	})
+	_, err = sensorconn.Request(addr, cmd.New(fmt.Sprintf("%d", sensorData.ID), command.Command, command.Content))
+
 	if err != nil {
 		fmt.Println(err)
 		storage.GetSensorDataStorage().UpdateResponse(sensorData.ID, "Sensor offline")
