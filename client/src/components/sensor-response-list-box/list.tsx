@@ -50,7 +50,8 @@ export function List() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Sensor ID</TableHead>
-              <TableHead>Comando</TableHead>
+              <TableHead className="w-[100px]">Comando</TableHead>
+              <TableHead className="w-[300px]">Conteúdo</TableHead>
               <TableHead className="text-right">Resposta</TableHead>
             </TableRow>
           </TableHeader>
@@ -61,6 +62,7 @@ export function List() {
                   {sensor.sensor_id}
                 </TableCell>
                 <TableCell>{sensor.command}</TableCell>
+                <TableCell>{sensor.content}</TableCell>
                 <TableCell className="text-right">{sensor.response}</TableCell>
               </TableRow>
             ))}
