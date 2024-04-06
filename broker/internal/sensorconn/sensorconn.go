@@ -1,7 +1,7 @@
-package sensor_conn
+package sensorconn
 
 import (
-	"broker/internal/cmd_parser"
+	"broker/internal/cmdparser"
 	"broker/internal/errors"
 	"net"
 	"os"
@@ -61,7 +61,7 @@ Exemplo de uso:
 		log.Fatal(err)
 	}
 
-	response, err := conn.Request(cmd_parser.Cmd{
+	response, err := conn.Request(cmdparser.Cmd{
 		ID:      "1",
 		Command: "get",
 		Content: "temperature",
@@ -72,7 +72,7 @@ Exemplo de uso:
 
 	fmt.Println(response)
 */
-func Request(addr string, cmd cmd_parser.Cmd) (string, error) {
+func Request(addr string, cmd cmdparser.Cmd) (string, error) {
 	conn, err := NewSensorConn(addr)
 	if err != nil {
 		return "", err
@@ -80,7 +80,7 @@ func Request(addr string, cmd cmd_parser.Cmd) (string, error) {
 
 	defer conn.Conn.Close()
 
-	_, err = conn.Conn.Write([]byte(cmd_parser.EncodeCmd(cmd)))
+	_, err = conn.Conn.Write([]byte(cmdparser.EncodeCmd(cmd)))
 	if err != nil {
 		return "", err
 	}

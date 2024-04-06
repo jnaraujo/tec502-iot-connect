@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"broker/internal/cmd_parser"
-	"broker/internal/sensor_conn"
+	"broker/internal/cmdparser"
+	"broker/internal/sensorconn"
 	"broker/internal/storage"
 	"net/http"
 	"strings"
@@ -22,7 +22,7 @@ func FindSensorCommands(c *gin.Context) {
 		return
 	}
 
-	resp, err := sensor_conn.Request(addr, cmd_parser.Cmd{
+	resp, err := sensorconn.Request(addr, cmdparser.Cmd{
 		ID:      "#",
 		Command: "get_commands",
 	})
@@ -33,7 +33,7 @@ func FindSensorCommands(c *gin.Context) {
 		return
 	}
 
-	cmd, err := cmd_parser.DecodeCmd(resp)
+	cmd, err := cmdparser.DecodeCmd(resp)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "O comando recebido do sensor é inválido.",

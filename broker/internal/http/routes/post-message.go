@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"broker/internal/cmd_parser"
-	"broker/internal/sensor_conn"
+	"broker/internal/cmdparser"
+	"broker/internal/sensorconn"
 	"broker/internal/storage"
 	"fmt"
 	"net/http"
@@ -46,7 +46,7 @@ func PostMessageHandler(c *gin.Context) {
 
 	sensorData := storage.GetSensorDataStorage().Create(command.SensorID, command.Command, command.Content)
 
-	_, err = sensor_conn.Request(addr, cmd_parser.Cmd{
+	_, err = sensorconn.Request(addr, cmdparser.Cmd{
 		ID:      fmt.Sprintf("%d", sensorData.ID),
 		Command: command.Command,
 		Content: command.Content,

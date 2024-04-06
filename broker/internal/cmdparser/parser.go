@@ -1,4 +1,4 @@
-package cmd_parser
+package cmdparser
 
 import (
 	"broker/internal/errors"
