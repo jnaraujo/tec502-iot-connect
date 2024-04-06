@@ -35,7 +35,7 @@ func PostMessageHandler(c *gin.Context) {
 		return
 	}
 
-	addr := storage.GetSensorStorage().FindSensorAddrByName(command.SensorID)
+	addr := storage.GetSensorStorage().FindSensorAddrById(command.SensorID)
 
 	if addr == "" {
 		c.JSON(http.StatusNotFound, gin.H{

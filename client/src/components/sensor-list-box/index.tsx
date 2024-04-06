@@ -25,12 +25,12 @@ export function SensorListBox() {
     const formData = new FormData(event.currentTarget)
 
     const address = formData.get("address") as string
-    const name = formData.get("name") as string
+    const id = formData.get("id") as string
 
     createSensor(
       {
         address,
-        name,
+        id,
       },
       {
         onSuccess: () => {
@@ -42,7 +42,7 @@ export function SensorListBox() {
   }
 
   return (
-    <article className="bg-background flex flex-col gap-4 overflow-hidden rounded-lg border p-6">
+    <article className="flex flex-col gap-4 overflow-hidden rounded-lg border bg-background p-6">
       <h2 className="text-lg font-medium text-zinc-900">Lista de sensores</h2>
 
       <List
@@ -64,10 +64,10 @@ export function SensorListBox() {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name">Nome do sensor:</Label>
+                <Label htmlFor="name">ID do sensor:</Label>
                 <Input
-                  id="name"
-                  name="name"
+                  id="id"
+                  name="id"
                   placeholder="Ex: sensor_temperatura"
                   className="col-span-3"
                   required

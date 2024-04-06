@@ -32,7 +32,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	if storage.GetSensorStorage().FindSensorNameByAddress(newSensor.Address) != "" {
+	if storage.GetSensorStorage().FindSensorIdByAddress(newSensor.Address) != "" {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Sensor already exists",
 		})

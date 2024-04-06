@@ -16,16 +16,16 @@ func GetSensorStorage() *SensorStorage {
 	return sensorStorage
 }
 
-func (s *SensorStorage) AddSensor(name string, addr string) {
-	s.addrs[addr] = name
+func (s *SensorStorage) AddSensor(id string, addr string) {
+	s.addrs[addr] = id
 }
 
 func (s *SensorStorage) GetSensors() []map[string]string {
 	var sensors []map[string]string = []map[string]string{}
 
-	for addr, name := range s.addrs {
+	for addr, id := range s.addrs {
 		sensors = append(sensors, map[string]string{
-			"name":    name,
+			"id":      id,
 			"address": addr,
 		})
 	}
@@ -33,9 +33,9 @@ func (s *SensorStorage) GetSensors() []map[string]string {
 	return sensors
 }
 
-func (s *SensorStorage) FindSensorAddrByName(name string) string {
-	for addr, sensorName := range s.addrs {
-		if sensorName == name {
+func (s *SensorStorage) FindSensorAddrById(id string) string {
+	for addr, sensorId := range s.addrs {
+		if sensorId == id {
 			return addr
 		}
 	}
@@ -47,10 +47,10 @@ func (s *SensorStorage) DeleteSensorByAddress(addr string) {
 	delete(s.addrs, addr)
 }
 
-func (s *SensorStorage) FindSensorNameByAddress(addr string) string {
-	for sensorAddr, sensorName := range s.addrs {
+func (s *SensorStorage) FindSensorIdByAddress(addr string) string {
+	for sensorAddr, sensorId := range s.addrs {
 		if sensorAddr == addr {
-			return sensorName
+			return sensorId
 		}
 	}
 

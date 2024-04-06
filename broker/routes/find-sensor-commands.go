@@ -13,7 +13,7 @@ import (
 func FindSensorCommands(c *gin.Context) {
 	sensor_id := c.Param("sensor_id")
 
-	addr := storage.GetSensorStorage().FindSensorAddrByName(sensor_id)
+	addr := storage.GetSensorStorage().FindSensorAddrById(sensor_id)
 
 	if addr == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{

@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 interface NewSensor {
   address: string
-  name: string
+  id: string
 }
 
 export function useCreateSensor() {

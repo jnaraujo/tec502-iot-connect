@@ -43,7 +43,7 @@ export function SendCommandBox() {
   }
 
   return (
-    <article className="bg-background flex flex-col space-y-2 rounded-lg border p-6">
+    <article className="flex flex-col space-y-2 rounded-lg border bg-background p-6">
       <h2 className="text-lg font-medium text-zinc-900">Enviar comando</h2>
 
       <form
@@ -60,8 +60,8 @@ export function SendCommandBox() {
                 </SelectTrigger>
                 <SelectContent>
                   {sensors?.map((sensor) => (
-                    <SelectItem key={sensor.name} value={sensor.name}>
-                      {sensor.name}
+                    <SelectItem key={sensor.id} value={sensor.id}>
+                      {sensor.id}
                     </SelectItem>
                   ))}
                 </SelectContent>

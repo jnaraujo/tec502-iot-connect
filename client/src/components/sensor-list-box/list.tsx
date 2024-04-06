@@ -32,11 +32,11 @@ export function List(props: Props) {
 
       return (
         sensor.address.toLowerCase().includes(term) ||
-        sensor.name.toLowerCase().includes(term)
+        sensor.id.toLowerCase().includes(term)
       )
     })
     .sort((a, b) => {
-      return a.name.localeCompare(b.name)
+      return a.id.localeCompare(b.id)
     })
 
   return (
@@ -70,14 +70,14 @@ export function List(props: Props) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-8">Nome</TableHead>
+              <TableHead className="w-8">ID</TableHead>
               <TableHead className="text-right">Endereço IP</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredData?.map((sensor) => (
-              <TableRow key={sensor.name}>
-                <TableCell className="font-medium">{sensor.name}</TableCell>
+              <TableRow key={sensor.id}>
+                <TableCell className="font-medium">{sensor.id}</TableCell>
                 <TableCell className="text-right">{sensor.address}</TableCell>
               </TableRow>
             ))}

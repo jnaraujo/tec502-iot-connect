@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 
 interface Sensor {
   address: string
-  name: string
+  id: string
 }
 
 export function useSensorList() {
