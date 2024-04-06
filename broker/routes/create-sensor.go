@@ -11,7 +11,7 @@ import (
 
 type NewSensor struct {
 	Address string `json:"address"`
-	Name    string `json:"name"`
+	Id      string `json:"id"`
 }
 
 func CreateSensorHandler(c *gin.Context) {
@@ -25,7 +25,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	if newSensor.Address == "" || newSensor.Name == "" {
+	if newSensor.Address == "" || newSensor.Id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body",
 		})
@@ -59,7 +59,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	storage.GetSensorStorage().AddSensor(newSensor.Name, newSensor.Address)
+	storage.GetSensorStorage().AddSensor(newSensor.Id, newSensor.Address)
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Sensor created",
