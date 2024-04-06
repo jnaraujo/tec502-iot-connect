@@ -1,6 +1,16 @@
 version: '3.7'
 
 services:
+  client:
+    build: 
+      context: ./client
+      args:
+        - VITE_BROKER_URL=http://broker:8080
+    networks:
+      - iot-network
+    ports:
+      - "3000:3000"
+
   broker:
     build:
       context: ./broker
