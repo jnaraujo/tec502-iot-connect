@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"broker/storage"
+	"broker/internal/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

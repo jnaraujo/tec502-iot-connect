@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"broker/cmd_parser"
-	"broker/sensor"
-	"broker/storage"
+	"broker/internal/cmd_parser"
+	"broker/internal/sensor_conn"
+	"broker/internal/storage"
 	"net/http"
 	"strings"
 
@@ -22,16 +22,7 @@ func FindSensorCommands(c *gin.Context) {
 		return
 	}
 
-	conn, err := sensor.NewSensorConn(addr)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Error connecting to sensor",
-		})
-		return
-	}
-	defer conn.Close()
-
-	resp, err := conn.Request(cmd_parser.Cmd{
+	resp, err := sensor_conn.Request(addr, cmd_parser.Cmd{
 		ID:      "#",
 		Command: "get_commands",
 	})

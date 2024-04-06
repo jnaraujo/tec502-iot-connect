@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"broker/cmd_parser"
-	"broker/sensor"
-	"broker/storage"
+	"broker/internal/cmd_parser"
+	"broker/internal/sensor_conn"
+	"broker/internal/storage"
 	"fmt"
 	"net/http"
 
@@ -44,29 +44,17 @@ func PostMessageHandler(c *gin.Context) {
 		return
 	}
 
-	conn, err := sensor.NewSensorConn(addr)
-	if err != nil {
-		fmt.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Error connecting to sensor",
-		})
-		return
-	}
-
-	defer conn.Close()
-
 	sensorData := storage.GetSensorDataStorage().Create(command.SensorID, command.Command, command.Content)
 
-	_, err = conn.Request(cmd_parser.Cmd{
+	_, err = sensor_conn.Request(addr, cmd_parser.Cmd{
 		ID:      fmt.Sprintf("%d", sensorData.ID),
 		Command: command.Command,
 		Content: command.Content,
 	})
-
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Error sending message to sensor",
+			"message": "Erro ao enviar a mensagem para o sensor.",
 		})
 		return
 	}

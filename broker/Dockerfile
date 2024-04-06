@@ -13,7 +13,7 @@ RUN go mod download
 COPY . .
 
 # Compila o binário
-RUN CGO_ENABLED=0 GOOS=linux go build -o broker .
+RUN CGO_ENABLED=0 GOOS=linux go build -o broker ./cmd/api
 
 # Cria uma imagem alpine
 FROM alpine:latest

@@ -1,7 +1,7 @@
 package cmd_parser
 
 import (
-	"broker/errors"
+	"broker/internal/errors"
 	"fmt"
 	"strings"
 )

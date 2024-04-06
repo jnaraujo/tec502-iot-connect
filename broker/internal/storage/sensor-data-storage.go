@@ -1,17 +1,17 @@
 package storage
 
 import (
-	"broker/types"
+	"broker/internal/time"
 )
 
 type SensorData struct {
-	ID         int        `json:"id"`
-	SensorID   string     `json:"sensor_id"`
-	Command    string     `json:"command"`
-	Content    string     `json:"content"`
-	Response   string     `json:"response"`
-	CreatedAt  types.Time `json:"created_at"`
-	ReceivedAt types.Time `json:"received_at,omitempty"`
+	ID         int       `json:"id"`
+	SensorID   string    `json:"sensor_id"`
+	Command    string    `json:"command"`
+	Content    string    `json:"content"`
+	Response   string    `json:"response"`
+	CreatedAt  time.Time `json:"created_at"`
+	ReceivedAt time.Time `json:"received_at,omitempty"`
 }
 
 type SensorDataStorage struct {
@@ -36,7 +36,7 @@ func (s *SensorDataStorage) Create(sensorID, command string, content string) Sen
 		SensorID:  sensorID,
 		Command:   command,
 		Content:   content,
-		CreatedAt: types.NewTimeNow(),
+		CreatedAt: time.NewTimeNow(),
 	}
 
 	s.data = append(s.data, sensor)
@@ -63,7 +63,7 @@ func (s *SensorDataStorage) UpdateResponse(id int, response string) {
 		if data.ID == id {
 			currentData := s.data[i]
 			currentData.Response = response
-			currentData.ReceivedAt = types.NewTimeNow()
+			currentData.ReceivedAt = time.NewTimeNow()
 
 			s.data[i] = currentData
 			return

@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"broker/errors"
-	"broker/sensor"
-	"broker/storage"
+	"broker/internal/errors"
+	"broker/internal/sensor_conn"
+	"broker/internal/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -39,8 +39,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = sensor.NewSensorConn(newSensor.Address)
-
+	_, err = sensor_conn.NewSensorConn(newSensor.Address)
 	if err != nil {
 		switch {
 		case err == errors.ErrTimeout:
