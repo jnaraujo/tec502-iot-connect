@@ -6,8 +6,8 @@ type Time struct {
 	time.Time
 }
 
-func NewTimeNow() Time {
-	return Time{Time: time.Now()}
+func NewTimeNow() *Time {
+	return &Time{Time: time.Now()}
 }
 
 func (t *Time) UnmarshalJSON(data []byte) error {

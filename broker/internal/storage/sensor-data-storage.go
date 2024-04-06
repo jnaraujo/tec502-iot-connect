@@ -30,18 +30,18 @@ func GetSensorDataStorage() *SensorDataStorage {
 	return sensorDataStorage
 }
 
-func (s *SensorDataStorage) Create(sensorID, command string, content string) SensorData {
+func (s *SensorDataStorage) Create(sensorID, command string, content string) *SensorData {
 	sensor := SensorData{
 		ID:        len(s.data) + 1,
 		SensorID:  sensorID,
 		Command:   command,
 		Content:   content,
-		CreatedAt: time.NewTimeNow(),
+		CreatedAt: *time.NewTimeNow(),
 	}
 
 	s.data = append(s.data, sensor)
 
-	return sensor
+	return &sensor
 }
 
 func (s *SensorDataStorage) FindAll() []SensorData {
@@ -63,7 +63,7 @@ func (s *SensorDataStorage) UpdateResponse(id int, response string) {
 		if data.ID == id {
 			currentData := s.data[i]
 			currentData.Response = response
-			currentData.ReceivedAt = time.NewTimeNow()
+			currentData.ReceivedAt = *time.NewTimeNow()
 
 			s.data[i] = currentData
 			return
