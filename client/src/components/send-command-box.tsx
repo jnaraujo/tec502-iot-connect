@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useCommandList } from "@/hooks/use-command-list"
 import { useSendCommand } from "@/hooks/use-send-command"
 import { useSensorList } from "@/hooks/use-sensor-list"
 import { cn } from "@/lib/utils"
@@ -17,16 +17,22 @@ import {
 
 export function SendCommandBox() {
   const [sensorId, setSensorId] = useState("")
-  const { mutate: sendCommand, error } = useSendCommand()
+  const [command, setCommand] = useState("")
+  const [error, setError] = useState("")
+  const { mutate: sendCommand } = useSendCommand()
   const { data: sensors } = useSensorList()
+  const { data: commands } = useCommandList(sensorId)
 
   function handleSendCommand(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    setError("")
 
     const formData = new FormData(event.currentTarget)
-
-    const command = (formData.get("command") as string) || ""
     const content = (formData.get("content") as string) || ""
+
+    if (!sensorId || !command) {
+      return setError("Selecione ID e/ou o Comando.")
+    }
 
     sendCommand(
       {
@@ -37,6 +43,9 @@ export function SendCommandBox() {
       {
         onSuccess: () => {
           toast.success("Comando enviado com sucesso")
+        },
+        onError: (error) => {
+          setError(error.message)
         },
       },
     )
@@ -69,13 +78,19 @@ export function SendCommandBox() {
             </div>
             <div className="space-y-0.5">
               <Label htmlFor="command">Comando:</Label>
-              <Input
-                id="command"
-                name="command"
-                placeholder="Ex: get_time"
-                className="col-span-3"
-                required
-              />
+
+              <Select onValueChange={setCommand} defaultValue={command}>
+                <SelectTrigger id="command">
+                  <SelectValue placeholder="Comando" />
+                </SelectTrigger>
+                <SelectContent>
+                  {commands?.map((command) => (
+                    <SelectItem key={command} value={command}>
+                      {command}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -95,7 +110,7 @@ export function SendCommandBox() {
             "opacity-100": !!error,
           })}
         >
-          {error?.message}
+          {error}
         </span>
 
         <Button type="submit" className="w-fit">
