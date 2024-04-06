@@ -56,6 +56,10 @@ class Server:
   def handle_command(self, data: cmd_data.Cmd, conn: socket.socket):
     command = data['command']
     
+    if command == "get_commands":
+      conn.sendall(self.get_commands())
+      return
+    
     if command not in self.commands:
       if 'not_found' in self.commands:
         self.commands['not_found'](data)
@@ -74,6 +78,11 @@ class Server:
     else:
       conn.sendall(b'invalid handshake')
       return False
+  
+  def get_commands(self):
+    commands = list(self.commands.keys())    
+    cmd = cmd_data.encode(cmd_data.Cmd(id='commands', command="commands", content=", ".join(commands)))
+    return cmd
   
   def register_not_found(self, callback: callable):
     self.commands['not_found'] = callback

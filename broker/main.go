@@ -77,6 +77,7 @@ func handleServer() {
 	router.POST("/message", routes.PostMessageHandler)
 	router.POST("/sensor", routes.CreateSensorHandler)
 	router.GET("/sensor", routes.FindAllSensorsHandler)
+	router.GET("/commands/:sensor_id", routes.FindSensorCommands)
 	router.GET("/sensor/data", routes.FindAllSensorDataHandler)
 
 	fmt.Println("Server started on port", defaultPort)
