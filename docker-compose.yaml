@@ -19,7 +19,7 @@ services:
       - iot-network
     ports:
       - "8080:8080"
-      - "5310:5310"
+      - "5310:5310/udp"
 
   temp_sensor:
     build:
