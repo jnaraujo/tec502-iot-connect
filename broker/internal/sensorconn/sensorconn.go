@@ -15,11 +15,11 @@ const (
 	handshakeReceived = "hello, server!"
 )
 
-type SensorConn struct {
+type Connection struct {
 	Conn net.Conn
 }
 
-func NewSensorConn(addr string) (*SensorConn, error) {
+func New(addr string) (*Connection, error) {
 	conn, err := net.DialTimeout("tcp", addr, timeout)
 	if err != nil {
 		switch {
@@ -34,9 +34,7 @@ func NewSensorConn(addr string) (*SensorConn, error) {
 		return nil, errors.ErrValidationFailed
 	}
 
-	return &SensorConn{
-		Conn: conn,
-	}, nil
+	return &Connection{Conn: conn}, nil
 }
 
 func ValidateSensorConnection(conn net.Conn) bool {
@@ -73,7 +71,7 @@ Exemplo de uso:
 	fmt.Println(response)
 */
 func Request(addr string, cmd cmdparser.Cmd) (string, error) {
-	conn, err := NewSensorConn(addr)
+	conn, err := New(addr)
 	if err != nil {
 		return "", err
 	}

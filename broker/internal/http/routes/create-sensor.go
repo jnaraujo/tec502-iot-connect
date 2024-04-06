@@ -39,7 +39,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = sensorconn.NewSensorConn(newSensor.Address)
+	_, err = sensorconn.New(newSensor.Address)
 	if err != nil {
 		switch {
 		case err == errors.ErrTimeout:
