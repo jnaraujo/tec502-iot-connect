@@ -40,12 +40,12 @@ func (u *UDPServer) Listen() error {
 			return err
 		}
 
-		reply := u.makeReplayFunc(conn, addr)
+		reply := u.makeReplyFunc(conn, addr)
 		go u.handler(string(buffer[:n]), reply)
 	}
 }
 
-func (u *UDPServer) makeReplayFunc(conn net.PacketConn, addr net.Addr) func(string) error {
+func (u *UDPServer) makeReplyFunc(conn net.PacketConn, addr net.Addr) func(string) error {
 	return func(msg string) error {
 		_, err := conn.WriteTo([]byte(msg), addr)
 
