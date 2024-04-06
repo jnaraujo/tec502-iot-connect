@@ -11,7 +11,7 @@ func NewServer(addr string, port int) {
 	g := gin.Default()
 	g.Use(corsMiddleware())
 
-	registerRouter(g)
+	registerRoutes(g)
 
 	fmt.Printf("Server started on %s:%d\n", addr, port)
 
@@ -21,7 +21,7 @@ func NewServer(addr string, port int) {
 	}
 }
 
-func registerRouter(g *gin.Engine) {
+func registerRoutes(g *gin.Engine) {
 	g.GET("/", routes.GetRootHandler)
 	g.POST("/message", routes.PostMessageHandler)
 	g.POST("/sensor", routes.CreateSensorHandler)
