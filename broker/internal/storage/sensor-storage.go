@@ -33,6 +33,16 @@ func (s *SensorStorage) GetSensors() []map[string]string {
 	return sensors
 }
 
+func (s *SensorStorage) DoesSensorExists(id, addr string) bool {
+	sensor := s.FindSensorAddrById(id)
+	if sensor != "" {
+		return true
+	}
+
+	sensor = s.FindSensorIdByAddress(id)
+	return sensor != ""
+}
+
 func (s *SensorStorage) FindSensorAddrById(id string) string {
 	for addr, sensorId := range s.addrs {
 		if sensorId == id {
