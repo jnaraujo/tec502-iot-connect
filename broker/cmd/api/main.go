@@ -15,6 +15,6 @@ func main() {
 	fmt.Println(color.GreenString(utils.CenterFormat("IoT Connect Broker", 25)))
 	fmt.Println(color.CyanString(strings.Repeat("=", 25)))
 
-	go udp_server.NewServer("", 5310)
-	http.NewServer("", 8080)
+	go udp_server.NewServer("0.0.0.0", 5310)
+	http.NewServer("0.0.0.0", 8080)
 }
