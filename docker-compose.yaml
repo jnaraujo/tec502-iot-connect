@@ -5,7 +5,7 @@ services:
     build: 
       context: ./client
       args:
-        - VITE_BROKER_URL=http://broker:8080
+        - VITE_BROKER_URL=http://localhost:8080
     networks:
       - iot-network
     ports:
