@@ -53,6 +53,7 @@ func PostMessageHandler(c *gin.Context) {
 	})
 	if err != nil {
 		fmt.Println(err)
+		storage.GetSensorDataStorage().UpdateResponse(sensorData.ID, "Sensor offline")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Erro ao enviar a mensagem para o sensor.",
 		})
