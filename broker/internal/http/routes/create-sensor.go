@@ -8,24 +8,26 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator"
 )
 
 type NewSensor struct {
-	Address string `json:"address"`
-	Id      string `json:"id"`
+	Address string `json:"address" validate:"required"`
+	Id      string `json:"id" validate:"required"`
 }
 
 func CreateSensorHandler(c *gin.Context) {
 	var newSensor NewSensor
 
-	err := c.BindJSON(&newSensor)
-	if err != nil {
+	if err := c.BindJSON(&newSensor); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
 		})
 		return
 	}
-	if newSensor.Address == "" || newSensor.Id == "" {
+
+	validate := validator.New()
+	if err := validate.Struct(newSensor); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
 		})

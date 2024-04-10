@@ -7,28 +7,28 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator"
 )
 
 type CommandRequest struct {
-	SensorID string `json:"sensor_id"`
-	Command  string `json:"command"`
+	SensorID string `json:"sensor_id" validate:"required"`
+	Command  string `json:"command" validate:"required"`
 	Content  string `json:"content"`
 }
 
 func PostMessageHandler(c *gin.Context) {
 	var command CommandRequest
-
-	err := c.BindJSON(&command)
-	if err != nil {
+	if err := c.BindJSON(&command); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid request body",
+			"message": "Corpo da requisição é inválido",
 		})
 		return
 	}
 
-	if command.SensorID == "" || command.Command == "" {
+	validate := validator.New()
+	if err := validate.Struct(command); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid request body",
+			"message": "Corpo da requisição é inválido",
 		})
 		return
 	}
