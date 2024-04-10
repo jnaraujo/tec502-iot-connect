@@ -32,8 +32,6 @@ class Server:
       print('Waiting for connection...')
       conn, client_address = self.sock.accept()
       
-      print('Connection from:', client_address)
-      
       try:
         if not self.validate_connection(conn):
           conn.close()
@@ -102,7 +100,6 @@ class Server:
         command="commands", content=", ".join(commands)
       )
     )
-    print("aa", cmd)
     return cmd
   
   def register_not_found(self, callback: callable):
