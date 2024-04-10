@@ -1,32 +1,33 @@
 import datetime
-import socket
 import sys
 import time
 import os
 from threading import Thread
 from server import Server
-from cmd_data import Cmd
+import cmd_data
 from broker_service import BrokerService
-from random import randint
+import utils
 
 broker_url = os.environ.get('BROKER_URL', 'localhost:5310')
 broker_addr = (broker_url.split(':')[0], int(broker_url.split(':')[1]))
 
 bs = BrokerService(broker_addr)
 
-data = {}
-state = 'off'
+STATUS = False # O Status indica se o sensor está ligado ou desligado
+data = {
+  "temperature": 30.5,
+}
 
 def init():
   IP_ADDR = "0.0.0.0"
-  IP_PORT = int(os.environ.get('SENSOR_PORT', 3333))
+  IP_PORT = 3333
   
   if len(sys.argv) > 1:
     IP_PORT = int(sys.argv[1])
   
   print("="*30)
-  print("Air Conditioner - Sensor Server")
-  print(f'Sensor IP: {get_current_ip()}:{IP_PORT}')
+  print("Ar Condicionado - Sensor Server")
+  print(f'Sensor IP: {utils.get_current_ip()}:{IP_PORT}')
   print("="*30)
   
   server = Server(IP_ADDR, IP_PORT)
@@ -34,56 +35,43 @@ def init():
   server.register_not_found(not_found_cmd)
   
   server.register_command("set_temp", set_temp_cmd)
-  server.register_command("get_temp", get_temp_cmd)
-  server.register_command("turn_off", turn_off_cmd)
   server.register_command("turn_on", turn_on_cmd)
-  server.register_command("delay", delay)
+  server.register_command("turn_off", turn_off_cmd)
   
   Thread(target=server.start).start()
+  Thread(target=send_broker_data, args=(server,)).start()
   
-def not_found_cmd(cmd: Cmd):
-  res = Cmd(cmd.id, cmd.content, "Command not found")
-  bs.send(res)
+def send_broker_data(server: Server):
+  while True:
+    time.sleep(5) # Envia dados a cada 5 segundos
+    if not STATUS: # Se o sensor estiver desligado, não envia dados
+      continue
+    try:
+      cmd = cmd_data.Cmd(
+        idFrom=server.get_sensor_id(), idTo="BROKER", command='temperature',content=str(data["temperature"])
+        )
+      bs.send(cmd_data.encode(cmd))
+    except Exception as e:
+      print("Error sending data to broker:", e)
   
-def delay(cmd: Cmd):
-  time.sleep(randint(1, 5))
-  res = Cmd(cmd.id, cmd.content, "Delayed response")
-  bs.send(res)
-  
-def turn_on_cmd(cmd: Cmd):
-  global state
-  state = 'on'
-  res = Cmd(cmd.id, cmd.content, "Air Conditioner turned on")
-  bs.send(res)
-  
-def turn_off_cmd(cmd: Cmd):
-  global state
-  state = 'off'
-  res = Cmd(cmd.id, cmd.content, "Air Conditioner turned off")
-  bs.send(res)
-  
-def set_temp_cmd(cmd: Cmd):
-  if state == 'off':
-    res = Cmd(cmd.id, cmd.content, "Air Conditioner is off")
-    bs.send(res)
-    return
-  
-  data['temp'] = cmd.content
-  res = Cmd(cmd.id, cmd.content, "Temperature set")
-  bs.send(res)
-  
-def get_temp_cmd(cmd: Cmd):
-  if state == 'off':
-    res = Cmd(cmd.id, cmd.content, "Air Conditioner is off")
-    bs.send(res)
-    return
-  
-  temp = data.get('temp', 'N/A')
-  res = Cmd(cmd.id, cmd.content, temp)
-  bs.send(res)
+def not_found_cmd(cmd: cmd_data.Cmd):
+  return cmd_data.BasicCmd("not_found", f'Comando {cmd.command} não encontrado')
 
-def get_current_ip():
-  IPAddr = socket.gethostbyname(socket.gethostname())
-  return IPAddr
+def set_temp_cmd(cmd: cmd_data.Cmd):
+  if not STATUS:
+    return cmd_data.BasicCmd("error", "O sensor está desligado")
+  
+  data['temperature'] = cmd.content
+  return cmd_data.BasicCmd("set_temp", f'Temperature set to {cmd.content}')
+
+def turn_on_cmd(cmd: cmd_data.Cmd):
+  global STATUS
+  STATUS = True
+  return cmd_data.BasicCmd("turn_on", "Ar Condicionado foi ligado")
+
+def turn_off_cmd(cmd: cmd_data.Cmd):
+  global STATUS
+  STATUS = False
+  return cmd_data.BasicCmd("turn_off", "Ar Condicionado foi desligado")
 
 init()

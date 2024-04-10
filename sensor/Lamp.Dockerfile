@@ -8,4 +8,4 @@ WORKDIR /app
 COPY . .
 
 # Define o comando de execução
-CMD ["python", "temp_sensor.main.py"]
+CMD ["python", "lamp.main.py"]

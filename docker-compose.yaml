@@ -21,10 +21,10 @@ services:
       - "8080:8080"
       - "5310:5310/udp"
 
-  temp_sensor:
+  lamp_sensor:
     build:
       context: ./sensor
-      dockerfile: TempSensor.Dockerfile
+      dockerfile: Lamp.Dockerfile
     environment:
       - BROKER_URL=broker:5310
       - SENSOR_PORT=3333
