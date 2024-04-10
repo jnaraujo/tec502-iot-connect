@@ -53,7 +53,8 @@ func (s *SensorStorage) FindSensorAddrById(id string) string {
 	return ""
 }
 
-func (s *SensorStorage) DeleteSensorByAddress(addr string) {
+func (s *SensorStorage) DeleteSensorBySensorId(sensorId string) {
+	addr := s.FindSensorAddrById(sensorId)
 	delete(s.addrs, addr)
 }
 

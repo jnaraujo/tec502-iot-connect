@@ -28,6 +28,7 @@ func registerRoutes(g *gin.Engine) {
 	g.GET("/sensor", routes.FindAllSensorsHandler)
 	g.GET("/sensor/commands/:sensor_id", routes.FindSensorCommands)
 	g.GET("/sensor/data", routes.FindAllSensorDataHandler)
+	g.DELETE("/sensor/:sensor_id", routes.DeleteSensorRoute)
 }
 
 func corsMiddleware() gin.HandlerFunc {
