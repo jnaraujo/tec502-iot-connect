@@ -20,15 +20,12 @@ func NewServer(addr string, port int) {
 			return
 		}
 
-		fmt.Println(cmd.Content)
-
 		if storage.GetSensorStorage().FindSensorAddrById(cmd.IdFrom) == "" {
 			fmt.Println("O sensor não foi encontrado")
 			return
 		}
 
 		response := storage.GetSensorResponseStorage().FindBySensorId(cmd.IdFrom)
-
 		if response.SensorID == "" {
 			storage.GetSensorResponseStorage().Create(cmd.IdFrom, cmd.Command, cmd.Content)
 			return
