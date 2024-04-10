@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDecodeCmd(t *testing.T) {
@@ -15,9 +17,7 @@ func TestDecodeCmd(t *testing.T) {
 	expected := "IdFrom: BROKER\nIdTo: test_id\nCmd: test_command\n\ntest_content"
 	got := cmd.Decode()
 
-	if got != expected {
-		t.Error("Error encoding cmd")
-	}
+	assert.Equal(t, got, expected)
 }
 
 func TestEncode(t *testing.T) {
@@ -32,11 +32,8 @@ func TestEncode(t *testing.T) {
 
 	got, err := Encode(data)
 
-	if err != nil {
-		t.Error("Error decoding cmd")
-	}
+	assert.NoError(t, err)
 
-	if got.Command != expected.Command || got.Content != expected.Content {
-		t.Error("Error decoding cmd - wrong data")
-	}
+	assert.Equal(t, got.Command, expected.Command)
+	assert.Equal(t, got.Content, expected.Content)
 }
