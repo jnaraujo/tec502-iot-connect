@@ -60,6 +60,6 @@ func PostMessageHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"response": cmd.Content,
+		"message": cmd.Content,
 	})
 }

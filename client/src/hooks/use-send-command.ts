@@ -7,6 +7,10 @@ interface NewCommand {
   content?: string
 }
 
+interface Response {
+  message: string
+}
+
 export function useSendCommand() {
   const queryClient = useQueryClient()
 
@@ -30,7 +34,7 @@ export function useSendCommand() {
         throw new Error(data.message)
       }
 
-      return data
+      return data as Response
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

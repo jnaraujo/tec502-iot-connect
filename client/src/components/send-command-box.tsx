@@ -42,12 +42,11 @@ export function SendCommandBox() {
       },
       {
         onSuccess: (data) => {
-          console.log(data)
-
-          toast.success("Comando enviado com sucesso")
+          toast.success(data.message)
         },
         onError: (error) => {
           setError(error.message)
+          toast.error(error.message)
         },
       },
     )
