@@ -34,6 +34,7 @@ func (s *SensorResponseStorage) Create(sensorID, name, content string) Response 
 		Name:      name,
 		Content:   content,
 		CreatedAt: *time.NewTimeNow(),
+		UpdatedAt: *time.NewTimeNow(),
 	}
 
 	s.data[sensorID] = response
