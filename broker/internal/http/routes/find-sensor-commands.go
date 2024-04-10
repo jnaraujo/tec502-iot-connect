@@ -4,6 +4,7 @@ import (
 	"broker/internal/cmd"
 	"broker/internal/sensorconn"
 	"broker/internal/storage"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -14,7 +15,6 @@ func FindSensorCommands(c *gin.Context) {
 	sensor_id := c.Param("sensor_id")
 
 	addr := storage.GetSensorStorage().FindSensorAddrById(sensor_id)
-
 	if addr == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Sensor não encontrado.",
@@ -22,7 +22,7 @@ func FindSensorCommands(c *gin.Context) {
 		return
 	}
 
-	resp, err := sensorconn.Request(addr, cmd.New("#", "get_commands", ""))
+	resp, err := sensorconn.Request(addr, cmd.New("BROKER", sensor_id, "get_commands", ""))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Erro ao realizar a requisição com o sensor.",
@@ -32,6 +32,7 @@ func FindSensorCommands(c *gin.Context) {
 
 	cmd, err := cmd.Encode(resp)
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "O comando recebido do sensor é inválido.",
 		})

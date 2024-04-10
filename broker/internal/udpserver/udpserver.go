@@ -5,7 +5,6 @@ import (
 	"broker/internal/storage"
 	"fmt"
 	"log"
-	"strconv"
 )
 
 func NewServer(addr string, port int) {
@@ -14,29 +13,28 @@ func NewServer(addr string, port int) {
 	udpServer := NewUDPServer(fmt.Sprintf("%s:%d", addr, port))
 	defer udpServer.Close()
 
-	udpServer.HandleRequest(func(msg string, reply func(string) error) {
-		cmd, err := cmd.Encode(msg)
+	udpServer.HandleRequest(func(addr, content string) {
+		cmd, err := cmd.Encode(content)
 		if err != nil {
-			reply("Invalid command")
+			fmt.Println("Erro ao encodar o comando", err)
 			return
 		}
 
-		numId, err := strconv.Atoi(cmd.ID)
-		if err != nil {
-			reply("Invalid sensor ID")
+		fmt.Println(cmd.Content)
+
+		if storage.GetSensorStorage().FindSensorAddrById(cmd.IdFrom) == "" {
+			fmt.Println("O sensor não foi encontrado")
 			return
 		}
 
-		data := storage.GetSensorDataStorage().FindByID(numId)
-		if data == nil {
-			reply("Sensor not found")
+		response := storage.GetSensorResponseStorage().FindBySensorId(cmd.IdFrom)
+
+		if response.SensorID == "" {
+			storage.GetSensorResponseStorage().Create(cmd.IdFrom, cmd.Command, cmd.Content)
 			return
 		}
 
-		storage.GetSensorDataStorage().UpdateResponse(data.ID, cmd.Content)
-
-		fmt.Println("Received response from request", data.ID)
-		reply("Message received")
+		storage.GetSensorResponseStorage().UpdateContent(cmd.IdFrom, cmd.Content)
 	})
 
 	err := udpServer.Listen()

@@ -37,11 +37,26 @@ func New(addr string) (*Connection, error) {
 	return &Connection{Conn: conn}, nil
 }
 
+func (c *Connection) Send(content string) (string, error) {
+	_, err := c.Conn.Write([]byte(content))
+	if err != nil {
+		return "", err
+	}
+
+	buff := make([]byte, 1024)
+	n, err := c.Conn.Read(buff)
+	if err != nil {
+		return "", err
+	}
+
+	return string(buff[:n]), nil
+}
+
 func ValidateSensorConnection(conn net.Conn) bool {
 	conn.Write([]byte(handshakeSent))
 	buffer := make([]byte, len(handshakeReceived))
-
 	n, err := conn.Read(buffer)
+
 	if err != nil {
 		return false
 	}
@@ -49,28 +64,7 @@ func ValidateSensorConnection(conn net.Conn) bool {
 	return string(buffer[:n]) == handshakeReceived
 }
 
-/*
-Cria um request para o sensor enviando o comando passado.
-
-Exemplo de uso:
-
-	conn, err := sensor.NewSensorConn("localhost:3333")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	response, err := conn.Request(cmdparser.Cmd{
-		ID:      "1",
-		Command: "get",
-		Content: "temperature",
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(response)
-*/
-func Request(addr string, cmd *cmd.Cmd) (string, error) {
+func Request(addr string, command *cmd.Cmd) (string, error) {
 	conn, err := New(addr)
 	if err != nil {
 		return "", err
@@ -78,16 +72,10 @@ func Request(addr string, cmd *cmd.Cmd) (string, error) {
 
 	defer conn.Conn.Close()
 
-	_, err = conn.Conn.Write([]byte(cmd.Decode()))
+	content, err := conn.Send(command.Decode())
 	if err != nil {
 		return "", err
 	}
 
-	buff := make([]byte, 1024)
-	n, err := conn.Conn.Read(buff)
-	if err != nil {
-		return "", err
-	}
-
-	return string(buff[:n]), nil
+	return content, nil
 }

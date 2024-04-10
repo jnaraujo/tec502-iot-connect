@@ -8,7 +8,7 @@ import (
 )
 
 func FindAllSensorDataHandler(c *gin.Context) {
-	data := storage.GetSensorDataStorage().FindAll()
+	data := storage.GetSensorResponseStorage().FindAll()
 
 	c.JSON(http.StatusOK, data)
 }

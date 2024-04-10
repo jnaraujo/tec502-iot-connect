@@ -20,21 +20,20 @@ func CreateSensorHandler(c *gin.Context) {
 	err := c.BindJSON(&newSensor)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid request body",
+			"message": "Corpo da requisição é inválido",
 		})
 		return
 	}
-
 	if newSensor.Address == "" || newSensor.Id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid request body",
+			"message": "Corpo da requisição é inválido",
 		})
 		return
 	}
 
 	if storage.GetSensorStorage().DoesSensorExists(newSensor.Id, newSensor.Address) {
 		c.JSON(http.StatusConflict, gin.H{
-			"message": "Sensor already exists",
+			"message": "Sensor já existe",
 		})
 		return
 	}
@@ -61,6 +60,6 @@ func CreateSensorHandler(c *gin.Context) {
 	storage.GetSensorStorage().AddSensor(newSensor.Id, newSensor.Address)
 
 	c.JSON(http.StatusCreated, gin.H{
-		"message": "Sensor created",
+		"message": "Sensor criado",
 	})
 }

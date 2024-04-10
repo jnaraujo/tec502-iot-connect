@@ -41,7 +41,9 @@ export function SendCommandBox() {
         content,
       },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
+          console.log(data)
+
           toast.success("Comando enviado com sucesso")
         },
         onError: (error) => {

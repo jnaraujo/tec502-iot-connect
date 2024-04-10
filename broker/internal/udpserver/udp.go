@@ -1,11 +1,10 @@
 package udpserver
 
 import (
-	"fmt"
 	"net"
 )
 
-type UDPServerHandler func(string, func(string) error)
+type UDPServerHandler func(addr, content string)
 
 type UDPServer struct {
 	Conn net.PacketConn
@@ -34,26 +33,11 @@ func (u *UDPServer) Listen() error {
 	for {
 		n, addr, err := conn.ReadFrom(buffer)
 
-		fmt.Println("Received message from", addr, ":", string(buffer[:n]))
-
 		if err != nil {
 			return err
 		}
 
-		reply := u.makeReplyFunc(conn, addr)
-		go u.handler(string(buffer[:n]), reply)
-	}
-}
-
-func (u *UDPServer) makeReplyFunc(conn net.PacketConn, addr net.Addr) func(string) error {
-	return func(msg string) error {
-		_, err := conn.WriteTo([]byte(msg), addr)
-
-		if err != nil {
-			return err
-		}
-
-		return nil
+		go u.handler(addr.String(), string(buffer[:n]))
 	}
 }
 

@@ -6,12 +6,13 @@ import (
 
 func TestDecodeCmd(t *testing.T) {
 	cmd := Cmd{
-		ID:      "test_id",
+		IdFrom:  "BROKER",
+		IdTo:    "test_id",
 		Command: "test_command",
 		Content: "test_content",
 	}
 
-	expected := "Id: test_id\nCmd: test_command\n\ntest_content"
+	expected := "IdFrom: BROKER\nIdTo: test_id\nCmd: test_command\n\ntest_content"
 	got := cmd.Decode()
 
 	if got != expected {
@@ -20,10 +21,11 @@ func TestDecodeCmd(t *testing.T) {
 }
 
 func TestEncode(t *testing.T) {
-	data := "Id: test_id\nCmd: test_command\n\ntest_content"
+	data := "IdFrom: test_id_from\nIdTo: test_id_to\nCmd: test_command\n\ntest_content"
 
 	expected := Cmd{
-		ID:      "test_id",
+		IdFrom:  "test_id_from",
+		IdTo:    "test_id_to",
 		Command: "test_command",
 		Content: "test_content",
 	}

@@ -1,11 +1,14 @@
 import socket
 from threading import Thread
 import cmd_data
+import random
 
 class Server:
   HANDSHAKE_RECEIVED = b'hello, sensor!'
   HANDSHAKE_SENT = b'hello, server!'
 
+  sensor_id=f'sensor-{random.randint(0, 1000)}'
+  
   def __init__(self, host: str, port: int):
     self.host = host
     self.port = port
@@ -17,6 +20,9 @@ class Server:
     self.sock.listen(1)
     
     self.handle_connections()
+    
+  def get_sensor_id(self):
+    return self.sensor_id
   
   def stop(self):
     self.sock.close()
@@ -39,7 +45,6 @@ class Server:
         
   def handle_connection(self, conn: socket.socket):    
     data = conn.recv(1024)
-    print('Received:', data)
     if not data:
       conn.close()
       return
@@ -56,6 +61,9 @@ class Server:
   def handle_command(self, data: cmd_data.Cmd, conn: socket.socket):
     command = data['command']
     
+    if self.sensor_id != data['idTo']:
+      self.sensor_id = data['idTo'] # Atualiza o ID do sensor caso seja diferente
+    
     if command == "get_commands":
       conn.sendall(self.get_commands())
       return
@@ -66,8 +74,15 @@ class Server:
       conn.sendall(b'command not found')
       return
     
-    conn.sendall(b'command received')
-    self.commands[command](data)
+    resCmd: cmd_data.Cmd = self.commands[command](data)
+    
+    # Se o comando não tiver um ID, seta o ID do sensor
+    if resCmd.idFrom is None:
+      resCmd.idFrom = self.sensor_id
+    if resCmd.idTo is None: # Se o comando não tiver um destinatário, seta o destinatário como o broker
+      resCmd.idTo = 'BROKER'
+    
+    conn.sendall(cmd_data.encode(resCmd))
       
   def validate_connection(self, conn: socket.socket) -> bool:
     data = conn.recv(len(self.HANDSHAKE_RECEIVED))
@@ -81,7 +96,13 @@ class Server:
   
   def get_commands(self):
     commands = list(self.commands.keys())    
-    cmd = cmd_data.encode(cmd_data.Cmd(id='commands', command="commands", content=", ".join(commands)))
+    cmd = cmd_data.encode(
+      cmd_data.Cmd(
+        idFrom=self.sensor_id, idTo="BROKER",
+        command="commands", content=", ".join(commands)
+      )
+    )
+    print("aa", cmd)
     return cmd
   
   def register_not_found(self, callback: callable):
