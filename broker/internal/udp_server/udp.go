@@ -1,4 +1,4 @@
-package udpserver
+package udp_server
 
 import (
 	"net"
