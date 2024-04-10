@@ -68,6 +68,7 @@ def turn_on_cmd(cmd: cmd_data.Cmd):
   return cmd_data.BasicCmd("turn_on", "Sensor turned on")
 
 def turn_off_cmd(cmd: cmd_data.Cmd):
+  global STATUS
   STATUS = False
   return cmd_data.BasicCmd("turn_off", "Sensor turned off")
   
