@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"broker/internal/cmd"
 	"broker/internal/errors"
 	"broker/internal/sensorconn"
 	"broker/internal/storage"
@@ -38,7 +39,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = sensorconn.New(newSensor.Address)
+	conn, err := sensorconn.New(newSensor.Address)
 	if err != nil {
 		switch {
 		case err == errors.ErrTimeout:
@@ -54,6 +55,14 @@ func CreateSensorHandler(c *gin.Context) {
 				"message": "Error connecting to sensor",
 			})
 		}
+		return
+	}
+
+	_, err = conn.Send(cmd.New("BROKER", newSensor.Id, "set_id", newSensor.Id).Decode())
+	if err != nil {
+		c.JSON(http.StatusConflict, gin.H{
+			"message": "Erro ao setar o id no sensor.",
+		})
 		return
 	}
 

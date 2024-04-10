@@ -59,6 +59,17 @@ class Server:
   def handle_command(self, data: cmd_data.Cmd, conn: socket.socket):
     command = data['command']
     
+    if command == "set_id":
+      self.sensor_id = data['content']
+      cmd = cmd_data.Cmd(
+        idFrom=self.sensor_id,
+        idTo="BROKER",
+        command='id',
+        content=self.sensor_id
+      )
+      conn.sendall(cmd_data.encode(cmd))
+      return
+    
     if self.sensor_id != data['idTo']:
       self.sensor_id = data['idTo'] # Atualiza o ID do sensor caso seja diferente
     
