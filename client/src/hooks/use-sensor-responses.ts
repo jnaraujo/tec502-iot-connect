@@ -2,16 +2,14 @@ import { env } from "@/env"
 import { useQuery } from "@tanstack/react-query"
 
 interface Sensor {
-  id: number
   sensor_id: string
-  command: string
+  name: string
   content: string
-  response: string
   created_at: string
-  received_at: string
+  updated_at: string
 }
 
-export function useSensorDataList() {
+export function useSensorResponses() {
   return useQuery({
     queryFn: async () => {
       const resp = await fetch(`${env.VITE_BROKER_URL}/sensor/data`)

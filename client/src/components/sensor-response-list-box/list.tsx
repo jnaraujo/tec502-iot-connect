@@ -8,11 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useSensorDataList } from "@/hooks/use-sensor-data-list"
+import { useSensorResponses } from "@/hooks/use-sensor-responses"
+import { getRelativeTimeString } from "@/util/time"
 import { useState } from "react"
 
 export function List() {
-  const { data } = useSensorDataList()
+  const { data } = useSensorResponses()
   const [search, setSearch] = useState("")
 
   const filteredData = data
@@ -21,17 +22,12 @@ export function List() {
 
       return (
         sensor.sensor_id.toLowerCase().includes(term) ||
-        sensor.command.toLowerCase().includes(term) ||
-        sensor.response.toLowerCase().includes(term) ||
+        sensor.name.toLowerCase().includes(term) ||
         sensor.content.toLowerCase().includes(term)
       )
     })
     .sort((a, b) => {
-      if (!a.received_at || !b.received_at) {
-        return Date.parse(b.created_at) - Date.parse(a.created_at)
-      }
-
-      return Date.parse(b.received_at) - Date.parse(a.received_at)
+      return Date.parse(b.updated_at) - Date.parse(a.updated_at)
     })
 
   return (
@@ -50,20 +46,22 @@ export function List() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Sensor ID</TableHead>
-              <TableHead className="w-[100px]">Comando</TableHead>
+              <TableHead className="w-[100px]">Nome</TableHead>
               <TableHead className="w-[300px]">Conteúdo</TableHead>
-              <TableHead className="text-right">Resposta</TableHead>
+              <TableHead className="text-right">Atualizado em</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredData?.map((sensor) => (
-              <TableRow key={sensor.id}>
+              <TableRow key={sensor.sensor_id}>
                 <TableCell className="font-medium">
                   {sensor.sensor_id}
                 </TableCell>
-                <TableCell>{sensor.command}</TableCell>
+                <TableCell>{sensor.name}</TableCell>
                 <TableCell>{sensor.content}</TableCell>
-                <TableCell className="text-right">{sensor.response}</TableCell>
+                <TableCell className="text-right">
+                  {getRelativeTimeString(new Date(sensor.updated_at))}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
