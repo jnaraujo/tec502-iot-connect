@@ -25,6 +25,8 @@ func NewServer(addr string, port int) {
 			return
 		}
 
+		fmt.Println("New udp packet from", cmd.IdFrom)
+
 		response := storage.GetSensorResponseStorage().FindBySensorId(cmd.IdFrom)
 		if response.SensorID == "" {
 			storage.GetSensorResponseStorage().Create(cmd.IdFrom, cmd.Command, cmd.Content)

@@ -1,4 +1,15 @@
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -9,15 +20,19 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCreateSensor } from "@/hooks/use-create-sensor"
+import { useDeleteSensor } from "@/hooks/use-delete-sensor"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
-import { Button } from "../ui/button"
+import { Button, buttonVariants } from "../ui/button"
 import { List } from "./list"
 
 export function SensorListBox() {
+  const [openCreateDialog, setOpenCreateDialog] = useState(false)
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
+  const [deletedSensorId, setDeletedSensorId] = useState("")
   const { mutate: createSensor, error } = useCreateSensor()
-  const [open, setOpen] = useState(false)
+  const { mutate: deleteSensor } = useDeleteSensor()
 
   function addNewSensor(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -35,7 +50,23 @@ export function SensorListBox() {
       {
         onSuccess: () => {
           toast.success("Sensor adicionado!")
-          setOpen(false)
+          setOpenCreateDialog(false)
+        },
+      },
+    )
+  }
+
+  function handleDeleteSensor() {
+    deleteSensor(
+      {
+        id: deletedSensorId,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Sensor deletado!")
+        },
+        onError: (error) => {
+          toast.error("Erro ao deletar o sensor: " + error.message)
         },
       },
     )
@@ -47,11 +78,15 @@ export function SensorListBox() {
 
       <List
         onCreateSensorClick={() => {
-          setOpen(true)
+          setOpenCreateDialog(true)
+        }}
+        onDeleteSensor={(sensorId) => {
+          setOpenDeleteDialog(true)
+          setDeletedSensorId(sensorId)
         }}
       />
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={openCreateDialog} onOpenChange={setOpenCreateDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <form onSubmit={addNewSensor}>
             <DialogHeader>
@@ -100,6 +135,32 @@ export function SensorListBox() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
+        <AlertDialogTrigger>Open</AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Deletar o sensor "{deletedSensorId}"?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Essa ação é irreversível. Ao deletar um sensor, ele não será mais
+              acessível.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className={buttonVariants({
+                variant: "destructive",
+              })}
+              onClick={handleDeleteSensor}
+            >
+              Deletar o sensor
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </article>
   )
 }

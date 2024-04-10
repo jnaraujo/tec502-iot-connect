@@ -14,12 +14,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useSensorList } from "@/hooks/use-sensor-list"
-import { Plus } from "lucide-react"
+import { Plus, Trash } from "lucide-react"
 import { useState } from "react"
 import { Input } from "../ui/input"
 
 interface Props {
   onCreateSensorClick: () => void
+  onDeleteSensor: (sensorId: string) => void
 }
 
 export function List(props: Props) {
@@ -71,14 +72,28 @@ export function List(props: Props) {
           <TableHeader>
             <TableRow>
               <TableHead className="w-8">ID</TableHead>
-              <TableHead className="text-right">Endereço IP</TableHead>
+              <TableHead>Endereço IP</TableHead>
+              <TableHead className="w-12 text-center">#</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredData?.map((sensor) => (
-              <TableRow key={sensor.id}>
+              <TableRow key={sensor.id} className="group">
                 <TableCell className="font-medium">{sensor.id}</TableCell>
-                <TableCell className="text-right">{sensor.address}</TableCell>
+                <TableCell>{sensor.address}</TableCell>
+                <TableCell className="text-right">
+                  <button
+                    className="hidden group-hover:block"
+                    onClick={() => {
+                      props.onDeleteSensor(sensor.id)
+                    }}
+                  >
+                    <Trash
+                      size={16}
+                      className="text-zinc-400 transition-colors duration-200 hover:text-red-700"
+                    />
+                  </button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
