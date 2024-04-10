@@ -77,13 +77,13 @@ class Server:
       conn.sendall(self.get_commands())
       return
     
+    resCmd: cmd_data.Cmd = None
+    
     if command not in self.commands:
       if 'not_found' in self.commands:
-        self.commands['not_found'](data)
-      conn.sendall(b'command not found')
-      return
-    
-    resCmd: cmd_data.Cmd = self.commands[command](data)
+        resCmd = self.commands['not_found'](data)
+    else:
+      resCmd = self.commands[command](data)
     
     # Se o comando não tiver um ID, seta o ID do sensor
     if resCmd.idFrom is None:
