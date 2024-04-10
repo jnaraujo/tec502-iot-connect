@@ -2,10 +2,10 @@ package routes
 
 import (
 	"broker/internal/cmd"
-	"broker/internal/errors"
 	"broker/internal/sensorconn"
 	"broker/internal/storage"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,17 +42,13 @@ func CreateSensorHandler(c *gin.Context) {
 	conn, err := sensorconn.New(newSensor.Address)
 	if err != nil {
 		switch {
-		case err == errors.ErrTimeout:
+		case os.IsTimeout(err):
 			c.JSON(http.StatusRequestTimeout, gin.H{
-				"message": "Sensor connection timeout",
-			})
-		case err == errors.ErrValidationFailed:
-			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "Invalid sensor address",
+				"message": "O sensor demorou demais para responder",
 			})
 		default:
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"message": "Error connecting to sensor",
+				"message": "Erro ao se conectar com o sensor",
 			})
 		}
 		return

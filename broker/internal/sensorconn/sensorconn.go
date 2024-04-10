@@ -2,9 +2,8 @@ package sensorconn
 
 import (
 	"broker/internal/cmd"
-	"broker/internal/errors"
+	"errors"
 	"net"
-	"os"
 	"time"
 )
 
@@ -22,16 +21,11 @@ type Connection struct {
 func New(addr string) (*Connection, error) {
 	conn, err := net.DialTimeout("tcp", addr, timeout)
 	if err != nil {
-		switch {
-		case os.IsTimeout(err):
-			return nil, errors.ErrTimeout
-		default:
-			return nil, err
-		}
+		return nil, err
 	}
 
 	if !ValidateSensorConnection(conn) {
-		return nil, errors.ErrValidationFailed
+		return nil, errors.New("validation failed")
 	}
 
 	return &Connection{Conn: conn}, nil
