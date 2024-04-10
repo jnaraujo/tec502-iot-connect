@@ -17,6 +17,8 @@ func DeleteSensorRoute(c *gin.Context) {
 		return
 	}
 
+	storage.GetSensorResponseStorage().DeleteBySensorId(sensorId)
+
 	storage.GetSensorStorage().DeleteSensorBySensorId(sensorId)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Sensor deletado.",

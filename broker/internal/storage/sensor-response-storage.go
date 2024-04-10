@@ -55,6 +55,10 @@ func (s *SensorResponseStorage) FindBySensorId(sensorId string) Response {
 	return s.data[sensorId]
 }
 
+func (s *SensorResponseStorage) DeleteBySensorId(sensorId string) {
+	delete(s.data, sensorId)
+}
+
 func (s *SensorResponseStorage) UpdateContent(sensorId, content string) {
 	response := s.data[sensorId]
 
