@@ -59,6 +59,9 @@ def not_found_cmd(cmd: cmd_data.Cmd):
   return cmd_data.BasicCmd("not_found", f'Command {cmd.command} not found')
 
 def set_temp_cmd(cmd: cmd_data.Cmd):
+  if not STATUS:
+    return cmd_data.BasicCmd("set_temp", "Sensor is off")
+  
   data['temperature'] = cmd.content
   return cmd_data.BasicCmd("set_temp", f'Temperature set to {cmd.content}')
 
