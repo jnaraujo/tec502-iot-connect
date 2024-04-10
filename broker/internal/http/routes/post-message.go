@@ -2,7 +2,7 @@ package routes
 
 import (
 	"broker/internal/cmd"
-	"broker/internal/sensorconn"
+	"broker/internal/sensor_conn"
 	"broker/internal/storage"
 	"net/http"
 
@@ -41,7 +41,7 @@ func PostMessageHandler(c *gin.Context) {
 		return
 	}
 
-	response, err := sensorconn.Request(addr, cmd.New(
+	response, err := sensor_conn.Request(addr, cmd.New(
 		"BROKER", command.SensorID, command.Command, command.Content,
 	))
 	if err != nil {

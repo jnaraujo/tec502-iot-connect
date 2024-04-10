@@ -1,4 +1,4 @@
-package sensorconn
+package sensor_conn
 
 import (
 	"broker/internal/cmd"

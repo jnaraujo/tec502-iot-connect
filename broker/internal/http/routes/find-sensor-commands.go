@@ -2,7 +2,7 @@ package routes
 
 import (
 	"broker/internal/cmd"
-	"broker/internal/sensorconn"
+	"broker/internal/sensor_conn"
 	"broker/internal/storage"
 	"fmt"
 	"net/http"
@@ -22,7 +22,7 @@ func FindSensorCommands(c *gin.Context) {
 		return
 	}
 
-	resp, err := sensorconn.Request(addr, cmd.New("BROKER", sensor_id, "get_commands", ""))
+	resp, err := sensor_conn.Request(addr, cmd.New("BROKER", sensor_id, "get_commands", ""))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Erro ao realizar a requisição com o sensor.",

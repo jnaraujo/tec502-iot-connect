@@ -2,7 +2,7 @@ package routes
 
 import (
 	"broker/internal/cmd"
-	"broker/internal/sensorconn"
+	"broker/internal/sensor_conn"
 	"broker/internal/storage"
 	"net/http"
 	"os"
@@ -39,7 +39,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	conn, err := sensorconn.New(newSensor.Address)
+	conn, err := sensor_conn.New(newSensor.Address)
 	if err != nil {
 		switch {
 		case os.IsTimeout(err):
