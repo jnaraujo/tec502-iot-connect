@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 interface Sensor {
   address: string
   id: string
+  is_online: boolean
 }
 
 export function useSensorList() {
@@ -18,7 +19,7 @@ export function useSensorList() {
       return (await resp.json()).sensors as Array<Sensor>
     },
     queryKey: ["getSensors"],
-    refetchInterval: 10_000,
+    refetchInterval: 5_000,
     staleTime: 5_000,
   })
 }

@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useSensorList } from "@/hooks/use-sensor-list"
+import { cn } from "@/lib/utils"
 import { Plus, Trash } from "lucide-react"
 import { useState } from "react"
 import { Input } from "../ui/input"
@@ -71,14 +72,32 @@ export function List(props: Props) {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-3"></TableHead>
               <TableHead className="w-8">ID</TableHead>
-              <TableHead>Endereço IP</TableHead>
+              <TableHead className="flex-1">Endereço IP</TableHead>
               <TableHead className="w-12 text-center">#</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredData?.map((sensor) => (
               <TableRow key={sensor.id} className="group">
+                <TableCell>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div
+                        className={cn("size-3 rounded-full drop-shadow-sm", {
+                          "bg-green-500": sensor.is_online,
+                          "bg-red-600": !sensor.is_online,
+                        })}
+                      ></div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        {sensor.is_online ? "Sensor online" : "Sensor offline"}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TableCell>
                 <TableCell className="font-medium">{sensor.id}</TableCell>
                 <TableCell>{sensor.address}</TableCell>
                 <TableCell className="text-right">

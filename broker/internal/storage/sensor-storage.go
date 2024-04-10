@@ -20,13 +20,18 @@ func (s *SensorStorage) AddSensor(id string, addr string) {
 	s.addrs[addr] = id
 }
 
-func (s *SensorStorage) GetSensors() []map[string]string {
-	var sensors []map[string]string = []map[string]string{}
+type Sensor struct {
+	Id      string `json:"id"`
+	Address string `json:"address"`
+}
+
+func (s *SensorStorage) FindSensors() []Sensor {
+	var sensors []Sensor = []Sensor{}
 
 	for addr, id := range s.addrs {
-		sensors = append(sensors, map[string]string{
-			"id":      id,
-			"address": addr,
+		sensors = append(sensors, Sensor{
+			Id:      id,
+			Address: addr,
 		})
 	}
 
