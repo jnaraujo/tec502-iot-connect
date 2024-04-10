@@ -5,7 +5,7 @@ import { useCommandList } from "@/hooks/use-command-list"
 import { useSendCommand } from "@/hooks/use-send-command"
 import { useSensorList } from "@/hooks/use-sensor-list"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import {
   Select,
@@ -19,9 +19,9 @@ export function SendCommandBox() {
   const [sensorId, setSensorId] = useState("")
   const [command, setCommand] = useState("")
   const [error, setError] = useState("")
-  const { mutate: sendCommand } = useSendCommand()
   const { data: sensors } = useSensorList()
   const { data: commands } = useCommandList(sensorId)
+  const { mutate: sendCommand } = useSendCommand()
 
   function handleSendCommand(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -52,6 +52,16 @@ export function SendCommandBox() {
     )
   }
 
+  useEffect(() => {
+    if (sensors?.length === 0) {
+      setSensorId("")
+    }
+
+    if (commands?.length === 0) {
+      setCommand("")
+    }
+  }, [commands?.length, sensors?.length])
+
   return (
     <article className="flex flex-col space-y-2 rounded-lg border bg-background p-6">
       <h2 className="text-lg font-medium text-zinc-900">Enviar comando</h2>
@@ -64,9 +74,9 @@ export function SendCommandBox() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-0.5">
               <Label htmlFor="sensor_id">Sensor ID:</Label>
-              <Select onValueChange={setSensorId} defaultValue={sensorId}>
+              <Select onValueChange={setSensorId} value={sensorId}>
                 <SelectTrigger id="sensor_id">
-                  <SelectValue placeholder="Sensor" />
+                  <SelectValue placeholder="Selecione um sensor" />
                 </SelectTrigger>
                 <SelectContent>
                   {sensors?.map((sensor) => (
@@ -80,9 +90,9 @@ export function SendCommandBox() {
             <div className="space-y-0.5">
               <Label htmlFor="command">Comando:</Label>
 
-              <Select onValueChange={setCommand} defaultValue={command}>
+              <Select onValueChange={setCommand} value={command}>
                 <SelectTrigger id="command">
-                  <SelectValue placeholder="Comando" />
+                  <SelectValue placeholder="Selecione um comando" />
                 </SelectTrigger>
                 <SelectContent>
                   {commands?.map((command) => (
