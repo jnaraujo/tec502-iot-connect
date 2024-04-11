@@ -21,16 +21,15 @@ func NewUDPServer(addr string) *UDPServer {
 
 func (u *UDPServer) Listen() error {
 	conn, err := net.ListenPacket("udp", u.Addr)
-
 	if err != nil {
 		return err
 	}
 
 	u.Conn = conn
 
-	buffer := make([]byte, 1024)
-
 	for {
+		buffer := make([]byte, 1024)
+
 		n, addr, err := conn.ReadFrom(buffer)
 
 		if err != nil {
