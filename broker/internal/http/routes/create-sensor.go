@@ -18,7 +18,6 @@ type NewSensor struct {
 
 func CreateSensorHandler(c *gin.Context) {
 	var newSensor NewSensor
-
 	if err := c.BindJSON(&newSensor); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
@@ -65,7 +64,6 @@ func CreateSensorHandler(c *gin.Context) {
 	}
 
 	sensors.AddSensor(newSensor.Id, newSensor.Address)
-
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Sensor criado",
 	})
