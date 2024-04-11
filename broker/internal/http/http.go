@@ -8,12 +8,14 @@ import (
 )
 
 func NewServer(addr string, port int) {
-	g := gin.Default()
+	fmt.Printf("Server started on %s:%d\n", addr, port)
+
+	g := gin.New()
+
+	g.Use(gin.Recovery())
 	g.Use(corsMiddleware())
 
 	registerRoutes(g)
-
-	fmt.Printf("Server started on %s:%d\n", addr, port)
 
 	err := g.Run(fmt.Sprintf("%s:%d", addr, port))
 	if err != nil {
