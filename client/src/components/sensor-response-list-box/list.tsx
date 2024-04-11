@@ -27,7 +27,9 @@ export function List() {
       )
     })
     .sort((a, b) => {
-      return Date.parse(b.updated_at) - Date.parse(a.updated_at)
+      if(a.sensor_id < b.sensor_id) { return -1; }
+      if(a.sensor_id > b.sensor_id) { return 1; }
+      return 0;
     })
 
   return (

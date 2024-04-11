@@ -80,7 +80,7 @@ export function List(props: Props) {
           </TableHeader>
           <TableBody>
             {filteredData?.map((sensor) => (
-              <TableRow key={sensor.id} className="group">
+              <TableRow key={sensor.id}>
                 <TableCell>
                   <Tooltip>
                     <TooltipTrigger>
@@ -102,7 +102,6 @@ export function List(props: Props) {
                 <TableCell>{sensor.address}</TableCell>
                 <TableCell className="text-right">
                   <button
-                    className="hidden group-hover:block"
                     onClick={() => {
                       props.onDeleteSensor(sensor.id)
                     }}
