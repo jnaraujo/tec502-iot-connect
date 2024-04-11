@@ -36,7 +36,7 @@ def init():
   
 def send_broker_data(server: Server):
   while True:
-    time.sleep(5) # Envia dados a cada 5 segundos
+    time.sleep(0.5) # Envia dados a cada 0.5 segundos
     if not STATUS: # Se o sensor estiver desligado, não envia dados
       continue
     try:
