@@ -1,7 +1,8 @@
 package routes
 
 import (
-	"broker/internal/storage"
+	"broker/internal/storage/responses"
+	"broker/internal/storage/sensors"
 	"net/http"
 	"time"
 
@@ -13,17 +14,17 @@ const (
 )
 
 type sensorWithOnlineStatus struct {
-	storage.Sensor
+	sensors.Sensor
 	IsOnline bool `json:"is_online"`
 }
 
 func FindAllSensorsHandler(c *gin.Context) {
-	sensors := storage.GetSensorStorage().FindSensors()
+	sensors := sensors.FindSensors()
 
 	sensorsWithStatus := []sensorWithOnlineStatus{}
 
 	for _, sensor := range sensors {
-		resp := storage.GetSensorResponseStorage().FindBySensorId(sensor.Id)
+		resp := responses.FindBySensorId(sensor.Id)
 		isOnline := true
 
 		if resp.UpdatedAt.Time.IsZero() ||

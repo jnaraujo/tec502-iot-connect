@@ -3,7 +3,7 @@ package routes
 import (
 	"broker/internal/cmd"
 	"broker/internal/sensor_conn"
-	"broker/internal/storage"
+	"broker/internal/storage/sensors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,7 +33,7 @@ func PostMessageHandler(c *gin.Context) {
 		return
 	}
 
-	addr := storage.GetSensorStorage().FindSensorAddrById(command.SensorID)
+	addr := sensors.FindSensorAddrById(command.SensorID)
 	if addr == "" {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "Sensor not found",

@@ -3,7 +3,7 @@ package routes
 import (
 	"broker/internal/cmd"
 	"broker/internal/sensor_conn"
-	"broker/internal/storage"
+	"broker/internal/storage/sensors"
 	"net/http"
 	"os"
 
@@ -34,7 +34,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	if storage.GetSensorStorage().DoesSensorExists(newSensor.Id, newSensor.Address) {
+	if sensors.DoesSensorExists(newSensor.Id, newSensor.Address) {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Sensor já existe",
 		})
@@ -64,7 +64,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	storage.GetSensorStorage().AddSensor(newSensor.Id, newSensor.Address)
+	sensors.AddSensor(newSensor.Id, newSensor.Address)
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Sensor criado",

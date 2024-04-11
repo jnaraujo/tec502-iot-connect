@@ -3,7 +3,7 @@ package routes
 import (
 	"broker/internal/cmd"
 	"broker/internal/sensor_conn"
-	"broker/internal/storage"
+	"broker/internal/storage/sensors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -14,7 +14,7 @@ import (
 func FindSensorCommands(c *gin.Context) {
 	sensor_id := c.Param("sensor_id")
 
-	addr := storage.GetSensorStorage().FindSensorAddrById(sensor_id)
+	addr := sensors.FindSensorAddrById(sensor_id)
 	if addr == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Sensor não encontrado.",

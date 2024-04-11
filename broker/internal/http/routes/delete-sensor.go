@@ -1,7 +1,8 @@
 package routes
 
 import (
-	"broker/internal/storage"
+	"broker/internal/storage/responses"
+	"broker/internal/storage/sensors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,16 +11,16 @@ import (
 func DeleteSensorRoute(c *gin.Context) {
 	sensorId := c.Param("sensor_id")
 
-	if storage.GetSensorStorage().FindSensorAddrById(sensorId) == "" {
+	if sensors.FindSensorAddrById(sensorId) == "" {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "Sensor não encontrado.",
 		})
 		return
 	}
 
-	storage.GetSensorResponseStorage().DeleteBySensorId(sensorId)
+	responses.DeleteBySensorId(sensorId)
 
-	storage.GetSensorStorage().DeleteSensorBySensorId(sensorId)
+	sensors.DeleteSensorBySensorId(sensorId)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Sensor deletado.",
 	})

@@ -2,7 +2,8 @@ package udp_server
 
 import (
 	"broker/internal/cmd"
-	"broker/internal/storage"
+	"broker/internal/storage/responses"
+	"broker/internal/storage/sensors"
 	"fmt"
 	"log"
 )
@@ -20,20 +21,20 @@ func NewServer(addr string, port int) {
 			return
 		}
 
-		if storage.GetSensorStorage().FindSensorAddrById(cmd.IdFrom) == "" {
+		if sensors.FindSensorAddrById(cmd.IdFrom) == "" {
 			fmt.Println("O sensor não foi encontrado")
 			return
 		}
 
 		fmt.Println("New udp packet from", cmd.IdFrom)
 
-		response := storage.GetSensorResponseStorage().FindBySensorId(cmd.IdFrom)
+		response := responses.FindBySensorId(cmd.IdFrom)
 		if response.SensorID == "" {
-			storage.GetSensorResponseStorage().Create(cmd.IdFrom, cmd.Command, cmd.Content)
+			responses.Create(cmd.IdFrom, cmd.Command, cmd.Content)
 			return
 		}
 
-		storage.GetSensorResponseStorage().UpdateContent(cmd.IdFrom, cmd.Content)
+		responses.UpdateContent(cmd.IdFrom, cmd.Content)
 	})
 
 	err := udpServer.Listen()
