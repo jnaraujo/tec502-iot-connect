@@ -29,8 +29,8 @@ class Server:
     
   def handle_connections(self):
     while True:
-      print('Waiting for connection...')
       conn, client_address = self.sock.accept()
+      print('Connection from:', client_address)
       
       try:
         if not self.validate_connection(conn):
