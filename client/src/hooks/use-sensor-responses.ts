@@ -1,3 +1,4 @@
+import { SENSOR_RESPONSE_REFETCH_INTERVAL } from "@/constants/query"
 import { env } from "@/env"
 import { useQuery } from "@tanstack/react-query"
 
@@ -21,7 +22,6 @@ export function useSensorResponses() {
       return (await resp.json()) as Array<Sensor>
     },
     queryKey: ["getSensorsData"],
-    refetchInterval: 1_000,
-    staleTime: 5_000,
+    refetchInterval: SENSOR_RESPONSE_REFETCH_INTERVAL,
   })
 }
