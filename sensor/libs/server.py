@@ -1,7 +1,7 @@
 import socket
 from threading import Thread
-import cmd_data
 import random
+from libs import cmd_data
 
 class Server:
   HANDSHAKE_RECEIVED = b'hello, sensor!'

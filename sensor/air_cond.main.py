@@ -3,10 +3,9 @@ import sys
 import time
 import os
 from threading import Thread
-from server import Server
-import cmd_data
-from broker_service import BrokerService
-import utils
+from libs import cmd_data, utils
+from libs.broker_service import BrokerService
+from libs.server import Server
 
 broker_url = os.environ.get('BROKER_URL', 'localhost:5310')
 broker_addr = (broker_url.split(':')[0], int(broker_url.split(':')[1]))
@@ -18,19 +17,13 @@ data = {
   "temperature": 30.5,
 }
 
-def init():
-  IP_ADDR = "0.0.0.0"
-  IP_PORT = 3333
-  
-  if len(sys.argv) > 1:
-    IP_PORT = int(sys.argv[1])
-  
+def init():  
   print("="*30)
   print("Ar Condicionado - Sensor Server")
-  print(f'Sensor IP: {utils.get_current_ip()}:{IP_PORT}')
+  print(f'Sensor IP: {utils.get_current_ip()}:3333')
   print("="*30)
   
-  server = Server(IP_ADDR, IP_PORT)
+  server = Server("0.0.0.0", 3333)
   
   server.register_not_found(not_found_cmd)
   
