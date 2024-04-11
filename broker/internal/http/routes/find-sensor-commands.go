@@ -40,7 +40,6 @@ func FindSensorCommands(c *gin.Context) {
 	}
 
 	commands := strings.Split(cmd.Content, ", ")
-
 	if commands == nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "o sensor não existe",
