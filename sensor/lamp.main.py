@@ -61,7 +61,7 @@ def set_lux_cmd(cmd: cmd_data.Cmd):
   if not STATUS:
     return cmd_data.BasicCmd("error", "Sensor is off")
   
-  data['temperature'] = cmd.content
+  data['lux'] = cmd.content
   return cmd_data.BasicCmd("set_lux", f'A luminosidade foi definida para {cmd.content}')
 
 def turn_on_cmd(cmd: cmd_data.Cmd):
