@@ -7,5 +7,4 @@ class BrokerService:
   
   def send(self, content: str):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.connect(self.address)
-    sock.sendall(content)
+    sock.sendto(content, self.address)
