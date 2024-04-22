@@ -1,0 +1,90 @@
+{
+  "info": {
+    "name": "iot-connect-api-bruno",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "create sensor",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "127.0.0.1:8080/sensor",
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"address\": \"localhost:3333\",\r\n  \"id\": \"temp1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "delete sensor",
+      "event": [],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "127.0.0.1:8080/sensor/temp1"
+      }
+    },
+    {
+      "name": "find all sensor data",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "127.0.0.1:8080/sensor/data"
+      }
+    },
+    {
+      "name": "find all sensors",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "127.0.0.1:8080/sensor"
+      }
+    },
+    {
+      "name": "get sensor commands",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "127.0.0.1:8080/sensor/commands/temp1"
+      }
+    },
+    {
+      "name": "hello world root",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "127.0.0.1:8080"
+      }
+    },
+    {
+      "name": "post message",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "127.0.0.1:8080/message",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sensor_id\": \"temp1\",\n  \"command\": \"turn_on\",\n  \"content\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "variable": []
+}
