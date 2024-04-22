@@ -7,8 +7,9 @@ from libs import cmd_data, utils
 from libs.broker_service import BrokerService
 from libs.server import Server
 
-DEFAULT_BROKER_URL = ("localhost", 3000) # default broker address
-bs = BrokerService(DEFAULT_BROKER_URL) # Broker Service
+broker_url = os.environ.get('BROKER_URL', 'localhost:5310')
+broker_addr = (broker_url.split(':')[0], int(broker_url.split(':')[1]))
+bs = BrokerService(broker_addr) # Broker Service
 
 STATUS = False # O Status indica se o sensor está ligado ou desligado
 data = {
@@ -23,8 +24,6 @@ def init():
   
   server = Server("0.0.0.0", 3333)
   
-  server.on_broker_url_change(handle_on_broker_url_change) # Quando o endereço do broker mudar, atualiza o endereço no BrokerService
-  
   server.register_not_found(not_found_cmd) # Registra o comando de não encontrado
   
   server.register_command("set_temp", set_temp_cmd)
@@ -33,10 +32,6 @@ def init():
   
   Thread(target=server.start).start()
   Thread(target=send_broker_data, args=(server,)).start()
-  
-def handle_on_broker_url_change(address: str):
-  url = address.split(":")
-  bs.set_address((url[0], int(url[1])))
   
 def send_broker_data(server: Server):
   while True:

@@ -4,7 +4,6 @@ import (
 	"broker/internal/cmd"
 	"broker/internal/sensor_conn"
 	"broker/internal/storage/sensors"
-	"fmt"
 	"net/http"
 	"os"
 
@@ -63,18 +62,6 @@ func CreateSensorHandler(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Erro ao definir o id no sensor.",
-		})
-		return
-	}
-
-	_, err = sensor_conn.Request(
-		body.Address,
-		cmd.New("BROKER", body.Id, "set_broker_url", "192.168.1.8:5310"),
-	)
-	if err != nil {
-		fmt.Println(err)
-		c.JSON(http.StatusConflict, gin.H{
-			"message": "Erro ao definir url do broker no sensor.",
 		})
 		return
 	}
