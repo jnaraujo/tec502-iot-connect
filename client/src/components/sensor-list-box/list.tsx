@@ -72,9 +72,9 @@ export function List(props: Props) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-3"></TableHead>
-              <TableHead className="w-8">ID</TableHead>
-              <TableHead className="flex-1">Endereço IP</TableHead>
+              <TableHead className="w-12 text-center"></TableHead>
+              <TableHead className="w-20">ID</TableHead>
+              <TableHead>Endereço IP</TableHead>
               <TableHead className="w-12 text-center">#</TableHead>
             </TableRow>
           </TableHeader>
@@ -84,12 +84,15 @@ export function List(props: Props) {
                 <TableCell>
                   <Tooltip>
                     <TooltipTrigger>
-                      <div
-                        className={cn("size-3 rounded-full drop-shadow-sm", {
-                          "bg-green-500": sensor.is_online,
-                          "bg-red-600": !sensor.is_online,
-                        })}
-                      ></div>
+                      <span
+                        className={cn(
+                          "block size-3 rounded-full drop-shadow-sm",
+                          {
+                            "bg-green-500": sensor.is_online,
+                            "bg-red-600": !sensor.is_online,
+                          },
+                        )}
+                      />
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>
