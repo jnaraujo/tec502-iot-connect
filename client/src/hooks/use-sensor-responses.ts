@@ -1,5 +1,6 @@
 import { SENSOR_RESPONSE_REFETCH_INTERVAL } from "@/constants/query"
 import { env } from "@/env"
+import { getRelativeTimeString } from "@/util/time"
 import { useQuery } from "@tanstack/react-query"
 
 interface Sensor {
@@ -8,6 +9,7 @@ interface Sensor {
   content: number[]
   created_at: string
   updated_at: string
+  relative_time: string
 }
 
 export function useSensorResponses() {
@@ -19,7 +21,11 @@ export function useSensorResponses() {
         throw await resp.json()
       }
 
-      return (await resp.json()) as Array<Sensor>
+      const data = (await resp.json()) as Array<Sensor>
+      return data.map((sensor) => ({
+        ...sensor,
+        relative_time: getRelativeTimeString(new Date(sensor.updated_at)),
+      }))
     },
     queryKey: ["getSensorsData"],
     refetchInterval: SENSOR_RESPONSE_REFETCH_INTERVAL,

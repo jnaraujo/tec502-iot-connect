@@ -9,7 +9,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useSensorResponses } from "@/hooks/use-sensor-responses"
-import { getRelativeTimeString } from "@/util/time"
 import { useState } from "react"
 import { Chart } from "../chart"
 
@@ -74,7 +73,7 @@ export function List() {
                   />
                 </TableCell>
                 <TableCell className="text-right">
-                  {getRelativeTimeString(new Date(sensor.updated_at))}
+                  {sensor.relative_time}
                 </TableCell>
               </TableRow>
             ))}
