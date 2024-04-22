@@ -10,15 +10,15 @@ import (
 	"github.com/go-playground/validator"
 )
 
-type CommandRequest struct {
+type PostMessageBody struct {
 	SensorID string `json:"sensor_id" validate:"required"`
 	Command  string `json:"command" validate:"required"`
 	Content  string `json:"content"`
 }
 
 func PostMessageHandler(c *gin.Context) {
-	var command CommandRequest
-	if err := c.BindJSON(&command); err != nil {
+	var body PostMessageBody
+	if err := c.BindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
 		})
@@ -26,14 +26,14 @@ func PostMessageHandler(c *gin.Context) {
 	}
 
 	validate := validator.New()
-	if err := validate.Struct(command); err != nil {
+	if err := validate.Struct(body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
 		})
 		return
 	}
 
-	addr := sensors.FindSensorAddrById(command.SensorID)
+	addr := sensors.FindSensorAddrById(body.SensorID)
 	if addr == "" {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": "Sensor not found",
@@ -42,7 +42,7 @@ func PostMessageHandler(c *gin.Context) {
 	}
 
 	response, err := sensor_conn.Request(addr, cmd.New(
-		"BROKER", command.SensorID, command.Command, command.Content,
+		"BROKER", body.SensorID, body.Command, body.Content,
 	))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

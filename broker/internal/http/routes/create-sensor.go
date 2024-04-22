@@ -11,14 +11,14 @@ import (
 	"github.com/go-playground/validator"
 )
 
-type NewSensor struct {
+type CreateSensorBody struct {
 	Address string `json:"address" validate:"required"`
 	Id      string `json:"id" validate:"required"`
 }
 
 func CreateSensorHandler(c *gin.Context) {
-	var newSensor NewSensor
-	if err := c.BindJSON(&newSensor); err != nil {
+	var body CreateSensorBody
+	if err := c.BindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
 		})
@@ -26,21 +26,21 @@ func CreateSensorHandler(c *gin.Context) {
 	}
 
 	validate := validator.New()
-	if err := validate.Struct(newSensor); err != nil {
+	if err := validate.Struct(body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
 		})
 		return
 	}
 
-	if sensors.DoesSensorExists(newSensor.Id, newSensor.Address) {
+	if sensors.DoesSensorExists(body.Id, body.Address) {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Sensor já existe",
 		})
 		return
 	}
 
-	conn, err := sensor_conn.New(newSensor.Address)
+	conn, err := sensor_conn.New(body.Address)
 	if err != nil {
 		switch {
 		case os.IsTimeout(err):
@@ -55,7 +55,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	_, err = conn.Send(cmd.New("BROKER", newSensor.Id, "set_id", newSensor.Id).Decode())
+	_, err = conn.Send(cmd.New("BROKER", body.Id, "set_id", body.Id).Decode())
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{
 			"message": "Erro ao setar o id no sensor.",
@@ -63,7 +63,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
-	sensors.AddSensor(newSensor.Id, newSensor.Address)
+	sensors.AddSensor(body.Id, body.Address)
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Sensor criado",
 	})
