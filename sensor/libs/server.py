@@ -8,6 +8,9 @@ class Server:
   HANDSHAKE_SENT = b'hello, server!'
 
   sensor_id=f'sensor-{random.randint(0, 1000)}'
+  broker_url = None
+  
+  on_broker_url_change_handler = None
   
   def __init__(self, host: str, port: int):
     self.host = host
@@ -17,7 +20,7 @@ class Server:
   def start(self):
     self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     self.sock.bind((self.host, self.port))
-    self.sock.listen(1)
+    self.sock.listen(10)
     
     self.handle_connections()
     
@@ -69,6 +72,18 @@ class Server:
       )
       conn.sendall(cmd_data.encode(cmd))
       return
+
+    if command == "set_broker_url":
+      self.broker_url = data['content']
+      cmd = cmd_data.Cmd(
+        idFrom=self.sensor_id,
+        idTo="BROKER",
+        command='set_broker_url',
+        content=self.broker_url
+      )
+      self.on_broker_url_change_handler(self.broker_url)
+      conn.sendall(cmd_data.encode(cmd))
+      return
     
     if self.sensor_id != data['idTo']:
       self.sensor_id = data['idTo'] # Atualiza o ID do sensor caso seja diferente
@@ -118,3 +133,6 @@ class Server:
   
   def register_command(self, command: str, callback: callable):
     self.commands[command] = callback
+    
+  def on_broker_url_change(self, callback: callable):
+    self.on_broker_url_change_handler = callback

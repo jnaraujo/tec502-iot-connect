@@ -31,6 +31,16 @@ func New(addr string) (*Connection, error) {
 	return &Connection{Conn: conn}, nil
 }
 
+func Validate(addr string) error {
+	conn, err := New(addr)
+	if err != nil {
+		return err
+	}
+	defer conn.Conn.Close()
+
+	return nil
+}
+
 func (c *Connection) Send(content string) (string, error) {
 	_, err := c.Conn.Write([]byte(content))
 	if err != nil {

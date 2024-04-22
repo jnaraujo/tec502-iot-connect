@@ -26,8 +26,6 @@ func NewServer(addr string, port int) {
 			return
 		}
 
-		fmt.Println("New udp packet from", cmd.IdFrom)
-
 		response := responses.FindBySensorId(cmd.IdFrom)
 		if response.SensorID == "" {
 			responses.Create(cmd.IdFrom, cmd.Command, cmd.Content)
