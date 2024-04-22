@@ -6,6 +6,7 @@ import (
 	"broker/internal/storage/sensors"
 	"fmt"
 	"log"
+	"strconv"
 )
 
 func NewServer(addr string, port int) {
@@ -26,13 +27,16 @@ func NewServer(addr string, port int) {
 			return
 		}
 
-		response := responses.FindBySensorId(cmd.IdFrom)
-		if response.SensorID == "" {
-			responses.Create(cmd.IdFrom, cmd.Command, cmd.Content)
-			return
+		if responses.FindBySensorId(cmd.IdFrom).SensorID == "" {
+			responses.Create(cmd.IdFrom, cmd.Command)
 		}
 
-		responses.UpdateContent(cmd.IdFrom, cmd.Content)
+		value, err := strconv.ParseFloat(cmd.Content, 64)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		responses.AddContent(cmd.IdFrom, value)
 	})
 
 	err := udpServer.Listen()

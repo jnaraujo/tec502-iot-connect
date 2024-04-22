@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 interface Sensor {
   sensor_id: string
   name: string
-  content: string
+  content: number[]
   created_at: string
   updated_at: string
 }

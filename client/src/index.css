@@ -90,3 +90,11 @@ p {
     @apply bg-background text-foreground;
   }
 }
+
+.apexcharts-svg {
+  @apply overflow-visible;
+}
+
+.apexcharts-tooltip {
+  @apply !shadow-none border;
+}

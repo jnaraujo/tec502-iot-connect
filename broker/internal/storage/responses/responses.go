@@ -1,15 +1,16 @@
 package responses
 
 import (
+	"broker/internal/queue"
 	"broker/internal/time"
 )
 
 type Response struct {
-	SensorID  string    `json:"sensor_id"`
-	Name      string    `json:"name"`
-	Content   string    `json:"content"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	SensorID  string                `json:"sensor_id"`
+	Name      string                `json:"name"`
+	Content   *queue.Queue[float64] `json:"content"`
+	CreatedAt time.Time             `json:"created_at"`
+	UpdatedAt time.Time             `json:"updated_at"`
 }
 
 type SensorResponseStorage struct {
@@ -20,15 +21,14 @@ var storage *SensorResponseStorage = &SensorResponseStorage{
 	data: make(map[string]Response),
 }
 
-func Create(sensorID, name, content string) Response {
+func Create(sensorID, name string) Response {
 	response := Response{
 		SensorID:  sensorID,
 		Name:      name,
-		Content:   content,
+		Content:   queue.New[float64](20),
 		CreatedAt: *time.NewTimeNow(),
 		UpdatedAt: *time.NewTimeNow(),
 	}
-
 	storage.data[sensorID] = response
 
 	return response
@@ -52,10 +52,10 @@ func DeleteBySensorId(sensorId string) {
 	delete(storage.data, sensorId)
 }
 
-func UpdateContent(sensorId, content string) {
+func AddContent(sensorId string, data float64) {
 	response := storage.data[sensorId]
 
-	response.Content = content
+	response.Content.Add(data)
 	response.UpdatedAt = *time.NewTimeNow()
 
 	storage.data[sensorId] = response
