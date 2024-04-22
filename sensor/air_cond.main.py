@@ -2,6 +2,7 @@ import datetime
 import sys
 import time
 import os
+import random
 from threading import Thread
 from libs import cmd_data, utils
 from libs.broker_service import BrokerService
@@ -39,6 +40,7 @@ def send_broker_data(server: Server):
     if not STATUS: # Se o sensor estiver desligado, não envia dados
       continue
     try:
+      data["temperature"] = round(data["temperature"] + random.uniform(-0.5, 0.5), 2)
       cmd = cmd_data.Cmd(
         idFrom=server.get_sensor_id(), idTo="BROKER", command='temperature',content=str(data["temperature"])
         )
