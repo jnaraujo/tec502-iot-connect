@@ -31,22 +31,23 @@ func Encode(data string) (*Cmd, error) {
 	header := strings.Split(strings.Replace(data, `\n`, "\n", -1), "\n")
 	body := dataMap[1]
 
-	if len(header) <= 2 ||
-		!strings.Contains(header[0], "IdFrom: ") ||
-		!strings.Contains(header[1], "IdTo: ") ||
-		!strings.Contains(header[2], "Cmd: ") {
+	if len(header) <= 2 {
 		return nil, errors.New("header inválido")
 	}
 
-	idFrom := strings.Split(header[0], "IdFrom: ")[1]
-	idTo := strings.Split(header[1], "IdTo: ")[1]
-	command := strings.Split(header[2], "Cmd: ")[1]
+	idFrom := strings.Split(header[0], "IdFrom: ")
+	idTo := strings.Split(header[1], "IdTo: ")
+	command := strings.Split(header[2], "Cmd: ")
 	content := body
 
+	if len(idFrom) < 2 || len(idTo) < 2 || len(command) < 2 {
+		return nil, errors.New("header inválido")
+	}
+
 	return &Cmd{
-		IdFrom:  idFrom,
-		IdTo:    idTo,
-		Command: command,
+		IdFrom:  idFrom[1],
+		IdTo:    idTo[1],
+		Command: command[1],
 		Content: content,
 	}, nil
 }
