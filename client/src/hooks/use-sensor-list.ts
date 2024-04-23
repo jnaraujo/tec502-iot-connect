@@ -17,7 +17,11 @@ export function useSensorList() {
         throw new Error("Não foi possível listar os sensores")
       }
 
-      return (await resp.json()).sensors as Array<Sensor>
+      const sensors = (await resp.json()).sensors as Array<Sensor>
+
+      return sensors.sort((a, b) => {
+        return a.id.localeCompare(b.id)
+      })
     },
     queryKey: ["getSensors"],
     refetchInterval: SENSOR_LIST_REFETCH_INTERVAL,
