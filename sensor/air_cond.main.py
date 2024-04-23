@@ -55,7 +55,7 @@ def set_temp_cmd(cmd: cmd_data.Cmd):
   if not STATUS:
     return cmd_data.BasicCmd("error", "O sensor está desligado")
   
-  data['temperature'] = cmd.content
+  data['temperature'] = int(cmd.content)
   return cmd_data.BasicCmd("set_temp", f'Temperature set to {cmd.content}')
 
 def turn_on_cmd(cmd: cmd_data.Cmd):
