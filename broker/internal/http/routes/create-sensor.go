@@ -4,6 +4,7 @@ import (
 	"broker/internal/cmd"
 	"broker/internal/sensor_conn"
 	"broker/internal/storage/sensors"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -42,6 +43,7 @@ func CreateSensorHandler(c *gin.Context) {
 
 	err := sensor_conn.Validate(body.Address)
 	if err != nil {
+		fmt.Println(err)
 		switch {
 		case os.IsTimeout(err):
 			c.JSON(http.StatusRequestTimeout, gin.H{
