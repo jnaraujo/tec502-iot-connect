@@ -1,7 +1,6 @@
 package udp_server
 
 import (
-	"errors"
 	"net"
 )
 
@@ -25,10 +24,6 @@ func (u *UDPServer) Listen() error {
 	if err != nil {
 		return err
 	}
-	if conn == nil {
-		return errors.New("connection is nil")
-	}
-
 	u.Conn = conn
 
 	for {
@@ -37,9 +32,6 @@ func (u *UDPServer) Listen() error {
 		n, addr, err := conn.ReadFrom(buffer)
 		if err != nil {
 			return err
-		}
-		if addr == nil {
-			return errors.New("addr is nil")
 		}
 
 		go u.handler(addr.String(), string(buffer[:n]))
@@ -51,8 +43,5 @@ func (u *UDPServer) HandleRequest(handler UDPServerHandler) {
 }
 
 func (u *UDPServer) Close() {
-	if u.Conn == nil {
-		return
-	}
 	u.Conn.Close()
 }
