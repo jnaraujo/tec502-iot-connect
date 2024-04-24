@@ -31,13 +31,9 @@ func FindSensors() []Sensor {
 }
 
 func DoesSensorExists(id, addr string) bool {
-	sensor := FindSensorAddrById(id)
-	if sensor != "" {
-		return true
-	}
-
-	sensor = FindSensorIdByAddress(id)
-	return sensor != ""
+	sensor_addr_exists := FindSensorAddrById(id) != ""
+	sensor_id_exists := FindSensorIdByAddress(addr) != ""
+	return sensor_addr_exists || sensor_id_exists
 }
 
 func FindSensorAddrById(id string) string {
