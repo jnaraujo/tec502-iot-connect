@@ -49,14 +49,15 @@ class Server:
     
     try:
       cmd = cmd_data.decode(data)
-      self.handle_command(cmd, conn)
+      out_cmd = self.handle_command(cmd)
+      conn.sendall(cmd_data.encode(out_cmd))
     except Exception as e:
       conn.sendall(b'error decoding data')
       print('Error decoding data:', e)
-      
-    conn.close()
+    finally:
+      conn.close()
         
-  def handle_command(self, data: cmd_data.Cmd, conn: socket.socket):
+  def handle_command(self, data: cmd_data.Cmd) -> cmd_data.Cmd:
     command = data['command']
     
     if command == "set_id":
@@ -67,15 +68,13 @@ class Server:
         command='id',
         content=self.sensor_id
       )
-      conn.sendall(cmd_data.encode(cmd))
-      return
+      return cmd
     
     if self.sensor_id != data['idTo']:
       self.sensor_id = data['idTo'] # Atualiza o ID do sensor caso seja diferente
     
     if command == "get_commands":
-      conn.sendall(self.get_commands())
-      return
+      return self.get_commands()
     
     resCmd: cmd_data.Cmd = None
     
@@ -91,7 +90,7 @@ class Server:
     if resCmd.idTo is None: # Se o comando não tiver um destinatário, seta o destinatário como o broker
       resCmd.idTo = 'BROKER'
     
-    conn.sendall(cmd_data.encode(resCmd))
+    return resCmd
       
   def validate_connection(self, conn: socket.socket) -> bool:
     data = conn.recv(len(self.HANDSHAKE_RECEIVED))
@@ -105,12 +104,10 @@ class Server:
   
   def get_commands(self):
     commands = list(self.commands.keys())    
-    cmd = cmd_data.encode(
-      cmd_data.Cmd(
+    cmd = cmd_data.Cmd(
         idFrom=self.sensor_id, idTo="BROKER",
         command="commands", content=", ".join(commands)
       )
-    )
     return cmd
   
   def register_not_found(self, callback: callable):

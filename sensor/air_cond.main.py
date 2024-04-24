@@ -7,6 +7,7 @@ from threading import Thread
 from libs import cmd_data, utils
 from libs.broker_service import BrokerService
 from libs.server import Server
+from  libs.interface import Interface
 
 broker_url = os.environ.get('BROKER_URL', 'localhost:5310')
 broker_addr = (broker_url.split(':')[0], int(broker_url.split(':')[1]))
@@ -24,6 +25,7 @@ def init():
   print("="*30)
   
   server = Server("0.0.0.0", 3333)
+  interface = Interface(server)
   
   server.register_not_found(not_found_cmd) # Registra o comando de não encontrado
   
@@ -33,6 +35,7 @@ def init():
   
   Thread(target=server.start).start()
   Thread(target=send_broker_data, args=(server,)).start()
+  interface.run()
   
 def send_broker_data(server: Server):
   while True:

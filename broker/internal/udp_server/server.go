@@ -23,7 +23,7 @@ func NewServer(addr string, port int) {
 		}
 
 		if sensors.FindSensorAddrById(cmd.IdFrom) == "" {
-			fmt.Println("O sensor não foi encontrado")
+			fmt.Printf("O sensor (%s - %s) não foi encontrado", addr, cmd.IdFrom)
 			return
 		}
 
