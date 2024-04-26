@@ -52,7 +52,7 @@ docker-compose up --build
 ### Como utilizar
 #### Como adicionar um novo sensor
 <div align="center">
-<img src="./docs/imgs/adicionar-novo-sensor.png" alt="Adicionar Sensor" height="300px" width="auto" />
+<img src="./docs/imgs/adicionar-novo-sensor.png" alt="Adicionar Sensor" height="300px" width="auto" /> <br/>
 <em>Figura 1. Modal para adicionar um novo sensor</em>
 </div>
 
@@ -60,7 +60,7 @@ Para adicionar um novo sensor, clique no botão "+" na caixa de "Lista de Sensor
 
 #### Como enviar um comando para um sensor
 <div align="center">
-<img src="./docs/imgs/enviar-comando.png" alt="Enviar Comando" height="300px" width="auto" />
+<img src="./docs/imgs/enviar-comando.png" alt="Enviar Comando" height="300px" width="auto" /> <br/>
 <em>Figura 2. Caixa para enviar um comando para um sensor</em>
 </div>
 
@@ -68,7 +68,7 @@ Para enviar um comando para um sensor, na caixa "Enviar comando", selecione o id
 
 #### Como visualizar os dados de um sensor
 <div align="center">
-<img src="./docs/imgs/resposta-dos-sensores.png" alt="Dados Sensor" height="300px" width="auto" />
+<img src="./docs/imgs/resposta-dos-sensores.png" alt="Dados Sensor" height="300px" width="auto" /> <br/>
 <em>Figura 3. Caixa para visualizar os dados de um sensor</em>
 </div>
 
@@ -76,7 +76,7 @@ Na caixa "Respostas dos sensores" irá aparecer todos os dados recebidos dos sen
 
 #### Como remover um sensor
 <div align="center">
-<img src="./docs/imgs/remover-sensor.png" alt="Remover Sensor" height="100px" width="auto" />
+<img src="./docs/imgs/remover-sensor.png" alt="Remover Sensor" height="100px" width="auto" /> <br/>
 <em>Figura 4. Remover um sensor</em>
 </div>
 
