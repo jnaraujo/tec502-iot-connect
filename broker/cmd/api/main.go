@@ -3,7 +3,7 @@ package main
 import (
 	"broker/internal/http"
 	"broker/internal/udp_server"
-	"broker/utils"
+	"broker/internal/utils"
 	"fmt"
 	"strings"
 
