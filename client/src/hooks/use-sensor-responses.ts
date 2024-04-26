@@ -1,6 +1,6 @@
 import { SENSOR_RESPONSE_REFETCH_INTERVAL } from "@/constants/query"
 import { env } from "@/env"
-import { getRelativeTimeString } from "@/util/time"
+import { getRelativeTimeString } from "@/lib/time"
 import { useQuery } from "@tanstack/react-query"
 
 interface Sensor {
