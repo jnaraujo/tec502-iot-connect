@@ -74,7 +74,7 @@ Na caixa "Respostas dos sensores" irá aparecer todos os dados recebidos dos sen
 
 #### Como remover um sensor
 <div align="center">
-<img src="./docs/imgs/remover-sensor.png" alt="Remover Sensor" height="300px" width="auto" />
+<img src="./docs/imgs/remover-sensor.png" alt="Remover Sensor" height="100px" width="auto" />
 </div>
 
 Para remover um sensor, na caixa de "Lista de sensores", clique no ícone de lixeira ao lado do sensor que deseja remover. Um modal irá aparecer perguntando se você realmente deseja remover o sensor. Clique em "Remover" para confirmar a remoção.
