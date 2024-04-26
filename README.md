@@ -52,30 +52,34 @@ docker-compose up --build
 
 ### Como utilizar
 #### Como adicionar um novo sensor
-<div align="center">
+<figure align="center">
 <img src="./docs/imgs/adicionar-novo-sensor.png" alt="Adicionar Sensor"/>
-</div>
+<figcaption>Adicionar Sensor</figcaption>
+</figure>
 
 Para adicionar um novo sensor, clique no botão "+" na caixa de "Lista de Sensores". Digite um ID único para o sensor e o endereço IP do sensor (ex: 172.19.0.2:3333 ou 172.19.0.4:3334). Clique em "Adicionar Sensor". Uma mensagem irá aparecer informando se o sensor foi adicionado com sucesso ou se houve algum erro.
 
 #### Como enviar um comando para um sensor
-<div align="center">
+<figure align="center">
 <img src="./docs/imgs/enviar-comando.png" alt="Enviar Comando"/>
-</div>
+<figcaption>Enviar Comando</figcaption>
+</figure>
 
 Para enviar um comando para um sensor, na caixa "Enviar comando", selecione o id do sensor em "Sensor ID", selecione o comando que deseja enviar em "Comando", escreva o conteúdo do comando (se necessário) e clique em "Enviar Comando". Uma mensagem irá aparecer informando se o comando foi enviado com sucesso ou se houve algum erro.
 
 #### Como visualizar os dados de um sensor
-<div align="center">
+<figure align="center">
 <img src="./docs/imgs/resposta-dos-sensores.png" alt="Dados Sensor"/>
-</div>
+<figcaption>Resposta dos Sensores</figcaption>
+</figure>
 
 Na caixa "Respostas dos sensores" irá aparecer todos os dados recebidos dos sensores, bem como o ID do sensor que enviou o dado, qual o comando, o conteúdo do dado, um histórico de envio e a data de envio.
 
 #### Como remover um sensor
-<div align="center">
+<figure align="center">
 <img src="./docs/imgs/remover-sensor.png" alt="Remover Sensor"/>
-</div>
+<figcaption>Remover Sensor</figcaption>
+</figure>
 
 Para remover um sensor, na caixa de "Lista de sensores", clique no ícone de lixeira ao lado do sensor que deseja remover. Um modal irá aparecer perguntando se você realmente deseja remover o sensor. Clique em "Remover" para confirmar a remoção.
 
@@ -174,7 +178,7 @@ Cmd: set_temp
 
 Nesse exemplo, o Sensor `temp1` está enviando um comando para o Broker. O comando é `set_temp` e o conteúdo é `25`.
 
-#### Comandos
+#### Campos do protocolo
 ##### idFrom
 ID do dispositivo que está enviando a mensagem. No caso do Broker, o `idFrom` é sempre `BROKER` (um exemplo pode ser visto na <a href="https://github.com/jnaraujo/tec502-iot-connect/blob/main/broker/internal/http/routes/create-sensor.go#L62">rota de criação de um novo sensor</a>). No caso dos Sensores, o `idFrom` é o ID do Sensor. Por exemplo, se um sensor for criado com o ID `temp1`, o `idFrom` será sempre `temp1`.
 
