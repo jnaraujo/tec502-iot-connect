@@ -27,7 +27,6 @@ services:
       dockerfile: Lamp.Dockerfile
     environment:
       - BROKER_URL=broker:5310
-      - SENSOR_PORT=3333
     networks:
       - iot-network
     ports:
