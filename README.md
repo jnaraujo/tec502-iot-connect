@@ -1,5 +1,8 @@
 <div align="center">
-  <h1>IoT Connect - TEC502: MI Concorrência e Conectividade</h1>
+  <h1>IoT Connect - Gerenciamento de dispositivos IOT</h1>
+  <p>
+    <strong>Projeto desenvolvido para a disciplina TEC502 - MI Concorrência e Conectividade</strong>
+  </p>
 
   ![Most used language](https://img.shields.io/github/languages/top/jnaraujo/tec502-iot-connect?style=flat-square)
   ![GitHub](https://img.shields.io/github/license/jnaraujo/tec502-iot-connect)
