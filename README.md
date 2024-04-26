@@ -51,33 +51,33 @@ docker-compose up --build
 
 ### Como utilizar
 #### Como adicionar um novo sensor
-<div align="center" style="margin-bottom: 20px;">
+<div align="center">
 <img src="./docs/imgs/adicionar-novo-sensor.png" alt="Adicionar Sensor" height="300px" width="auto" /> <br/>
-<em>Figura 1. Modal para adicionar um novo sensor</em>
+<em>Figura 1. Modal para adicionar um novo sensor</em> <br/>
 </div>
 
 Para adicionar um novo sensor, clique no botão "+" na caixa de "Lista de Sensores". Digite um ID único para o sensor e o endereço IP do sensor (ex: 172.19.0.2:3333 ou 172.19.0.4:3334). Clique em "Adicionar Sensor". Uma mensagem irá aparecer informando se o sensor foi adicionado com sucesso ou se houve algum erro.
 
 #### Como enviar um comando para um sensor
-<div align="center" style="margin-bottom: 20px;">
+<div align="center">
 <img src="./docs/imgs/enviar-comando.png" alt="Enviar Comando" height="300px" width="auto" /> <br/>
-<em>Figura 2. Caixa para enviar um comando para um sensor</em>
+<em>Figura 2. Caixa para enviar um comando para um sensor</em> <br/>
 </div>
 
 Para enviar um comando para um sensor, na caixa "Enviar comando", selecione o id do sensor em "Sensor ID", selecione o comando que deseja enviar em "Comando", escreva o conteúdo do comando (se necessário) e clique em "Enviar Comando". Uma mensagem irá aparecer informando se o comando foi enviado com sucesso ou se houve algum erro.
 
 #### Como visualizar os dados de um sensor
-<div align="center" style="margin-bottom: 20px;">
+<div align="center">
 <img src="./docs/imgs/resposta-dos-sensores.png" alt="Dados Sensor" height="300px" width="auto" /> <br/>
-<em>Figura 3. Caixa para visualizar os dados de um sensor</em>
+<em>Figura 3. Caixa para visualizar os dados de um sensor</em> <br/>
 </div>
 
 Na caixa "Respostas dos sensores" irá aparecer todos os dados recebidos dos sensores, bem como o ID do sensor que enviou o dado, qual o comando, o conteúdo do dado, um histórico de envio e a data de envio.
 
 #### Como remover um sensor
-<div align="center" style="margin-bottom: 20px;">
+<div align="center">
 <img src="./docs/imgs/remover-sensor.png" alt="Remover Sensor" height="100px" width="auto" /> <br/>
-<em>Figura 4. Remover um sensor</em>
+<em>Figura 4. Remover um sensor</em> <br/>
 </div>
 
 Para remover um sensor, na caixa de "Lista de sensores", clique no ícone de lixeira ao lado do sensor que deseja remover. Um modal irá aparecer perguntando se você realmente deseja remover o sensor. Clique em "Remover" para confirmar a remoção.
