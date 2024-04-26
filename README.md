@@ -52,32 +52,32 @@ docker-compose up --build
 
 ### Como utilizar
 #### Como adicionar um novo sensor
-<figure height="300" align="center">
-<img src="./docs/imgs/adicionar-novo-sensor.png" alt="Adicionar Sensor"/>
+<figure>
+<img height="300" width="auto" align="center" src="./docs/imgs/adicionar-novo-sensor.png" alt="Adicionar Sensor"/>
 <figcaption>Adicionar Sensor</figcaption>
 </figure>
 
 Para adicionar um novo sensor, clique no botão "+" na caixa de "Lista de Sensores". Digite um ID único para o sensor e o endereço IP do sensor (ex: 172.19.0.2:3333 ou 172.19.0.4:3334). Clique em "Adicionar Sensor". Uma mensagem irá aparecer informando se o sensor foi adicionado com sucesso ou se houve algum erro.
 
 #### Como enviar um comando para um sensor
-<figure height="300" align="center">
-<img src="./docs/imgs/enviar-comando.png" alt="Enviar Comando"/>
+<figure>
+<img height="300" width="auto" align="center" src="./docs/imgs/enviar-comando.png" alt="Enviar Comando"/>
 <figcaption>Enviar Comando</figcaption>
 </figure>
 
 Para enviar um comando para um sensor, na caixa "Enviar comando", selecione o id do sensor em "Sensor ID", selecione o comando que deseja enviar em "Comando", escreva o conteúdo do comando (se necessário) e clique em "Enviar Comando". Uma mensagem irá aparecer informando se o comando foi enviado com sucesso ou se houve algum erro.
 
 #### Como visualizar os dados de um sensor
-<figure height="300" align="center">
-<img src="./docs/imgs/resposta-dos-sensores.png" alt="Dados Sensor"/>
+<figure>
+<img height="300" width="auto" align="center" src="./docs/imgs/resposta-dos-sensores.png" alt="Dados Sensor"/>
 <figcaption>Resposta dos Sensores</figcaption>
 </figure>
 
 Na caixa "Respostas dos sensores" irá aparecer todos os dados recebidos dos sensores, bem como o ID do sensor que enviou o dado, qual o comando, o conteúdo do dado, um histórico de envio e a data de envio.
 
 #### Como remover um sensor
-<figure height="300" align="center">
-<img src="./docs/imgs/remover-sensor.png" alt="Remover Sensor"/>
+<figure>
+<img height="300" width="auto" align="center" src="./docs/imgs/remover-sensor.png" alt="Remover Sensor"/>
 <figcaption>Remover Sensor</figcaption>
 </figure>
 
