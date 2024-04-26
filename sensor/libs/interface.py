@@ -1,6 +1,7 @@
-import requests
+import urllib.request
 from libs.server import Server
 from libs.cmd_data import Cmd
+import json
 
 class Interface:
   config_cmds = [
@@ -32,7 +33,13 @@ class Interface:
     print("=+"*15 + "=")
     while True:
       try:
-        cmd_in = input("Digite o comando: ")
+        try:
+          cmd_in = input("Digite o comando: ")
+        except KeyboardInterrupt:
+          break
+        except EOFError:
+          print("\nSaindo...")
+          break
         values = cmd_in.split(' ')
                   
         if cmd_in.startswith('setup'):
@@ -62,13 +69,16 @@ class Interface:
         print('Error:', e)
         
   def register_sensor_on_broker(self, broker_addr: str, sensor_id:str, sensor_addr: str):
-    resp = requests.post(f'http://{broker_addr}/sensor', json={
+    req = urllib.request.Request(f'http://{broker_addr}/sensor', method='POST')
+    req.add_header('Content-Type', 'application/json')
+    req.data = json.dumps({
       'address': sensor_addr,
       'id': sensor_id
-    })
+    }).encode('utf-8')
     
-    return resp.json()
+    resp = urllib.request.urlopen(req)
+    return json.loads(resp.read())
   
   def delete_sensor_on_broker(self, broker_addr: str, sensor_id:str):
-    resp = requests.delete(f'http://{broker_addr}/sensor/{sensor_id}')
-    return resp.json()
+    resp = urllib.request.urlopen(f'http://{broker_addr}/sensor/{sensor_id}', method='DELETE')
+    return json.loads(resp.read())
