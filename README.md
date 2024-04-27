@@ -1,6 +1,6 @@
 <div align="center">
   <div align="center">
-  <img src="./docs/gif/client.gif" alt="Client web" height="500px" width="auto" />
+  <img src="./docs/gif/client.gif" alt="Client web" height="300px" width="auto" />
   </div>
 
   <h1>IoT Connect - Gerenciamento de dispositivos IOT</h1>
