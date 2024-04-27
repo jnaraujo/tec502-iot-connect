@@ -74,7 +74,7 @@ export function List(props: Props) {
             <TableRow>
               <TableHead className="w-12 text-center"></TableHead>
               <TableHead className="w-20">ID</TableHead>
-              <TableHead>Endereço IP</TableHead>
+              <TableHead className="w-28">Endereço IP</TableHead>
               <TableHead className="w-12 text-center">#</TableHead>
             </TableRow>
           </TableHeader>
@@ -101,9 +101,16 @@ export function List(props: Props) {
                     </TooltipContent>
                   </Tooltip>
                 </TableCell>
-                <TableCell className="font-medium">{sensor.id}</TableCell>
-                <TableCell>{sensor.address}</TableCell>
-                <TableCell className="text-right">
+                <TableCell
+                  className="max-w-20 truncate font-medium"
+                  title={sensor.id}
+                >
+                  {sensor.id}
+                </TableCell>
+                <TableCell className="max-w-24 truncate" title={sensor.address}>
+                  {sensor.address}
+                </TableCell>
+                <TableCell className="max-w-12 text-center">
                   <button
                     onClick={() => {
                       props.onDeleteSensor(sensor.id)
