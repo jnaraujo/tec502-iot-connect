@@ -40,6 +40,19 @@ services:
     ports:
       - "3334:3333"
 
+  lamp_sensor2:
+    <<: *lamp_sensor
+    ports:
+      - "3335:3333"
+  
+  air_cond_sensor2:
+    <<: *lamp_sensor
+    build:
+      context: ./sensor
+      dockerfile: AirCond.Dockerfile
+    ports:
+      - "3336:3333"
+
 networks:
   iot-network:
     driver: bridge
