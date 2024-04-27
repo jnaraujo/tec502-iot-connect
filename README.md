@@ -1,4 +1,8 @@
 <div align="center">
+  <div align="center">
+  <img src="./docs/gif/client.gif" alt="Client web" height="500px" width="auto" />
+  </div>
+
   <h1>IoT Connect - Gerenciamento de dispositivos IOT</h1>
   <p>
     <strong>Projeto desenvolvido para a disciplina TEC502 - MI Concorrência e Conectividade</strong>
