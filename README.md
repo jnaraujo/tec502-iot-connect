@@ -249,11 +249,6 @@ Rota que remove um Sensor.
 A comunicação entre o Broker e os Sensores é feita através de TCP/IP e UDP. O Broker é responsável por enviar comandos para os Sensores e receber os dados enviados pelos Sensores. Todas essas comunicações são feitas através do protocolo de comunicação [descrito acima](#protocolo-de-comunicação).
 
 #### Envio de comandos do Broker para o Sensor
-<div align="center">
-<img src="./docs/imgs/diagrama-envio-dados.png" alt="Envio de dados do Sensor para o Broker" height="300px" width="auto" /> <br/>
-<em>Figura 7. Diagrama de envio de dados do Sensor para o Broker</em> <br/>
-</div>
-
 Para envio de comandos do Broker para os Sensores, é utilizando uma abordagem confiável (TCP/IP). Assim, sempre que o Broker precisa enviar algum dado para os Sensores, ele inicia uma conexão TCP/IP com o Sensor e envia o comando.
 
 Para lidar com o recebimento dos comandos, o Sensor permite ao desenvolvedor [criar](https://github.com/jnaraujo/tec502-iot-connect/blob/3b767d1bc8150ca48f22ab9af7d43b25e8ed0f6d/sensor/air_cond.main.py#L57) os próprios comandos e [cadastrar](https://github.com/jnaraujo/tec502-iot-connect/blob/3b767d1bc8150ca48f22ab9af7d43b25e8ed0f6d/sensor/libs/server.py#L60C7-L60C21) no `Server`. Para isso, ele define o nome do comando e a função que será executada quando o comando for recebido. Essa abordagem torna mais fácil criar novos comandos e adicionar novas funcionalidades ao Sensor.
@@ -263,6 +258,11 @@ Além disso, o Sensor é capaz de lidar com múltiplas conexões simultâneas, g
 No Broker, o código para envio de comandos pode ser encontrado em [broker/internal/sensor_conn/sensor.go](https://github.com/jnaraujo/tec502-iot-connect/blob/main/broker/internal/sensor_conn/sensor.go), enquanto no Sensor, o código para receber comandos pode ser encontrado em [sensor/libs/server.py](https://github.com/jnaraujo/tec502-iot-connect/blob/main/sensor/libs/server.py).
 
 #### Envio de dados dos Sensores para o Broker
+<div align="center">
+<img src="./docs/imgs/diagrama-envio-dados.png" alt="Envio de dados do Sensor para o Broker" height="300px" width="auto" /> <br/>
+<em>Figura 7. Diagrama de envio de dados do Sensor para o Broker</em> <br/>
+</div>
+
 Para o envio de dados dos Sensores para o Broker, é utilizado uma abordagem não confiável (UDP). Assim, os Sensores enviam os dados para o Broker através de pacotes UDP. A abordagem não confiável foi escolhida pois o protocolo UDP é mais leve e mais rápido que o TCP. Desse modo, como os sensores estão constantemente enviando dados para o Broker, caso algum pacote seja perdido, o Sensor irá enviar novamente na próxima iteração, não causando maiores problemas ao sistema.
 
 Assim, sempre que um [novo dado chega no Broker](https://github.com/jnaraujo/tec502-iot-connect/blob/3b767d1bc8150ca48f22ab9af7d43b25e8ed0f6d/broker/internal/udp_server/server.go#L18), é verificado se o Sensor que enviou o dado está cadastrado. Caso esteja, o dado é armazenado. Caso contrário, o dado é descartado.
