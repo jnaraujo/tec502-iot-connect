@@ -13,7 +13,7 @@
 </p>
 
 <div align="center">
-  <img src="./docs/gif/client.gif" alt="Client web" height="300px" width="auto" />
+  <img src="./docs/gif/client.gif" alt="Client web" height="400px" width="auto" />
 </div>
 
 ## Sobre o projeto
