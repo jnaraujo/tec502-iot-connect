@@ -72,7 +72,7 @@ export function List(props: Props) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-12 text-center"></TableHead>
+              <TableHead className="w-8 pl-3 pr-0 text-center"></TableHead>
               <TableHead className="w-20">ID</TableHead>
               <TableHead className="w-28">Endereço IP</TableHead>
               <TableHead className="w-12 text-center">#</TableHead>
@@ -81,7 +81,7 @@ export function List(props: Props) {
           <TableBody>
             {filteredData?.map((sensor) => (
               <TableRow key={sensor.id}>
-                <TableCell>
+                <TableCell className="w-3 pl-3 pr-0">
                   <Tooltip>
                     <TooltipTrigger>
                       <span
