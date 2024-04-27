@@ -1,8 +1,4 @@
 <div align="center">
-  <div align="center">
-  <img src="./docs/gif/client.gif" alt="Client web" height="300px" width="auto" />
-  </div>
-
   <h1>IoT Connect - Gerenciamento de dispositivos IOT</h1>
   <p>
     <strong>Projeto desenvolvido para a disciplina TEC502 - MI Concorrência e Conectividade</strong>
@@ -15,6 +11,10 @@
 <p>
   O objetivo do IOT Connect é criar um sistema de comunicação e gerenciamento entre dispositivos IOT e suas diferentes aplicações. O sistema deve ser capaz de criar, remover e verificar o status de dispositivos IOT, além de receber, armazenar e disponibilizar dados dos dispositivos IOT para aplicações web.
 </p>
+
+<div align="center">
+  <img src="./docs/gif/client.gif" alt="Client web" height="300px" width="auto" />
+</div>
 
 ## Sobre o projeto
 ### Tecnologias utilizadas
