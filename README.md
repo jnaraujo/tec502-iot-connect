@@ -202,6 +202,11 @@ Qualquer dado que será enviado junto ao comando, como a temperatura que o Senso
 
 
 ### Comunicação entre Client e Broker
+<div align="center">
+<img src="./docs/imgs/diagrama-cliente-dados.png" alt="Pedido de dados do Client para o Broker" height="300px" width="auto" /> <br/>
+<em>Figura 5. Diagrama de pedido de dados do Client para o Broker</em> <br/>
+</div>
+
 A comunicação entre o Client e o Broker é feita através de HTTP (REST API). Essa api permite a criação, remoção, visualização de dispositivos IOT e a visualização dos dados enviados pelos dispositivos. O código da API REST pode ser encontrado em [broker/cmd/api/main.go](https://github.com/jnaraujo/tec502-iot-connect/tree/main/broker/internal/http) e em [client/src/hooks](https://github.com/jnaraujo/tec502-iot-connect/tree/main/client/src/hooks).
 
 No Broker, foi utilizado a biblioteca [Gin](https://gin-gonic.com/) para a criação das rotas HTTP. Já no Client, foi utilizado a biblioteca [TanStack Query](https://tanstack.com/query/latest) para fazer as requisições HTTP e gerenciar o estado da aplicação. O TanStack Query permite definir um tempo de refetch, ou seja, a cada X segundos, a aplicação irá buscar os dados novamente, garantindo que a aplicação esteja sempre atualizada.
@@ -236,9 +241,19 @@ Rota que remove um Sensor.
 > O arquivo responsável por essa rota pode ser encontrado em `broker/internal/http/routes/delete-sensor.go`.
 
 ### Comunicação entre Broker e Sensores
+<div align="center">
+<img src="./docs/imgs/diagrama-envio-comandos.png" alt="Envio de comandos do Client para o Broker" height="300px" width="auto" /> <br/>
+<em>Figura 6. Diagrama de envio de comandos do Client para o Broker</em> <br/>
+</div>
+
 A comunicação entre o Broker e os Sensores é feita através de TCP/IP e UDP. O Broker é responsável por enviar comandos para os Sensores e receber os dados enviados pelos Sensores. Todas essas comunicações são feitas através do protocolo de comunicação [descrito acima](#protocolo-de-comunicação).
 
 #### Envio de comandos do Broker para o Sensor
+<div align="center">
+<img src="./docs/imgs/diagrama-envio-dados.png" alt="Envio de dados do Sensor para o Broker" height="300px" width="auto" /> <br/>
+<em>Figura 7. Diagrama de envio de dados do Sensor para o Broker</em> <br/>
+</div>
+
 Para envio de comandos do Broker para os Sensores, é utilizando uma abordagem confiável (TCP/IP). Assim, sempre que o Broker precisa enviar algum dado para os Sensores, ele inicia uma conexão TCP/IP com o Sensor e envia o comando.
 
 Para lidar com o recebimento dos comandos, o Sensor permite ao desenvolvedor [criar](https://github.com/jnaraujo/tec502-iot-connect/blob/3b767d1bc8150ca48f22ab9af7d43b25e8ed0f6d/sensor/air_cond.main.py#L57) os próprios comandos e [cadastrar](https://github.com/jnaraujo/tec502-iot-connect/blob/3b767d1bc8150ca48f22ab9af7d43b25e8ed0f6d/sensor/libs/server.py#L60C7-L60C21) no `Server`. Para isso, ele define o nome do comando e a função que será executada quando o comando for recebido. Essa abordagem torna mais fácil criar novos comandos e adicionar novas funcionalidades ao Sensor.
