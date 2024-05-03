@@ -69,15 +69,18 @@ class Interface:
         print('Error:', e)
         
   def register_sensor_on_broker(self, broker_addr: str, sensor_id:str, sensor_addr: str):
-    req = urllib.request.Request(f'http://{broker_addr}/sensor', method='POST')
-    req.add_header('Content-Type', 'application/json')
-    req.data = json.dumps({
-      'address': sensor_addr,
-      'id': sensor_id
-    }).encode('utf-8')
-    
-    resp = urllib.request.urlopen(req)
-    return json.loads(resp.read())
+    try:
+      req = urllib.request.Request(f'http://{broker_addr}/sensor', method='POST')
+      req.add_header('Content-Type', 'application/json')
+      req.data = json.dumps({
+        'address': sensor_addr,
+        'id': sensor_id
+      }).encode('utf-8')
+      
+      resp = urllib.request.urlopen(req, timeout=1) # timeout de 1s
+      return json.loads(resp.read())
+    except Exception as e:
+      return {'error': 'Erro durante a solicitação: ' + str(e)}
   
   def delete_sensor_on_broker(self, broker_addr: str, sensor_id:str):
     resp = urllib.request.urlopen(f'http://{broker_addr}/sensor/{sensor_id}', method='DELETE')
