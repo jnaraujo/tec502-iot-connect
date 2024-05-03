@@ -92,7 +92,7 @@ Para remover um sensor, na caixa de "Lista de sensores", clique no ícone de lix
 #### Envio de comandos pelo terminal do Sensor
 O terminal do Sensor permite enviar comandos para o Broker. Para isso, basta digitar o comando no terminal e pressionar Enter. O Sensor irá enviar o comando para o Broker e aguardar a resposta. O terminal do Sensor é útil para testar a comunicação entre o Sensor e o Broker.
 
-> Vale destacar se o Sensor estiver rodando através do Docker, é necessário utilizar o comando `docker exec -it <container_id> bash` para acessar o terminal do Sensor. O Docker Compose não permite a execução de comandos interativos.
+> Vale destacar que não é possível acessar a interface do Sensor através do Docker Compose (por limitações do Docker Compose). Se quiser acessar a interface do Sensor, é necessário executar o Dockerfile de forma manual. Para isso, basta entrar na pasta do Sensor e executar o comando `docker build -t sensor -f AirCond.Dockerfile . && docker run  -p 3344:3333 -e BROKER_URL=<broker url> -it sensor`.
 
 ## Arquitetura do projeto
 As principais pastas do projeto são:
