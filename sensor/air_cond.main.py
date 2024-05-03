@@ -58,6 +58,9 @@ def set_temp_cmd(cmd: cmd_data.Cmd):
   if not STATUS:
     return cmd_data.BasicCmd("error", "O sensor está desligado")
   
+  if not cmd.content.isdigit():
+    return cmd_data.BasicCmd("error", "O conteúdo do comando deve ser um número")
+  
   data['temperature'] = int(cmd.content)
   return cmd_data.BasicCmd("set_temp", f'Temperature set to {cmd.content}')
 
