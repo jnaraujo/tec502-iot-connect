@@ -1,3 +1,4 @@
+// Este pacote é responsável por armazenar as respostas dos sensores.
 package responses
 
 import (
@@ -15,14 +16,16 @@ type Response struct {
 }
 
 type SensorResponseStorage struct {
-	mu   sync.RWMutex
+	mu   sync.RWMutex // mu é um mutex para controlar o acesso concorrente ao mapa data.
 	data map[string]Response
 }
 
+// storage é uma instância de SensorResponseStorage que armazena as respostas dos sensores.
 var storage *SensorResponseStorage = &SensorResponseStorage{
 	data: make(map[string]Response),
 }
 
+// Create cria uma nova resposta para um sensor.
 func Create(sensorID, name string) Response {
 	storage.mu.Lock()
 	defer storage.mu.Unlock()
@@ -38,6 +41,7 @@ func Create(sensorID, name string) Response {
 	return response
 }
 
+// FindAll retorna todas as respostas dos sensores.
 func FindAll() []Response {
 	storage.mu.RLock()
 	defer storage.mu.RUnlock()
@@ -49,6 +53,7 @@ func FindAll() []Response {
 	return responses
 }
 
+// FindBySensorId retorna a resposta de um sensor pelo seu ID.
 func FindBySensorId(sensorId string) Response {
 	storage.mu.RLock()
 	defer storage.mu.RUnlock()
@@ -56,6 +61,7 @@ func FindBySensorId(sensorId string) Response {
 	return storage.data[sensorId]
 }
 
+// DeleteBySensorId deleta a resposta de um sensor pelo seu ID.
 func DeleteBySensorId(sensorId string) {
 	storage.mu.Lock()
 	defer storage.mu.Unlock()
@@ -63,6 +69,7 @@ func DeleteBySensorId(sensorId string) {
 	delete(storage.data, sensorId)
 }
 
+// AddContent adiciona um conteúdo à resposta de um sensor.
 func AddContent(sensorId string, data float64) {
 	storage.mu.Lock()
 	defer storage.mu.Unlock()

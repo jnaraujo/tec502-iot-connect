@@ -17,7 +17,7 @@ type PostMessageBody struct {
 }
 
 func PostMessageHandler(c *gin.Context) {
-	var body PostMessageBody
+	var body PostMessageBody // Convertendo o corpo da requisição em um objeto Go
 	if err := c.BindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
@@ -25,6 +25,7 @@ func PostMessageHandler(c *gin.Context) {
 		return
 	}
 
+	// Valida o corpo da requisição
 	validate := validator.New()
 	if err := validate.Struct(body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -41,6 +42,7 @@ func PostMessageHandler(c *gin.Context) {
 		return
 	}
 
+	// Envia o comando para o sensor e aguarda a resposta
 	response, err := sensor_conn.Request(addr, cmd.New(
 		"BROKER", body.SensorID, body.Command, body.Content,
 	))
@@ -51,6 +53,7 @@ func PostMessageHandler(c *gin.Context) {
 		return
 	}
 
+	// Decodifica a resposta do sensor
 	cmd, err := cmd.Encode(response)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

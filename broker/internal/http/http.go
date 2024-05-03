@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Cria um novo servidor HTTP
 func NewServer(addr string, port int) {
 	fmt.Printf("Server started on %s:%d\n", addr, port)
 
@@ -23,6 +24,7 @@ func NewServer(addr string, port int) {
 	}
 }
 
+// Registra as rotas do servidor HTTP
 func registerRoutes(g *gin.Engine) {
 	g.GET("/", routes.GetRootHandler)
 	g.POST("/message", routes.PostMessageHandler)
@@ -33,6 +35,7 @@ func registerRoutes(g *gin.Engine) {
 	g.DELETE("/sensor/:sensor_id", routes.DeleteSensorRoute)
 }
 
+// Middleware para permitir requisições de outros domínios
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")

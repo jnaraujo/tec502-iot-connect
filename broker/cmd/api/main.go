@@ -10,6 +10,11 @@ import (
 	"github.com/fatih/color"
 )
 
+/*
+A função main é o ponto de entrada de um programa Go. Ela é responsável por iniciar a execução do programa.
+
+Neste caso, a função main inicia um servidor UDP e um servidor HTTP.
+*/
 func main() {
 	fmt.Println(color.CyanString(strings.Repeat("=", 25)))
 	fmt.Println(color.GreenString(utils.CenterFormat("IoT Connect Broker", 25)))

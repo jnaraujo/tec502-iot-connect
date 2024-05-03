@@ -16,13 +16,14 @@ type sensorWithOnlineStatus struct {
 }
 
 func FindAllSensorsHandler(c *gin.Context) {
-	sensors := sensors.FindSensors()
+	sensors := sensors.FindSensors() // Busca todos os sensores
 
 	sensorsWithStatus := []sensorWithOnlineStatus{}
 	for _, sensor := range sensors {
 		resp := responses.FindBySensorId(sensor.Id)
 		isOnline := true
 
+		// Verifica se o tempo existe e se o tempo é maior que o tempo máximo para ser considerado online
 		if resp.UpdatedAt.Time.IsZero() ||
 			time.Since(resp.UpdatedAt.Time) > constants.MaxTimeToBeConsideredOnline {
 			isOnline = false

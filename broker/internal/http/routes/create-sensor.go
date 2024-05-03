@@ -19,6 +19,7 @@ type CreateSensorBody struct {
 
 func CreateSensorHandler(c *gin.Context) {
 	var body CreateSensorBody
+	// O método BindJSON é responsável por fazer transformar o corpo da requisição em um objeto Go.
 	if err := c.BindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
@@ -26,6 +27,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
+	// O pacote validator é responsável por garantir que o corpo da requisição está de acordo com o esperado.
 	validate := validator.New()
 	if err := validate.Struct(body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -41,6 +43,7 @@ func CreateSensorHandler(c *gin.Context) {
 		return
 	}
 
+	// O método Validate é responsável por verificar se a conexão com o sensor é válida, ou seja, se o sensor está respondendo.
 	err := sensor_conn.Validate(body.Address)
 	if err != nil {
 		fmt.Println(err)

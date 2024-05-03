@@ -12,8 +12,9 @@ import (
 )
 
 func FindSensorCommands(c *gin.Context) {
-	sensor_id := c.Param("sensor_id")
+	sensor_id := c.Param("sensor_id") // /sensors/commands/:sensor_id
 
+	// Verifica se o sensor existe
 	addr := sensors.FindSensorAddrById(sensor_id)
 	if addr == "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -22,6 +23,7 @@ func FindSensorCommands(c *gin.Context) {
 		return
 	}
 
+	// Envia o comando para o sensor para obter os comandos disponíveis
 	resp, err := sensor_conn.Request(addr, cmd.New("BROKER", sensor_id, "get_commands", ""))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -39,6 +41,7 @@ func FindSensorCommands(c *gin.Context) {
 		return
 	}
 
+	// Separa os comandos
 	commands := strings.Split(cmd.Content, ", ")
 	if commands == nil {
 		c.JSON(http.StatusNotFound, gin.H{
