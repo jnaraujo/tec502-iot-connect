@@ -73,7 +73,6 @@ func Request(addr string, command *cmd.Cmd) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	defer conn.Conn.Close()
 
 	content, err := conn.Send(command.Decode())
