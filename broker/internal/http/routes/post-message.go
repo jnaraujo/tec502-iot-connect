@@ -7,27 +7,18 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator"
 )
 
 type PostMessageBody struct {
-	SensorID string `json:"sensor_id" validate:"required"`
-	Command  string `json:"command" validate:"required"`
+	SensorID string `json:"sensor_id" binding:"required"`
+	Command  string `json:"command" binding:"required"`
 	Content  string `json:"content"`
 }
 
 func PostMessageHandler(c *gin.Context) {
-	var body PostMessageBody // Convertendo o corpo da requisição em um objeto Go
-	if err := c.BindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Corpo da requisição é inválido",
-		})
-		return
-	}
-
-	// Valida o corpo da requisição
-	validate := validator.New()
-	if err := validate.Struct(body); err != nil {
+	var body PostMessageBody
+	// O método ShouldBindJSON é responsável transformar o corpo da requisição em um objeto e validar se o corpo da requisição está de acordo com o esperado.
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
 		})

@@ -9,27 +9,17 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator"
 )
 
 type CreateSensorBody struct {
-	Address string `json:"address" validate:"required"`
-	Id      string `json:"id" validate:"required"`
+	Address string `json:"address" binding:"required"`
+	Id      string `json:"id" binding:"required"`
 }
 
 func CreateSensorHandler(c *gin.Context) {
 	var body CreateSensorBody
-	// O método BindJSON é responsável por fazer transformar o corpo da requisição em um objeto Go.
-	if err := c.BindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Corpo da requisição é inválido",
-		})
-		return
-	}
-
-	// O pacote validator é responsável por garantir que o corpo da requisição está de acordo com o esperado.
-	validate := validator.New()
-	if err := validate.Struct(body); err != nil {
+	// O método ShouldBindJSON é responsável transformar o corpo da requisição em um objeto e validar se o corpo da requisição está de acordo com o esperado.
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Corpo da requisição é inválido",
 		})
