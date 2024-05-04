@@ -69,3 +69,10 @@ func FindSensorIdByAddress(addr string) string {
 
 	return ""
 }
+
+// Deleta todos os Sensores
+func DeleteAll() {
+	for k := range storage.addrs {
+		delete(storage.addrs, k)
+	}
+}

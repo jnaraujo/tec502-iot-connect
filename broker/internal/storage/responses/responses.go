@@ -79,3 +79,10 @@ func AddContent(sensorId string, data float64) {
 	response.UpdatedAt = *time.NewTimeNow()
 	storage.data[sensorId] = response
 }
+
+// Deleta todas as Responses
+func DeleteAll() {
+	for k := range storage.data {
+		delete(storage.data, k)
+	}
+}
