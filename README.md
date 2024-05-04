@@ -115,8 +115,6 @@ Um exemplo de execução do Sensor pode ser visto abaixo:
 docker build -t sensor -f AirCond.Dockerfile . && docker run  -p 3344:3333 -e BROKER_URL=http://
 ```
 
-> Vale destacar que não é possível acessar a interface do Sensor através do Docker Compose (por limitações do Docker Compose). Se quiser acessar a interface do Sensor, é necessário executar o Dockerfile de forma manual. Para isso, basta entrar na pasta do Sensor e executar o comando `docker build -t sensor -f AirCond.Dockerfile . && docker run  -p 3344:3333 -e BROKER_URL=<broker url> -it sensor`.
-
 ## Arquitetura do projeto
 As principais pastas do projeto são:
 
