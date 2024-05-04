@@ -425,3 +425,15 @@ Para a troca de mensagens entre o Client e o Broker, foi utilizado o protocolo H
 O envio de comandos entre o Broker e os Sensores é feito através de uma abordagem confiável (TCP/IP). Assim, caso ocorra algum problema na comunicação, o Broker informará ao usuário que houve uma falha na comunicação.
 
 O envio de dados dos Sensores para o Broker é feito através de uma abordagem não confiável (UDP). Assim, caso ocorra algum problema na comunicação, o Sensor irá enviar novamente na próxima iteração, não causando maiores problemas ao sistema. No momento em que a conexão é estabelecida, os dados voltam a chegar ao Broker, que irá processá-los normalmente. Vale destacar que, caso o Broker não receba os dados de um Sensor por um determinado tempo, ele considerará o Sensor como offline. Assim que o Sensor voltar a enviar dados, ele voltará a ser considerado online.
+
+## Testes
+Para garantir o funcionamento correto do sistema, alguns módulos apresentam testes unitários ([Cmd](/broker/internal/cmd/cmd_test.go) e [Queue](/broker/internal/queue/queue_test.go)). Além disso, todas as rotas podem ser testadas utilizando o [Postman](https://www.postman.com/) ou o [Bruno](https://www.usebruno.com/) para garantir que a API está funcionando corretamente.
+
+Os arquivos do Postman podem ser encontrados na em [/iot-connect-api-postman.json](/iot-connect-api-postman.json) e no Bruno em [/iot-connect-api-bruno](/iot-connect-api-bruno/).
+
+## Conclusão
+O projeto desenvolvido cumpriu com os objetivos propostos, criando um sistema de comunicação e gerenciamento entre dispositivos IOT e suas diferentes aplicações. O sistema é capaz de criar, remover e verificar o status de dispositivos IOT, além de receber, armazenar e disponibilizar dados dos dispositivos IOT para aplicações web.
+
+O sistema foi desenvolvido utilizando tecnologias modernas e atuais, como React, Go e Python. Além disso, o sistema foi desenvolvido utilizando Docker e Docker Compose, o que facilita a execução do sistema em diferentes ambientes.
+
+O sistema é capaz de lidar com falhas de comunicação entre os dispositivos, garantindo que o usuário seja sempre informado caso ocorra algum problema na comunicação. Além disso, o sistema é capaz de lidar com múltiplas conexões simultâneas, garantindo que ele esteja sempre disponível para receber os dados dos Sensores.
