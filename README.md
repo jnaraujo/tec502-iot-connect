@@ -383,16 +383,18 @@ No Broker, o código para envio de comandos pode ser encontrado em [broker/inter
 #### Comandos disponíveis
 Os comandos disponíveis para os Sensores são:
 
-- `turn_on`: Liga o dispositivo.
-- `turn_off`: Desliga o dispositivo.
-- `set_temp`: Configura a temperatura do dispositivo. *Somente para o Sensor de ar condicionado*.
-- `set_heat`: Configura a temperatura do ar condicionado para 40 graus. *Somente para o Sensor de ar condicionado*.
-- `set_cool`: Configura a temperatura do ar condicionado para 16 graus. *Somente para o Sensor de ar condicionado*.
-- `set_lux`: Configura a luminosidade do dispositivo. *Somente para o Sensor de lâmpada*.
-- `lux_low`: Configura a luminosidade do dispositivo para baixa. *Somente para o Sensor de lâmpada*.
-- `not_found`: Comando não encontrado. *Retornado quando um comando não é reconhecido*.
-- `set_id`: Configura o ID do Sensor. *Comando interno do Sensor*.
-- `get_commands`: Retorna a lista de comandos disponíveis para o Sensor. *Comando interno do Sensor*.
+| Comando | Descrição | Observação |
+|---------|-----------|------------|
+| `turn_on` | Liga o dispositivo | Disponível para todos os Sensores |
+| `turn_off` | Desliga o dispositivo | Disponível para todos os Sensores |
+| `set_temp` | Configura a temperatura do dispositivo | Somente para o Sensor de ar condicionado |
+| `set_heat` | Configura a temperatura do ar condicionado para 40 graus | Somente para o Sensor de ar condicionado |
+| `set_cool` | Configura a temperatura do ar condicionado para 16 graus | Somente para o Sensor de ar condicionado |
+| `set_lux` | Configura a luminosidade do dispositivo | Somente para o Sensor de lâmpada |
+| `lux_low` | Configura a luminosidade do dispositivo para baixa | Somente para o Sensor de lâmpada |
+| `not_found` | Comando não encontrado | Comando interno do Sensor |
+| `set_id` | Configura o ID do Sensor | Comando interno do Sensor |
+| `get_commands` | Retorna a lista de comandos disponíveis para o Sensor | Comando interno do Sensor |
 
 #### Envio de dados dos Sensores para o Broker
 <div align="center">
