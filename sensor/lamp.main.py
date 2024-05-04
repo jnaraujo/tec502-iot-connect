@@ -32,6 +32,7 @@ def init():
   server.register_command("turn_on", turn_on_cmd)
   server.register_command("turn_off", turn_off_cmd)
   server.register_command("set_lux", set_lux_cmd)
+  server.register_command("lux_low", lux_low_cmd)
   
   Thread(target=server.start).start() # Inicia o servidor
   Thread(target=send_broker_data, args=(server,)).start() # Inicia o envio de dados para o broker
@@ -63,7 +64,7 @@ def not_found_cmd(cmd: cmd_data.Cmd):
 
 def set_lux_cmd(cmd: cmd_data.Cmd):
   '''
-  Comando que lida com o comando set_temp.
+  Comando que altera a luminosidade da lampada.
   '''
   
   if not STATUS:
@@ -71,6 +72,17 @@ def set_lux_cmd(cmd: cmd_data.Cmd):
   
   data['lux'] = cmd.content
   return cmd_data.BasicCmd("set_lux", f'A luminosidade foi definida para {cmd.content}')
+
+def lux_low_cmd(cmd: cmd_data.Cmd):
+  '''
+  Comando que diminui a luminosidade da lampada.
+  '''
+  
+  if not STATUS:
+    return cmd_data.BasicCmd("error", "Sensor is off")
+  
+  data['lux'] = 10
+  return cmd_data.BasicCmd("light_low", "A luminosidade foi definida para 10")
 
 def turn_on_cmd(cmd: cmd_data.Cmd):
   '''

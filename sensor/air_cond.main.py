@@ -33,6 +33,8 @@ def init():
   server.register_command("set_temp", set_temp_cmd)
   server.register_command("turn_on", turn_on_cmd)
   server.register_command("turn_off", turn_off_cmd)
+  server.register_command("set_heat", set_heat_cmd)
+  server.register_command("set_cool", set_cool_cmd)
   
   Thread(target=server.start).start() # Inicia o servidor
   Thread(target=send_broker_data, args=(server,)).start() # Inicia o envio de dados para o broker
@@ -79,6 +81,28 @@ def set_temp_cmd(cmd: cmd_data.Cmd):
   
   data['temperature'] = cmd.content
   return cmd_data.BasicCmd("set_temp", f'Temperature set to {cmd.content}')
+
+def set_heat_cmd(cmd: cmd_data.Cmd):
+  '''
+  Comando que seta o modo de aquecimento do sensor.
+  '''
+  
+  if not STATUS: # Se o sensor estiver desligado, retorna um erro
+    return cmd_data.BasicCmd("error", "O sensor está desligado")
+  
+  data["temperature"] = 40
+  return cmd_data.BasicCmd("set_heat", "Modo de aquecimento ativado")
+
+def set_cool_cmd(cmd: cmd_data.Cmd):
+  '''
+  Comando que seta o modo de resfriamento do sensor.
+  '''
+  
+  if not STATUS: # Se o sensor estiver desligado, retorna um erro
+    return cmd_data.BasicCmd("error", "O sensor está desligado")
+  
+  data["temperature"] = 16
+  return cmd_data.BasicCmd("set_cool", "Modo de resfriamento ativado")
 
 def turn_on_cmd(cmd: cmd_data.Cmd):
   '''
