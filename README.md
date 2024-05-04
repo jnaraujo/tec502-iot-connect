@@ -173,6 +173,8 @@ broker
 ### Sensores
 Dentro da pasta `sensor`, temos o código dos Sensores, que são responsáveis por simular dispositivos IOT que enviam dados para o Broker. Os Sensores são desenvolvidos em Python.
 
+Foram criados dois Sensores: um que simula um ar condicionado e outro que simula uma lâmpada. Os Sensores são responsáveis por enviar dados para o Broker e receber comandos do Broker.
+
 ```bash
 sensor
 ├── libs # Bibliotecas utilizadas
@@ -240,7 +242,7 @@ A comunicação entre o Client e o Broker é feita através de **HTTP**, utiliza
 
 No Broker, foi utilizado a biblioteca [Gin](https://gin-gonic.com/) para a criação das rotas HTTP. Já no Client, foi utilizado a biblioteca [TanStack Query](https://tanstack.com/query/latest) para fazer as requisições HTTP e gerenciar o estado da aplicação. O TanStack Query permite definir um tempo de refetch, ou seja, a cada X segundos, a aplicação irá buscar os dados novamente, garantindo que a aplicação esteja sempre atualizada. O código do servidor pode ser encontrado em [broker/cmd/api/main.go](https://github.com/jnaraujo/tec502-iot-connect/tree/main/broker/internal/http), enquanto o código do cliente pode ser encontrado em [client/src/hooks](https://github.com/jnaraujo/tec502-iot-connect/tree/main/client/src/hooks).
 
-#### Rotas
+#### Rotas da API REST
 As rotas definem os pontos de entrada da API REST, cada uma correspondendo a uma operação específica que pode ser realizada no sistema. Seguindo o padrão de API REST, as rotas são projetadas para serem intuitivas e autoexplicativas, facilitando a compreensão e o uso por parte dos desenvolvedores.
 
 ##### GET /
@@ -377,6 +379,20 @@ Para lidar com o recebimento dos comandos, o Sensor permite ao desenvolvedor [cr
 Além disso, o Sensor é capaz de lidar com múltiplas conexões simultâneas, garantindo que ele esteja sempre disponível para receber comandos. Para isso, o Sensor [cria uma nova thread](https://github.com/jnaraujo/tec502-iot-connect/blob/3b767d1bc8150ca48f22ab9af7d43b25e8ed0f6d/sensor/libs/server.py#L40) para cada conexão TCP/IP que é estabelecida. Assim, ele é capaz de receber comandos de múltiplos Brokers simultaneamente. O problemas relacionados a concorrência são improváveis, visto que seria necessário que dois Brokers enviassem comandos para o mesmo Sensor ao mesmo tempo, algo que não é esperado no sistema.
 
 No Broker, o código para envio de comandos pode ser encontrado em [broker/internal/sensor_conn/sensor.go](https://github.com/jnaraujo/tec502-iot-connect/blob/main/broker/internal/sensor_conn/sensor.go), enquanto no Sensor, o código para receber comandos pode ser encontrado em [sensor/libs/server.py](https://github.com/jnaraujo/tec502-iot-connect/blob/main/sensor/libs/server.py).
+
+#### Comandos disponíveis
+Os comandos disponíveis para os Sensores são:
+
+- `turn_on`: Liga o dispositivo.
+- `turn_off`: Desliga o dispositivo.
+- `set_temp`: Configura a temperatura do dispositivo. *Somente para o Sensor de ar condicionado*.
+- `set_heat`: Configura a temperatura do ar condicionado para 40 graus. *Somente para o Sensor de ar condicionado*.
+- `set_cool`: Configura a temperatura do ar condicionado para 16 graus. *Somente para o Sensor de ar condicionado*.
+- `set_lux`: Configura a luminosidade do dispositivo. *Somente para o Sensor de lâmpada*.
+- `lux_low`: Configura a luminosidade do dispositivo para baixa. *Somente para o Sensor de lâmpada*.
+- `not_found`: Comando não encontrado. *Retornado quando um comando não é reconhecido*.
+- `set_id`: Configura o ID do Sensor. *Comando interno do Sensor*.
+- `get_commands`: Retorna a lista de comandos disponíveis para o Sensor. *Comando interno do Sensor*.
 
 #### Envio de dados dos Sensores para o Broker
 <div align="center">
