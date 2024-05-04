@@ -112,7 +112,7 @@ O `<dockerfile>` é o Dockerfile do Sensor que deseja executar (AirCond.Dockerfi
 Um exemplo de execução do Sensor pode ser visto abaixo:
 
 ```bash
-docker build -t sensor -f AirCond.Dockerfile . && docker run  -p 3344:3333 -e BROKER_URL=http://
+docker build -t sensor -f AirCond.Dockerfile . && docker run  -p 3344:3333 -e BROKER_URL=localhost:5310 -it sensor
 ```
 
 ## Arquitetura do projeto
@@ -284,7 +284,7 @@ POST /sensor
 
 Exemplo de resposta:
 ```http
-200 OK
+201 Created
 {
   "message": "Sensor criado"
 }
