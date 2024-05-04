@@ -23,20 +23,25 @@ def init():
   print(f'Sensor IP: {utils.get_current_ip()}:3333')
   print("="*30)
   
-  server = Server("0.0.0.0", 3333)
-  interface = Interface(server)
+  server = Server("0.0.0.0", 3333) # Cria o servidor
+  interface = Interface(server) # Cria a interface
   
   server.register_not_found(not_found_cmd) # Registra o comando de não encontrado
 
+  # Registra os comandos
   server.register_command("turn_on", turn_on_cmd)
   server.register_command("turn_off", turn_off_cmd)
   server.register_command("set_lux", set_lux_cmd)
   
-  Thread(target=server.start).start()
-  Thread(target=send_broker_data, args=(server,)).start()
-  interface.run()
+  Thread(target=server.start).start() # Inicia o servidor
+  Thread(target=send_broker_data, args=(server,)).start() # Inicia o envio de dados para o broker
+  interface.run() # Inicia a interface
   
 def send_broker_data(server: Server):
+  '''
+  Função que envia dados para o broker a cada 0.5 segundos.
+  '''
+  
   while True:
     time.sleep(0.5) # Envia dados a cada 0.5 segundos
     if not STATUS: # Se o sensor estiver desligado, não envia dados
@@ -50,9 +55,17 @@ def send_broker_data(server: Server):
       print("Error sending data to broker:", e)
   
 def not_found_cmd(cmd: cmd_data.Cmd):
+  '''
+  Função que lida com comandos não encontrados.
+  '''
+  
   return cmd_data.BasicCmd("not_found", f'Comando {cmd.command} não encontrado')
 
 def set_lux_cmd(cmd: cmd_data.Cmd):
+  '''
+  Comando que lida com o comando set_temp.
+  '''
+  
   if not STATUS:
     return cmd_data.BasicCmd("error", "Sensor is off")
   
@@ -60,11 +73,19 @@ def set_lux_cmd(cmd: cmd_data.Cmd):
   return cmd_data.BasicCmd("set_lux", f'A luminosidade foi definida para {cmd.content}')
 
 def turn_on_cmd(cmd: cmd_data.Cmd):
+  '''
+  Comando que liga o sensor.
+  '''
+  
   global STATUS
   STATUS = True
   return cmd_data.BasicCmd("turn_on", "Lampada foi ligada")
 
 def turn_off_cmd(cmd: cmd_data.Cmd):
+  '''
+  Comando que desliga o sensor.
+  '''
+  
   global STATUS
   STATUS = False
   return cmd_data.BasicCmd("turn_off", "Lampada foi desligada")
