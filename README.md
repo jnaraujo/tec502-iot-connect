@@ -427,9 +427,13 @@ O envio de comandos entre o Broker e os Sensores é feito através de uma aborda
 O envio de dados dos Sensores para o Broker é feito através de uma abordagem não confiável (UDP). Assim, caso ocorra algum problema na comunicação, o Sensor irá enviar novamente na próxima iteração, não causando maiores problemas ao sistema. No momento em que a conexão é estabelecida, os dados voltam a chegar ao Broker, que irá processá-los normalmente. Vale destacar que, caso o Broker não receba os dados de um Sensor por um determinado tempo, ele considerará o Sensor como offline. Assim que o Sensor voltar a enviar dados, ele voltará a ser considerado online.
 
 ## Testes
-Para garantir o funcionamento correto do sistema, alguns módulos apresentam testes unitários ([Cmd](/broker/internal/cmd/cmd_test.go) e [Queue](/broker/internal/queue/queue_test.go)). Além disso, todas as rotas podem ser testadas utilizando o [Postman](https://www.postman.com/) ou o [Bruno](https://www.usebruno.com/) para garantir que a API está funcionando corretamente.
+Para garantir o funcionamento correto do sistema, alguns módulos apresentam testes unitários ([Cmd](/broker/internal/cmd/cmd_test.go) e [Queue](/broker/internal/queue/queue_test.go)). Para rodar os testes unitários, basta executar o comando `go test ./internal/...` na pasta do Broker.
 
-Os arquivos do Postman podem ser encontrados na em [/iot-connect-api-postman.json](/iot-connect-api-postman.json) e no Bruno em [/iot-connect-api-bruno](/iot-connect-api-bruno/).
+Além disso, todas as rotas da API REST possuem testes de integração. Os testes de integração garantem que a API está funcionando corretamente e que os dados estão sendo armazenados e recuperados corretamente. Os testes foram feitos utilizando a biblioteca padrão do Go. Para rodar os testes, basta executar o comando `go test ./test/...` na pasta do Broker.
+
+> Nota: Para rodar os testes de integração, é necessário ter o Sensor do Ar Condicionado rodando com o IP *localhost:3399*. Para isso, basta executar o Dockerfile do Sensor do Ar Condicionado com `docker build -t sensor -f AirCond.Dockerfile . && docker run  -p 3399:3333 -e BROKER_URL=<broker url> -it sensor`.
+
+Além disso, todas as rotas podem ser testadas utilizando o [Postman](https://www.postman.com/) ou o [Bruno](https://www.usebruno.com/) para garantir que a API está funcionando corretamente. Os arquivos do Postman podem ser encontrados na em [/iot-connect-api-postman.json](/iot-connect-api-postman.json) e no Bruno em [/iot-connect-api-bruno](/iot-connect-api-bruno/).
 
 ## Conclusão
 O projeto desenvolvido cumpriu com os objetivos propostos, criando um sistema de comunicação e gerenciamento entre dispositivos IOT e suas diferentes aplicações. O sistema é capaz de criar, remover e verificar o status de dispositivos IOT, além de receber, armazenar e disponibilizar dados dos dispositivos IOT para aplicações web.
