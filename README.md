@@ -93,7 +93,7 @@ Para remover um sensor, na caixa de "Lista de sensores", clique no ícone de lix
 
 #### Envio de comandos pelo terminal do Sensor
 <div align="center">
-<img src="./docs/imgs/terminal-sensor.png" alt="Interface do Sensor" height="100px" width="auto" /> <br/>
+<img src="./docs/imgs/terminal-sensor.png" alt="Interface do Sensor" height="500px" width="auto" /> <br/>
 <em>Figura 5. Interface do Sensor</em> <br/>
 </div>
 
