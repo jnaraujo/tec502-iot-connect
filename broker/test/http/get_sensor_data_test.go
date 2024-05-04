@@ -14,13 +14,13 @@ import (
 
 func init() {
 	checkSensor()
-}
 
-func TestGetSensorDataRoute(t *testing.T) {
 	server := setupUdpServer() // inicia o servidor UDP para receber mensagens
 	go server.Listen()         // inicia o servidor
 	defer server.Close()
+}
 
+func TestGetSensorDataRoute(t *testing.T) {
 	cleanUp()
 	router := setupRouter()
 	w := httptest.NewRecorder()
