@@ -19,7 +19,6 @@
 ## Sumário
 - [Sobre o projeto](#sobre-o-projeto)
   - [Tecnologias utilizadas](#tecnologias-utilizadas)
-  - [Pré-requisitos](#pré-requisitos)
   - [Como executar](#como-executar)
   - [Como utilizar](#como-utilizar)
     - [Como adicionar um novo sensor](#como-adicionar-um-novo-sensor)
@@ -40,16 +39,19 @@
     - [Comandos disponíveis](#comandos-disponíveis)
     - [Envio de dados dos Sensores para o Broker](#envio-de-dados-dos-sensores-para-o-broker)
       - [Lidando com concorrência](#lidando-com-concorrência)
--[Confiabilidade da solução e tolerância a falhas](#confiabilidade-da-solução-e-tolerância-a-falhas)
+- [Confiabilidade da solução e tolerância a falhas](#confiabilidade-da-solução-e-tolerância-a-falhas)
   - [Troca de mensagens entre Client e Broker](#troca-de-mensagens-entre-client-e-broker)
   - [Troca de mensagens do Broker para os Sensores](#troca-de-mensagens-do-broker-para-os-sensores)
   - [Troca de mensagens dos Sensores para o Broker](#troca-de-mensagens-dos-sensores-para-o-broker)
--[Testes](#testes)
--[Conclusão](#conclusão)
+- [Testes](#testes)
+- [Conclusão](#conclusão)
   
 
 ## Sobre o projeto
 ### Tecnologias utilizadas
+- Geral
+  - [Docker](https://www.docker.com/): Plataforma de código aberto para criação, execução e gerenciamento de aplicações em containers.
+  - [Docker Compose](https://docs.docker.com/compose/): Ferramenta para definir e executar aplicações Docker em múltiplos containers.
 - Client
   - [React](https://reactjs.org/): Biblioteca JavaScript para a criação de interfaces de usuário.
   - [Vite](https://vitejs.dev/): Ferramenta de build para aplicações web.
@@ -60,12 +62,6 @@
   - [Gin](https://gin-gonic.com/) Framework web utilizado para a criação das rotas HTTP e API REST.
 - Sensores
   - [Python](https://www.python.org/): Linguagem de programação utilizada para o desenvolvimento dos Sensores.
-
-### Pré-requisitos
-O sistema foi desenvolvido utilizando Docker e Docker Compose. Assim, para executar o projeto, é necessário ter o Docker e o Docker Compose instalados na máquina.
-
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
 
 ### Como executar
 1. Clone o repositório:
