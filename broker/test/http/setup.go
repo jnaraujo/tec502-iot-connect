@@ -28,7 +28,7 @@ func checkSensor() {
 	// Verifica se o sensor esta online
 	err := sensor_conn.Validate("localhost:3399")
 	if err != nil {
-		panic("O *Sensor de Temperatura* precisa estar online para o teste! Se ele já estiver ligado, verifica se está ouvindo na porta '3399'.")
+		panic("O *Sensor do Ar Condicionado* precisa estar online para o teste! Se ele já estiver ligado, verifica se está ouvindo na porta '3399'.")
 	}
 }
 
