@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>IoT Connect - Gerenciamento de dispositivos IOT</h1>
+  <h1>IoT Connect - Gerenciamento de dispositivos IoT</h1>
   <p>
     <strong>Projeto desenvolvido para a disciplina TEC502 - MI Concorrência e Conectividade</strong>
   </p>
@@ -9,7 +9,7 @@
 </div>
 
 <p>
-  O objetivo do IOT Connect é criar um sistema de comunicação e gerenciamento entre dispositivos IOT e suas diferentes aplicações. O sistema deve ser capaz de criar, remover e verificar o status de dispositivos IOT, além de receber, armazenar e disponibilizar dados dos dispositivos IOT para aplicações web.
+  O objetivo do IoT Connect é criar um sistema de comunicação e gerenciamento entre dispositivos IoT e suas diferentes aplicações. O sistema deve ser capaz de criar, remover e verificar o status de dispositivos IoT, além de receber, armazenar e disponibilizar dados dos dispositivos IoT para aplicações web.
 </p>
 
 <div align="center">
@@ -145,10 +145,10 @@ As principais pastas do projeto são:
 
 - `client`: Aplicação web desenvolvida em React.
 - `broker`: Serviço de mensageria desenvolvido em Go.
-- `sensor`: Simulação de dispositivos IOT desenvolvida em Python.
+- `sensor`: Simulação de dispositivos IoT desenvolvida em Python.
 
 ### Client
-Dentro da pasta `client`, temos o código da aplicação web desenvolvida em React. A aplicação é responsável por criar, remover e visualizar dispositivos IOT, além de visualizar os dados enviados pelos dispositivos.
+Dentro da pasta `client`, temos o código da aplicação web desenvolvida em React. A aplicação é responsável por criar, remover e visualizar dispositivos IoT, além de visualizar os dados enviados pelos dispositivos.
 
 ```bash
 client
@@ -196,7 +196,7 @@ broker
 ```
 
 ### Sensores
-Dentro da pasta `sensor`, temos o código dos Sensores, que são responsáveis por simular dispositivos IOT que enviam dados para o Broker. Os Sensores são desenvolvidos em Python.
+Dentro da pasta `sensor`, temos o código dos Sensores, que são responsáveis por simular dispositivos IoT que enviam dados para o Broker. Os Sensores são desenvolvidos em Python.
 
 Foram criados dois Sensores: um que simula um ar condicionado e outro que simula uma lâmpada. Os Sensores são responsáveis por enviar dados para o Broker e receber comandos do Broker.
 
@@ -214,7 +214,7 @@ sensor
 
 ## Comunicação
 ### Protocolo de comunicação
-Para a comunicação entre os dispositivos IOT e o Broker, foi criado um protocolo de comunicação. O protocolo é baseado texto e funciona tanto sobre TCP/IP quanto UDP. O uso do protocolo facilita a comunicação entre os dispositivos e permite a criação de novos comandos de forma simples.
+Para a comunicação entre os dispositivos IoT e o Broker, foi criado um protocolo de comunicação. O protocolo é baseado texto e funciona tanto sobre TCP/IP quanto UDP. O uso do protocolo facilita a comunicação entre os dispositivos e permite a criação de novos comandos de forma simples.
 
 A implementação do protocolo foi feita tanto no [Broker](https://github.com/jnaraujo/tec502-iot-connect/broker/internal/cmd/cmd.go) quanto nos [Sensores](https://github.com/jnaraujo/tec502-iot-connect/sensor/libs/cmd_data.py). Assim, no envio de comandos do Broker para os Sensores, o Broker envia o comando no formato do protocolo sobre TCP/IP. Já no envio de dados dos Sensores para o Broker, os Sensores enviam os dados no formato do protocolo sobre UDP.
 
@@ -263,7 +263,7 @@ Qualquer dado que será enviado junto ao comando, como a temperatura que o Senso
 <em>Figura 6. Diagrama de pedido de dados do Client para o Broker</em> <br/>
 </div>
 
-A comunicação entre o Client e o Broker é feita através de **HTTP**, utilizando o padrão de API REST. A api do Broker permite a criação, remoção, visualização de dispositivos IOT e a visualização dos dados enviados pelos dispositivos. Ao se iniciar o Broker, o acesso a API poderá ser feito através do endereço `http://<endereço>:8080`.
+A comunicação entre o Client e o Broker é feita através de **HTTP**, utilizando o padrão de API REST. A api do Broker permite a criação, remoção, visualização de dispositivos IoT e a visualização dos dados enviados pelos dispositivos. Ao se iniciar o Broker, o acesso a API poderá ser feito através do endereço `http://<endereço>:8080`.
 
 No Broker, foi utilizado a biblioteca [Gin](https://gin-gonic.com/) para a criação das rotas HTTP. Já no Client, foi utilizado a biblioteca [TanStack Query](https://tanstack.com/query/latest) para fazer as requisições HTTP e gerenciar o estado da aplicação. O TanStack Query permite definir um tempo de refetch, ou seja, a cada X segundos, a aplicação irá buscar os dados novamente, garantindo que a aplicação esteja sempre atualizada. O código do servidor pode ser encontrado em [broker/cmd/api/main.go](https://github.com/jnaraujo/tec502-iot-connect/tree/main/broker/internal/http), enquanto o código do cliente pode ser encontrado em [client/src/hooks](https://github.com/jnaraujo/tec502-iot-connect/tree/main/client/src/hooks).
 
@@ -434,7 +434,7 @@ Para registrar o comando `set_temp`, o desenvolvedor deve adicionar o seguinte c
   server.register_command("set_temp", set_temp_cmd) # Registra o comando set_temp
 ```
 
-Além disso, o Sensor é capaz de lidar com múltiplas conexões simultâneas, garantindo que ele esteja sempre disponível para receber comandos. Para isso, o Sensor [cria uma nova thread](https://github.com/jnaraujo/tec502-iot-connect/sensor/libs/server.py#L40) para cada conexão TCP/IP que é estabelecida. Assim, ele é capaz de receber comandos de múltiplos Brokers simultaneamente. O problemas relacionados a concorrência são improváveis, visto que seria necessário que dois Brokers enviassem comandos para o mesmo Sensor ao mesmo tempo, algo que não é esperado no sistema.
+Além disso, o Sensor é capaz de lidar com múltiplas conexões simultâneas, garantindo que ele esteja sempre disponível para receber comandos. Para isso, o Sensor [cria uma nova thread](https://github.com/jnaraujo/tec502-iot-connect/sensor/libs/server.py#L40) para cada conexão TCP/IP que é estabelecida. Assim, ele é capaz de receber comandos de múltiplos Brokers simultaneamente. Os problemas relacionados a concorrência são improváveis, visto que seria necessário que dois Brokers enviassem comandos para o mesmo Sensor ao mesmo tempo, algo que não é esperado no sistema.
 
 No Broker, o código para envio de comandos pode ser encontrado em [broker/internal/sensor_conn/sensor.go](https://github.com/jnaraujo/tec502-iot-connect/blob/main/broker/internal/sensor_conn/sensor.go), enquanto no Sensor, o código para receber comandos pode ser encontrado em [sensor/libs/server.py](https://github.com/jnaraujo/tec502-iot-connect/blob/main/sensor/libs/server.py).
 
@@ -512,7 +512,7 @@ Além disso, todas as rotas da API REST possuem testes de integração. Os teste
 Além disso, todas as rotas podem ser testadas utilizando o [Postman](https://www.postman.com/) ou o [Bruno](https://www.usebruno.com/) para garantir que a API está funcionando corretamente. Os arquivos do Postman podem ser encontrados na em [/iot-connect-api-postman.json](/iot-connect-api-postman.json) e no Bruno em [/iot-connect-api-bruno](/iot-connect-api-bruno/).
 
 ## Conclusão
-O projeto desenvolvido cumpriu com os objetivos propostos, criando um sistema de comunicação e gerenciamento entre dispositivos IOT e suas diferentes aplicações. O sistema é capaz de criar, remover e verificar o status de dispositivos IOT, além de receber, armazenar e disponibilizar dados dos dispositivos IOT para aplicações web.
+O projeto desenvolvido cumpriu com os objetivos propostos, criando um sistema de comunicação e gerenciamento entre dispositivos IoT e suas diferentes aplicações. O sistema é capaz de criar, remover e verificar o status de dispositivos IoT, além de receber, armazenar e disponibilizar dados dos dispositivos IoT para aplicações web.
 
 O sistema foi desenvolvido utilizando tecnologias modernas e atuais, como React, Go e Python. Além disso, o sistema foi desenvolvido utilizando Docker e Docker Compose, o que facilita a execução do sistema em diferentes ambientes.
 
