@@ -448,6 +448,7 @@ Como diversos dados diferentes chegam ao Broker ao mesmo tempo, é necessário q
 
 Por exemplo, o código abaixo mostra como o Broker lida com a chegada de um novo pacote UDP:
 ```go	
+// Código retirado de: broker/internal/udp_server/udp.go
 // código omitido
 for {
   buffer := make([]byte, 1024) // Cria um buffer para armazenar o pacote UDP
