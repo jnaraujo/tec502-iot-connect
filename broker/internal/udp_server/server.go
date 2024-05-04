@@ -9,14 +9,17 @@ import (
 	"strconv"
 )
 
+type Server struct {
+	server *UDPServer
+}
+
 // NewServer cria um novo servidor UDP.
 // Também é responsável por lidar com as requisições recebidas.
-func NewServer(addr string, port int) {
+func NewServer(addr string, port int) *Server {
 	fmt.Printf("Starting UDP server on %s:%d", addr, port)
 
 	// Cria um novo servidor UDP - ainda sem ouvir
 	udpServer := NewUDPServer(fmt.Sprintf("%s:%d", addr, port))
-	defer udpServer.Close()
 
 	// Define a função que lida com as mensagens recebidas pelo servidor UDP
 	udpServer.HandleRequest(func(addr, content string) {
@@ -46,8 +49,18 @@ func NewServer(addr string, port int) {
 		responses.AddContent(cmd.IdFrom, value) // Adiciona o conteúdo do comando à resposta do sensor
 	})
 
-	err := udpServer.Listen() // Inicia o servidor UDP
+	return &Server{
+		server: udpServer,
+	}
+}
+
+func (s *Server) Listen() {
+	err := s.server.Listen() // Inicia o servidor UDP
 	if err != nil {
 		log.Fatal("Error starting UDP server:", err)
 	}
+}
+
+func (s *Server) Close() {
+	s.server.Close()
 }
