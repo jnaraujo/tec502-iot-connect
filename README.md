@@ -81,7 +81,7 @@ docker-compose up --build
 
 4. Acesse a aplicação em [http://localhost:3000](http://localhost:3000)
 
-> Nota: Por uma limitação do Docker Compose, não é possível usar a interface do sensor através do Docker Compose. Para saber como acessar a interface do Sensor, veja a seção [Envio de comandos pelo terminal do Sensor](#envio-de-comandos-pelo-terminal-do-sensor).
+> Nota: Por uma limitação do Docker Compose, não é possível usar a interface do sensor através do Docker Compose. Para saber como acessar a interface do sensor, veja a seção [Envio de comandos pelo terminal do Sensor](#envio-de-comandos-pelo-terminal-do-sensor).
 
 ### Como utilizar
 #### Como adicionar um novo sensor
@@ -106,7 +106,7 @@ Para enviar um comando para um sensor, na caixa "Enviar comando", selecione o id
 <em>Figura 3. Caixa para visualizar os dados de um sensor</em> <br/>
 </div>
 
-Na caixa "Respostas dos sensores" irá aparecer todos os dados recebidos dos sensores, bem como o ID do sensor que enviou o dado, qual o comando, o conteúdo do dado, um histórico de envio e a data de envio.
+Na caixa "Respostas dos sensores" serão exibidos todos os dados recebidos dos sensores, bem como o ID do sensor que enviou o dado, qual o comando, o conteúdo do dado, um histórico de envio e a data de envio.
 
 #### Como remover um sensor
 <div align="center">
@@ -122,11 +122,9 @@ Para remover um sensor, na caixa de "Lista de sensores", clique no ícone de lix
 <em>Figura 5. Interface do Sensor</em> <br/>
 </div>
 
-O sensor possui um terminal que permite configurar o sensor e enviar comandos para o Broker. Pelo terminal, é possível cadastrar o Sensor, atualizar os dados do Sensor e executar comandos no Sensor. Para isso, basta escrever o comando no terminal e pressionar Enter. O Sensor executar o comando e retornar a resposta. O terminal do Sensor é útil para testar a comunicação entre o Sensor e o Broker.
+O sensor possui um terminal que permite configurar o sensor e enviar comandos para o Broker. Pelo terminal, é possível cadastrar o Sensor, atualizar os dados do Sensor e executar comandos no Sensor. Para isso, basta escrever o comando no terminal e pressionar Enter. O Sensor executa o comando e retornar a resposta. O terminal do Sensor é útil para testar a comunicação entre o Sensor e o Broker.
 
-Por uma limitação do Docker Compose, não é possível acessar a interface do Sensor através do Docker Compose. Para acessar a interface do Sensor, é necessário executar o Dockerfile de forma manual. 
-
-Para isso, basta entrar na pasta do Sensor e executar:
+Devido a uma limitação do Docker Compose, a interface do Sensor não pode ser acessada por meio dele. Para acessá-la, é necessário executar o Dockerfile de forma manual. Para isso, basta entrar na pasta do Sensor e executar:
   
 ```bash
 docker build -t sensor -f <dockerfile> . && docker run  -p <porta>:3333 -e BROKER_URL=<broker url> -it sensor
@@ -271,11 +269,11 @@ No Broker, foi utilizado a biblioteca [Gin](https://gin-gonic.com/) para a cria�
 As rotas definem os pontos de entrada da API REST, cada uma correspondendo a uma operação específica que pode ser realizada no sistema. Seguindo o padrão de API REST, as rotas são projetadas para serem intuitivas e autoexplicativas, facilitando a compreensão e o uso por parte dos desenvolvedores.
 
 ##### GET /
-Esta rotas retorna a página inicial da aplicação. Ela é utilizada somente para fins de teste e não é utilizada na aplicação em si.
+Esta rota retorna a página inicial da aplicação. Ela é utilizada somente para fins de teste e não é utilizada na aplicação em si.
 > O arquivo responsável por essa rota pode ser encontrado em `broker/internal/http/routes/get-root.go`.
 
 ##### POST /message
-Esta [rota](broker/internal/http/routes/post-message.go) é utilizada para enviar um comando para um sensor específico. O corpo da requisição deve conter o `sensorId`, o `command` e o `content`. O `content` é opcional e depende do tipo de comando que está sendo enviado, como a temperatura que o Sensor deve ser configurado, por exemplo.
+Esta [rota](broker/internal/http/routes/post-message.go) é usada para enviar um comando para um sensor específico. O corpo da requisição deve conter o `sensorId`, o `command` e o `content`. O `content` é opcional e depende do tipo de comando que está sendo enviado, como a temperatura que o Sensor deve ser configurado, por exemplo.
 
 Exemplo de requisição:
 ```http
@@ -460,18 +458,18 @@ Os comandos disponíveis para os Sensores são:
 <em>Figura 8. Diagrama de envio de dados do Sensor para o Broker</em> <br/>
 </div>
 
-Para o envio de dados dos Sensores para o Broker, é utilizado uma abordagem não confiável (UDP). Assim, os Sensores enviam os dados para o Broker através de pacotes UDP. A abordagem não confiável foi escolhida pois o protocolo UDP é mais leve e mais rápido que o TCP. Desse modo, como os sensores estão constantemente enviando dados para o Broker, caso algum pacote seja perdido, o Sensor irá enviar um novo na próxima iteração, não causando maiores problemas ao sistema.
+Para o envio de dados dos Sensores para o Broker, é utilizada uma abordagem não confiável (UDP). Assim, os Sensores enviam os dados para o Broker através de pacotes UDP. A abordagem não confiável foi escolhida pois o protocolo UDP é mais leve e mais rápido que o TCP. Desse modo, como os sensores estão constantemente enviando dados para o Broker, caso algum pacote seja perdido, o Sensor irá enviar um novo na próxima iteração, não causando maiores problemas ao sistema.
 
 Ao se iniciar o Broker, um socket UDP é aberto na porta 5310 e o Broker fica aguardando por novos pacotes. Sempre que um Sensor envia um dado, ele envia um pacote UDP para o Broker. O Broker, por sua vez, recebe o pacote e processa o dado.
 
-Sempre que um [novo dado chega no Broker](https://github.com/jnaraujo/tec502-iot-connect/blob/431feac1735b679ace3b3878374cc705a543573b/broker/internal/udp_server/server.go#L22), é verificado se o Sensor que enviou o dado está cadastrado. Caso não esteja, o dado é descartado. Caso esteja, o dado é [armazenado na lista de conteúdo do Sensor](https://github.com/jnaraujo/tec502-iot-connect/blob/431feac1735b679ace3b3878374cc705a543573b/broker/internal/udp_server/server.go#L46).
+Sempre que um [novo dado chega ao Broker](https://github.com/jnaraujo/tec502-iot-connect/blob/431feac1735b679ace3b3878374cc705a543573b/broker/internal/udp_server/server.go#L22), é verificado se o Sensor que enviou o dado está cadastrado. Caso não esteja, o dado é descartado. Caso esteja, o dado é [armazenado na lista de conteúdo do Sensor](https://github.com/jnaraujo/tec502-iot-connect/blob/431feac1735b679ace3b3878374cc705a543573b/broker/internal/udp_server/server.go#L46).
 
 No Broker, o código para receber os dados dos Sensores pode ser encontrado em [broker/internal/udp_server/server.go](/broker/internal/udp_server/server.go), enquanto no Sensor, o código para enviar os dados pode ser encontrado em [sensor/libs/broker_service.py](/sensor/libs/broker_service.py).
 
 ##### Lidando com concorrência
 Como diversos dados diferentes chegam ao Broker ao mesmo tempo, é necessário que o Broker seja capaz de lidar com múltiplos pacotes UDP simultaneamente. Para isso, a cada novo dado que chega, uma nova [goroutine](https://github.com/jnaraujo/tec502-iot-connect/blob/431feac1735b679ace3b3878374cc705a543573b/broker/internal/udp_server/udp.go#L40) é criada para lidar com esse dado. Assim, o Broker é capaz de lidar com múltiplos pacotes UDP simultaneamente, garantindo que ele esteja sempre disponível para receber os dados dos Sensores.
 
-Por exemplo, o código abaixo mostra como o Broker lida com a chegada de um novo pacote UDP:
+Por exemplo, o código mostra como o Broker lida com a chegada de um novo pacote UDP:
 ```go	
 // Código retirado de: broker/internal/udp_server/udp.go
 // código omitido
@@ -486,21 +484,25 @@ for {
 
 > Vale destacar que goroutines são semelhantes a threads, mas são mais leves e mais eficientes. Assim, o uso de goroutines permite que o Broker seja capaz de lidar com múltiplas conexões simultâneas sem consumir muitos recursos do sistema.
 
-Para lidar com problemas de concorrência, [foi implementado um mecanismo de trava (mutex)](https://github.com/jnaraujo/tec502-iot-connect/blob/431feac1735b679ace3b3878374cc705a543573b/broker/internal/storage/responses/responses.go#L19) para garantir que apenas uma goroutine acesse a estrutura de dados que armazena os dados dos Sensores por vez. Assim, problemas relacionados a concorrência relacionados ao armazenamento dos dados são improváveis.
+Para lidar com problemas de concorrência, [foi implementado um mecanismo de trava (mutex)](https://github.com/jnaraujo/tec502-iot-connect/blob/431feac1735b679ace3b3878374cc705a543573b/broker/internal/storage/responses/responses.go#L19) para garantir que apenas uma goroutine acesse à estrutura que armazena os dados dos Sensores por vez. Assim, problemas de concorrência relacionados ao armazenamento dos dados são improváveis.
 
 ## Confiabilidade da solução e tolerância a falhas
-Para um sistema de troca de mensagens ser confiável, é necessário que ele seja capaz de lidar com falhas de comunicação entre os dispositivos. Para isso, algumas estratégias foram adotadas.
+Em um sistema de troca de mensagens confiável, é necessário adotar de estratégias para lidar com falhas de comunicação entre os dispositivos. Para isso, algumas estratégias foram adotadas, como o uso de protocolos confiáveis, tratamento de erros e envio constante de dados em caso de uso de protocolos não confiáveis.
 
-### Troca de mensagens entre Client e Broker
-Para a troca de mensagens entre o Client e o Broker, foi utilizado o protocolo HTTP. O HTTP é um protocolo baseado em TCP/IP, que garante a entrega das mensagens. Assim, caso ocorra algum problema na comunicação, o usuário é sempre avisado. Além disso, o Broker é capaz de lidar com múltiplas conexões simultâneas, garantindo que a aplicação esteja sempre disponível (a biblioteca Gin é responsável por gerenciar as rotas HTTP e as conexões).
+### Uso de protocolos confiáveis
+Para garantir a confiabilidade do sistema, foram utilizados protocolos confiáveis para a troca de mensagens entre o Client e o Broker e entre o Broker e os Sensores. O uso de protocolos confiáveis garante que as mensagens sejam entregues corretamente e que o sistema seja capaz de lidar com problemas na comunicação.
 
-### Troca de mensagens do Broker para os Sensores
-Para a troca de mensagens do Broker para os Sensores, foi adotada uma abordagem confiável utilizando o protocolo TCP/IP. Isso significa que, em caso de problemas na comunicação, como perda de pacotes ou interrupções na conexão, o Broker é capaz de detectar essas falhas e informar ao usuário sobre a ocorrência de qualquer problema na transmissão de dados. Essa confiabilidade é importante para garantir que os comandos enviados pelo Broker sejam sempre entregues aos Sensores (ou, caso ocorra algum problema, o usuário seja informado), garantindo a integridade e a precisão das mensagens enviadas.
+Entre o Client e o Broker, foi utilizado o protocolo HTTP, que é baseado em TCP/IP e garante a entrega das mensagens. Assim, caso ocorra algum problema na comunicação, o usuário é sempre avisado. Além disso, o Broker é capaz de lidar com múltiplas conexões simultâneas, garantindo que a aplicação esteja sempre disponível.
 
-### Troca de mensagens dos Sensores para o Broker
+Para a troca de mensagens do Broker para os Sensores, foi adotada uma abordagem confiável utilizando o protocolo TCP/IP. Isso significa que, em caso de problemas na comunicação, como perda de pacotes ou interrupções na conexão, o Broker é capaz de detectar essas falhas e informar ao usuário sobre a ocorrência de qualquer problema na transmissão de dados. Essa confiabilidade é importante para garantir que os comandos enviados pelo Broker sejam sempre entregues aos Sensores.
+
+### Tratamento de erros
+Para garantir a confiabilidade do sistema, foram implementados mecanismos de tratamento de erros em todas as partes do sistema. Por exemplo, na comunicação entre o Client e o Broker, caso ocorra algum problema na comunicação, o Broker é capaz de detectar o erro e informar ao usuário sobre a ocorrência de qualquer problema na transmissão de dados. Assim, o usuário é informado na própria interface sobre possíveis problemas na comunicação, além de ser possível visualizar o status dos Sensores e do Broker.
+
+### Envio constante de dados em caso de uso de protocolos não confiáveis
 O envio de dados dos Sensores para o Broker é feito através de uma abordagem não confiável (UDP). Assim, caso ocorra algum problema na comunicação, a mensagem será perdida. Porém, como os Sensores estão constantemente enviando dados para o Broker, caso algum pacote seja perdido, o Sensor irá enviar um novo na próxima iteração, não causando maiores problemas ao sistema.
 
-Vale destacar que, caso o Broker não receba os dados de um Sensor por um determinado tempo (por exemplo, 5 segundos), ele considerará o Sensor como offline. Assim que o Sensor voltar a enviar dados, ele voltará a ser considerado online.
+Vale destacar que, caso o Broker não receba os dados de um Sensor por um determinado tempo (por exemplo, 5 segundos), ele considerará o Sensor como offline. Assim que o Sensor voltar a enviar dados, ele voltará a ser considerado online. Essa abordagem garante que o Broker seja capaz de lidar com problemas na comunicação e que o usuário seja sempre informado sobre o status dos Sensores.
 
 ## Testes
 Para garantir o funcionamento correto do sistema, alguns módulos apresentam testes unitários ([Cmd](/broker/internal/cmd/cmd_test.go) e [Queue](/broker/internal/queue/queue_test.go)). Para rodar os testes unitários, basta executar o comando `go test ./internal/...` na pasta do Broker.
