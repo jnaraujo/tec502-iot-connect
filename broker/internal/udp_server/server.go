@@ -5,7 +5,6 @@ import (
 	"broker/internal/storage/responses"
 	"broker/internal/storage/sensors"
 	"fmt"
-	"log"
 	"strconv"
 )
 
@@ -16,7 +15,7 @@ type Server struct {
 // NewServer cria um novo servidor UDP.
 // Também é responsável por lidar com as requisições recebidas.
 func NewServer(addr string, port int) *Server {
-	fmt.Printf("Starting UDP server on %s:%d", addr, port)
+	fmt.Printf("Starting UDP server on %s:%d\n", addr, port)
 
 	// Cria um novo servidor UDP - ainda sem ouvir
 	udpServer := NewUDPServer(fmt.Sprintf("%s:%d", addr, port))
@@ -57,7 +56,7 @@ func NewServer(addr string, port int) *Server {
 func (s *Server) Listen() {
 	err := s.server.Listen() // Inicia o servidor UDP
 	if err != nil {
-		log.Fatal("Error starting UDP server:", err)
+		fmt.Println("Error starting UDP server:", err)
 	}
 }
 
