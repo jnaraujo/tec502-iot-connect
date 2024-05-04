@@ -417,14 +417,19 @@ Como diversos dados diferentes chegam ao Broker ao mesmo tempo, é necessário q
 
 Para lidar com problemas de concorrência, [foi implementado um mecanismo de trava (mutex)](https://github.com/jnaraujo/tec502-iot-connect/blob/431feac1735b679ace3b3878374cc705a543573b/broker/internal/storage/responses/responses.go#L19) para garantir que apenas uma goroutine acesse a estrutura de dados que armazena os dados dos Sensores por vez. Assim, problemas relacionados a concorrência relacionados ao armazenamento dos dados são improváveis.
 
-## Tolerância a falhas
-Para um sistema de troca de mensagens ser tolerante a falhas, é necessário que ele seja capaz de lidar com falhas de comunicação entre os dispositivos. Para isso, algumas estratégias foram adotadas.
+## Confiabilidade da solução e tolerância a falhas
+Para um sistema de troca de mensagens ser confiável, é necessário que ele seja capaz de lidar com falhas de comunicação entre os dispositivos. Para isso, algumas estratégias foram adotadas.
 
+### Troca de mensagens entre Client e Broker
 Para a troca de mensagens entre o Client e o Broker, foi utilizado o protocolo HTTP. O HTTP é um protocolo baseado em TCP/IP, que garante a entrega das mensagens. Assim, caso ocorra algum problema na comunicação, o usuário é sempre avisado. Além disso, o Broker é capaz de lidar com múltiplas conexões simultâneas, garantindo que a aplicação esteja sempre disponível (a biblioteca Gin é responsável por gerenciar as rotas HTTP e as conexões).
 
-O envio de comandos entre o Broker e os Sensores é feito através de uma abordagem confiável (TCP/IP). Assim, caso ocorra algum problema na comunicação, o Broker informará ao usuário que houve uma falha na comunicação.
+### Troca de mensagens do Broker para os Sensores
+Para a troca de mensagens do Broker para os Sensores, foi adotada uma abordagem confiável utilizando o protocolo TCP/IP. Isso significa que, em caso de problemas na comunicação, como perda de pacotes ou interrupções na conexão, o Broker é capaz de detectar essas falhas e informar ao usuário sobre a ocorrência de qualquer problema na transmissão de dados. Essa confiabilidade é importante para garantir que os comandos enviados pelo Broker sejam sempre entregues aos Sensores (ou, caso ocorra algum problema, o usuário seja informado), garantindo a integridade e a precisão das mensagens enviadas.
 
-O envio de dados dos Sensores para o Broker é feito através de uma abordagem não confiável (UDP). Assim, caso ocorra algum problema na comunicação, o Sensor irá enviar novamente na próxima iteração, não causando maiores problemas ao sistema. No momento em que a conexão é estabelecida, os dados voltam a chegar ao Broker, que irá processá-los normalmente. Vale destacar que, caso o Broker não receba os dados de um Sensor por um determinado tempo, ele considerará o Sensor como offline. Assim que o Sensor voltar a enviar dados, ele voltará a ser considerado online.
+### Troca de mensagens dos Sensores para o Broker
+O envio de dados dos Sensores para o Broker é feito através de uma abordagem não confiável (UDP). Assim, caso ocorra algum problema na comunicação, a mensagem será perdida. Porém, como os Sensores estão constantemente enviando dados para o Broker, caso algum pacote seja perdido, o Sensor irá enviar um novo na próxima iteração, não causando maiores problemas ao sistema.
+
+Vale destacar que, caso o Broker não receba os dados de um Sensor por um determinado tempo (por exemplo, 5 segundos), ele considerará o Sensor como offline. Assim que o Sensor voltar a enviar dados, ele voltará a ser considerado online.
 
 ## Testes
 Para garantir o funcionamento correto do sistema, alguns módulos apresentam testes unitários ([Cmd](/broker/internal/cmd/cmd_test.go) e [Queue](/broker/internal/queue/queue_test.go)). Para rodar os testes unitários, basta executar o comando `go test ./internal/...` na pasta do Broker.
