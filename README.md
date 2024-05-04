@@ -40,9 +40,6 @@
     - [Envio de dados dos Sensores para o Broker](#envio-de-dados-dos-sensores-para-o-broker)
       - [Lidando com concorrência](#lidando-com-concorrência)
 - [Confiabilidade da solução e tolerância a falhas](#confiabilidade-da-solução-e-tolerância-a-falhas)
-  - [Troca de mensagens entre Client e Broker](#troca-de-mensagens-entre-client-e-broker)
-  - [Troca de mensagens do Broker para os Sensores](#troca-de-mensagens-do-broker-para-os-sensores)
-  - [Troca de mensagens dos Sensores para o Broker](#troca-de-mensagens-dos-sensores-para-o-broker)
 - [Testes](#testes)
 - [Conclusão](#conclusão)
   
