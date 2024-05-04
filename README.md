@@ -374,7 +374,40 @@ Para envio de comandos do Broker para os Sensores, é utilizando uma abordagem c
 
 Ao se iniciar um novo Sensor, um socket é aberto na porta 3333 (desse modo, cabe ao desenvolvedor mapear esse porta através do Docker) e o Sensor fica aguardando por novas conexões. Sempre que o Broker precisa enviar um comando para um Sensor, ele [estabelece uma conexão TCP/IP](https://github.com/jnaraujo/tec502-iot-connect/blob/main/broker/internal/sensor_conn/sensor.go#L21-L22) com o Sensor. Antes de enviar qualquer dado, é realizado um [handshake](https://github.com/jnaraujo/tec502-iot-connect/broker/internal/sensor_conn/sensor.go#L59) para garantir que a conexão foi estabelecida corretamente. Após o handshake, o Broker envia o comando para o Sensor, que executa a ação correspondente.
 
+Para saber qual comando deve ser executado, o Sensor verifica se o comando recebido existe na lista de comandos disponíveis. Caso o comando exista, o Sensor executa a ação correspondente. Caso contrário, o Sensor retorna um comando de erro. Por exemplo, o código abaixo mostra como o Sensor lida com a chegada de um novo comando:
+```python
+# Código retirado de: /sensor/libs/server.py
+if command not in self.commands: # Se o comando não existir, retorna um comando de erro
+  # Código para retornar um comando de erro
+else:
+  resCmd = self.commands[command](data) # Executa o comando
+```
+
 Para lidar com o recebimento dos comandos, o Sensor permite ao desenvolvedor [criar](https://github.com/jnaraujo/tec502-iot-connect/sensor/air_cond.main.py#L57) os próprios comandos e [cadastrar](https://github.com/jnaraujo/tec502-iot-connect/sensor/libs/server.py#L60C7-L60C21) no `Server`. Para isso, ele define o nome do comando e a função que será executada quando o comando for recebido. Essa abordagem torna mais fácil criar novos comandos e adicionar novas funcionalidades ao Sensor.
+
+Por exemplo, o código abaixo mostra como o Sensor de ar condicionado lida com o comando `set_temp`:
+```python
+# Código retirado de: /sensor/air_cond.main.py
+def set_temp_cmd(cmd: cmd_data.Cmd):
+  if not STATUS: # Se o sensor estiver desligado, retorna um erro
+    return cmd_data.BasicCmd("error", "O sensor está desligado")
+
+  try:
+    cmd.content = float(cmd.content) # Tenta converter o valor da temperatura para float
+  except:
+    return cmd_data.BasicCmd("error", "O valor da temperatura deve ser um número")
+  
+  data['temperature'] = cmd.content
+  return cmd_data.BasicCmd("set_temp", f'Temperature set to {cmd.content}')
+```
+
+Para registrar o comando `set_temp`, o desenvolvedor deve adicionar o seguinte código:
+```python
+  # Código retirado de: /sensor/air_cond.main.py
+  # Código para registrar o comando set_temp
+  server = Server("0.0.0.0", 3333) # Cria um novo servidor
+  server.register_command("set_temp", set_temp_cmd) # Registra o comando set_temp
+```
 
 Além disso, o Sensor é capaz de lidar com múltiplas conexões simultâneas, garantindo que ele esteja sempre disponível para receber comandos. Para isso, o Sensor [cria uma nova thread](https://github.com/jnaraujo/tec502-iot-connect/sensor/libs/server.py#L40) para cada conexão TCP/IP que é estabelecida. Assim, ele é capaz de receber comandos de múltiplos Brokers simultaneamente. O problemas relacionados a concorrência são improváveis, visto que seria necessário que dois Brokers enviassem comandos para o mesmo Sensor ao mesmo tempo, algo que não é esperado no sistema.
 
@@ -412,6 +445,18 @@ No Broker, o código para receber os dados dos Sensores pode ser encontrado em [
 
 ##### Lidando com concorrência
 Como diversos dados diferentes chegam ao Broker ao mesmo tempo, é necessário que o Broker seja capaz de lidar com múltiplos pacotes UDP simultaneamente. Para isso, a cada novo dado que chega, uma nova [goroutine](https://github.com/jnaraujo/tec502-iot-connect/blob/431feac1735b679ace3b3878374cc705a543573b/broker/internal/udp_server/udp.go#L40) é criada para lidar com esse dado. Assim, o Broker é capaz de lidar com múltiplos pacotes UDP simultaneamente, garantindo que ele esteja sempre disponível para receber os dados dos Sensores.
+
+Por exemplo, o código abaixo mostra como o Broker lida com a chegada de um novo pacote UDP:
+```go	
+// código omitido
+for {
+  buffer := make([]byte, 1024) // Cria um buffer para armazenar o pacote UDP
+  n, addr, err := conn.ReadFrom(buffer) // Lê o pacote UDP
+  // código omitido
+  go u.handler(addr.String(), string(buffer[:n])) // Cria uma nova goroutine para lidar com o pacote UDP
+}
+// código omitido
+```
 
 > Vale destacar que goroutines são semelhantes a threads, mas são mais leves e mais eficientes. Assim, o uso de goroutines permite que o Broker seja capaz de lidar com múltiplas conexões simultâneas sem consumir muitos recursos do sistema.
 
