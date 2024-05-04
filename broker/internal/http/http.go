@@ -16,7 +16,7 @@ func NewServer(addr string, port int) {
 	g.Use(gin.Recovery())
 	g.Use(corsMiddleware())
 
-	registerRoutes(g)
+	RegisterRoutes(g)
 
 	err := g.Run(fmt.Sprintf("%s:%d", addr, port))
 	if err != nil {
@@ -25,7 +25,7 @@ func NewServer(addr string, port int) {
 }
 
 // Registra as rotas do servidor HTTP
-func registerRoutes(g *gin.Engine) {
+func RegisterRoutes(g *gin.Engine) {
 	g.GET("/", routes.GetRootHandler)
 	g.POST("/message", routes.PostMessageHandler)
 	g.POST("/sensor", routes.CreateSensorHandler)
