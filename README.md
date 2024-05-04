@@ -16,6 +16,38 @@
   <img src="./docs/gif/client.gif" alt="Client web" height="400px" width="auto" />
 </div>
 
+## Sumário
+- [Sobre o projeto](#sobre-o-projeto)
+  - [Tecnologias utilizadas](#tecnologias-utilizadas)
+  - [Pré-requisitos](#pré-requisitos)
+  - [Como executar](#como-executar)
+  - [Como utilizar](#como-utilizar)
+    - [Como adicionar um novo sensor](#como-adicionar-um-novo-sensor)
+    - [Como enviar um comando para um sensor](#como-enviar-um-comando-para-um-sensor)
+    - [Como visualizar os dados de um sensor](#como-visualizar-os-dados-de-um-sensor)
+    - [Como remover um sensor](#como-remover-um-sensor)
+    - [Envio de comandos pelo terminal do Sensor](#envio-de-comandos-pelo-terminal-do-sensor)
+- [Arquitetura do projeto](#arquitetura-do-projeto)
+  - [Client](#client)
+  - [Broker](#broker)
+  - [Sensores](#sensores)
+- [Comunicação](#comunicação)
+  - [Protocolo de comunicação](#protocolo-de-comunicação)
+  - [Comunicação entre Client e Broker](#comunicação-entre-client-e-broker)
+    - [Rotas da API REST](#rotas-da-api-rest)
+  - [Comunicação entre Broker e Sensores](#comunicação-entre-broker-e-sensores)
+    - [Envio de comandos do Broker para o Sensor](#envio-de-comandos-do-broker-para-o-sensor)
+    - [Comandos disponíveis](#comandos-disponíveis)
+    - [Envio de dados dos Sensores para o Broker](#envio-de-dados-dos-sensores-para-o-broker)
+      - [Lidando com concorrência](#lidando-com-concorrência)
+-[Confiabilidade da solução e tolerância a falhas](#confiabilidade-da-solução-e-tolerância-a-falhas)
+  - [Troca de mensagens entre Client e Broker](#troca-de-mensagens-entre-client-e-broker)
+  - [Troca de mensagens do Broker para os Sensores](#troca-de-mensagens-do-broker-para-os-sensores)
+  - [Troca de mensagens dos Sensores para o Broker](#troca-de-mensagens-dos-sensores-para-o-broker)
+-[Testes](#testes)
+-[Conclusão](#conclusão)
+  
+
 ## Sobre o projeto
 ### Tecnologias utilizadas
 - Client
