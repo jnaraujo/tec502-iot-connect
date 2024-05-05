@@ -13,21 +13,22 @@ class Interface:
     {
       "name": "setup",
       "description": "Criar sensor no broker",
-      "usage": "<broker_addr> <sensor_id> <sensor_addr>"
+      "usage": "setup <broker_url> <sensor_id> <sensor_addr>"
     },
     {
       "name": "delete",
       "description": "Deletar sensor no broker",
-      "usage": "<broker_addr> <sensor_id>"
+      "usage": "delete <broker_url> <sensor_id>"
     },
     {
       "name": "fas",
       "description": "Listar todos os sensores registrados no broker",
+      "usage": "fas <broker_url>"
     },
     {
       "name": "fad",
-      "description": "Listar todos os dados de um sensor específico",
-      "usage": "<broker_addr> <sensor_id>"
+      "description": "Listar todos os dados dos sensores",
+      "usage": "fad <broker_url>"
     }
   ]
   
@@ -80,6 +81,20 @@ class Interface:
           sensor_id = values[2]
           
           resp = self.delete_sensor_on_broker(broker_addr=broker_addr, sensor_id=sensor_id)
+          print(f'Resposta: {resp}')
+          continue
+        
+        if cmd_in.startswith('fas'): # Para listar todos os sensores registrados no broker
+          broker_addr = values[1]
+          
+          resp = self.find_all_sensors(broker_addr=broker_addr)
+          print(f'Resposta: {resp}')
+          continue
+        
+        if cmd_in.startswith('fad'): # Para listar todos os dados dos sensores
+          broker_addr = values[1]
+          
+          resp = self.find_all_sensor_data(broker_addr=broker_addr, sensor_id=self.server.sensor_id)
           print(f'Resposta: {resp}')
           continue
         
