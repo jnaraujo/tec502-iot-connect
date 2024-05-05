@@ -447,6 +447,10 @@ Os comandos disponíveis para os Sensores são:
 |---------|-----------|------------|
 | `turn_on` | Liga o dispositivo | *Disponível para todos os Sensores* |
 | `turn_off` | Desliga o dispositivo | *Disponível para todos os Sensores* |
+| `fas` | Lista todos os sensores registrados no Broker | *Disponível para todos os Sensores* |
+| `fad` | Lista todos os dados dos sensores registrados no Broker | *Disponível para todos os Sensores* |
+| `setup` | Cria um novo Sensor no Broker | *Disponível para todos os Sensores* |
+| `delete` | Deleta um Sensor do Broker | *Disponível para todos os Sensores* |
 | `set_temp` | Configura a temperatura do dispositivo | *Somente para o Sensor de ar condicionado* |
 | `set_heat` | Configura a temperatura do ar condicionado para 40 graus | *Somente para o Sensor de ar condicionado* |
 | `set_cool` | Configura a temperatura do ar condicionado para 16 graus | *Somente para o Sensor de ar condicionado* |
