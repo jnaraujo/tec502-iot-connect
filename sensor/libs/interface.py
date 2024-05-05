@@ -19,6 +19,15 @@ class Interface:
       "name": "delete",
       "description": "Deletar sensor no broker",
       "usage": "<broker_addr> <sensor_id>"
+    },
+    {
+      "name": "fas",
+      "description": "Listar todos os sensores registrados no broker",
+    },
+    {
+      "name": "fad",
+      "description": "Listar todos os dados de um sensor específico",
+      "usage": "<broker_addr> <sensor_id>"
     }
   ]
   
@@ -105,4 +114,20 @@ class Interface:
     '''
     
     resp = urllib.request.urlopen(f'http://{broker_addr}/sensor/{sensor_id}', method='DELETE') # Envia a requisição
+    return json.loads(resp.read())
+  
+  def find_all_sensors(self, broker_addr: str):
+    '''
+    Lista os sensores registrados no broker.
+    '''
+    
+    resp = urllib.request.urlopen(f'http://{broker_addr}/sensor')
+    return json.loads(resp.read())
+
+  def find_all_sensor_data(self, broker_addr: str, sensor_id: str):
+    '''
+    Lista os dados de um sensor específico.
+    '''
+    
+    resp = urllib.request.urlopen(f'http://{broker_addr}/sensor/data')
     return json.loads(resp.read())
