@@ -8,8 +8,8 @@
   ![GitHub](https://img.shields.io/github/license/jnaraujo/tec502-iot-connect)
 </div>
 
-<div align="center" style="border-radius: 10px; margin-bottom: 10px;">
-  <img src="./docs/gif/client.gif" alt="Client web" height="400px" width="100%" style="border-radius: 10px; margin-bottom: 10px; object-fit: cover; object-position: top center;" />
+<div align="center">
+  <img src="./docs/gif/client.gif" alt="Client web" height="300px" width="100%" style="border-radius: 10px; margin-bottom: 10px; object-fit: cover; object-position: top center;" />
 </div>
 
 No cenário atual, a crescente necessidade de integração de dispositivos IoT (Internet das Coisas) demanda sistemas robustos de gerenciamento e comunicação para garantir sua eficácia e confiabilidade. O projeto Iot Connect foi criado com o objetivo de permitir a interação entre dispositivos IoT e suas aplicações, facilitando a criação, remoção e monitoramento de dispositivos, bem como o recebimento, armazenamento e disponibilização de dados gerados por esses dispositivos os usuários.
