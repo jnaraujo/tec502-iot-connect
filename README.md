@@ -8,9 +8,11 @@
   ![GitHub](https://img.shields.io/github/license/jnaraujo/tec502-iot-connect)
 </div>
 
-<p>
-  O objetivo do IoT Connect é criar um sistema de comunicação e gerenciamento entre dispositivos IoT e suas diferentes aplicações. O sistema deve ser capaz de criar, remover e verificar o status de dispositivos IoT, além de receber, armazenar e disponibilizar dados dos dispositivos IoT para aplicações web.
-</p>
+No cenário atual, a crescente necessidade de integração de dispositivos IoT (Internet das Coisas) demanda sistemas robustos de gerenciamento e comunicação para garantir sua eficácia e confiabilidade. O projeto Iot Connect foi criado com o objetivo de permitir a interação entre dispositivos IoT e suas aplicações, facilitando a criação, remoção e monitoramento de dispositivos, bem como o recebimento, armazenamento e disponibilização de dados gerados por esses dispositivos os usuários.
+
+O IoT Connect faz uso de protocolos de comunicação confiáveis e não confiáveis, como TCP/IP e UDP, para garantir a comunicação entre os dispositivos IoT e o Broker, responsável por gerenciar os dispositivos e os dados gerados por eles. Essa variedade de protocolos permite que o IoT Connect adapte-se de forma flexível às diferentes necessidades de comunicação, oferecendo uma abordagem versátil para lidar com diversos tipos de dispositivos e ambientes de rede. O Broker, como peça central do sistema, desempenha um papel crucial no gerenciamento dos dispositivos e dos dados que fluem entre eles, garantindo não apenas a eficiência operacional, mas também a segurança e integridade das informações transmitidas.
+
+O projeto foi desenvolvido utilizando tecnologias modernas e práticas, como Docker, React, Go e Python, que permitem a criação de aplicações escaláveis e de alto desempenho. A arquitetura do sistema foi projetada para ser modular e extensível, facilitando a adição de novos dispositivos e funcionalidades, bem como a integração com outros sistemas e serviços. Este texto explorará em detalhes as tecnologias utilizadas, a arquitetura do projeto, os protocolos de comunicação adotados, a confiabilidade da solução e sua tolerância a falhas, oferecendo uma visão abrangente de como o IoT Connect aborda os desafios do gerenciamento de dispositivos IoT.
 
 <div align="center">
   <img src="./docs/gif/client.gif" alt="Client web" height="400px" width="auto" />
