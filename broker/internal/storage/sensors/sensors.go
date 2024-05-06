@@ -11,10 +11,14 @@ type SensorStorage struct {
 // storage é uma instância de SensorStorage que armazena os sensores.
 var storage *SensorStorage = &SensorStorage{
 	addrs: map[string]string{},
+	mu:    sync.RWMutex{},
 }
 
 // AddSensor adiciona um sensor ao armazenamento.
 func AddSensor(id string, addr string) {
+	storage.mu.Lock()
+	defer storage.mu.Unlock()
+
 	storage.addrs[addr] = id
 }
 
@@ -27,7 +31,7 @@ type Sensor struct {
 // FindSensors retorna todos os sensores.
 func FindSensors() []Sensor {
 	storage.mu.RLock()
-	defer storage.mu.Unlock()
+	defer storage.mu.RUnlock()
 
 	var sensors []Sensor = []Sensor{}
 
