@@ -1,13 +1,16 @@
 // Este pacote é responsável por armazenar os sensores..
 package sensors
 
+import "sync"
+
 type SensorStorage struct {
+	mu    sync.RWMutex
 	addrs map[string]string
 }
 
 // storage é uma instância de SensorStorage que armazena os sensores.
 var storage *SensorStorage = &SensorStorage{
-	map[string]string{},
+	addrs: map[string]string{},
 }
 
 // AddSensor adiciona um sensor ao armazenamento.
@@ -23,6 +26,9 @@ type Sensor struct {
 
 // FindSensors retorna todos os sensores.
 func FindSensors() []Sensor {
+	storage.mu.RLock()
+	defer storage.mu.Unlock()
+
 	var sensors []Sensor = []Sensor{}
 
 	for addr, id := range storage.addrs {
@@ -37,6 +43,9 @@ func FindSensors() []Sensor {
 
 // DoesSensorExists verifica se um sensor existe.
 func DoesSensorExists(id, addr string) bool {
+	storage.mu.RLock()
+	defer storage.mu.RUnlock()
+
 	sensor_addr_exists := FindSensorAddrById(id) != ""
 	sensor_id_exists := FindSensorIdByAddress(addr) != ""
 	return sensor_addr_exists || sensor_id_exists
@@ -44,6 +53,9 @@ func DoesSensorExists(id, addr string) bool {
 
 // FindSensorAddrById encontra o endereço de um sensor pelo seu ID.
 func FindSensorAddrById(id string) string {
+	storage.mu.RLock()
+	defer storage.mu.RUnlock()
+
 	for addr, sensorId := range storage.addrs {
 		if sensorId == id {
 			return addr
@@ -55,12 +67,18 @@ func FindSensorAddrById(id string) string {
 
 // DeleteSensorBySensorId deleta um sensor pelo seu ID.
 func DeleteSensorBySensorId(sensorId string) {
+	storage.mu.Lock()
+	defer storage.mu.Unlock()
+
 	addr := FindSensorAddrById(sensorId)
 	delete(storage.addrs, addr)
 }
 
 // FindSensorIdByAddress encontra o ID de um sensor pelo seu endereço.
 func FindSensorIdByAddress(addr string) string {
+	storage.mu.RLock()
+	defer storage.mu.RUnlock()
+
 	for sensorAddr, sensorId := range storage.addrs {
 		if sensorAddr == addr {
 			return sensorId
@@ -72,6 +90,9 @@ func FindSensorIdByAddress(addr string) string {
 
 // Deleta todos os Sensores
 func DeleteAll() {
+	storage.mu.Lock()
+	defer storage.mu.Unlock()
+
 	for k := range storage.addrs {
 		delete(storage.addrs, k)
 	}

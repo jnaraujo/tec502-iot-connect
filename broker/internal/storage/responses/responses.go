@@ -82,6 +82,9 @@ func AddContent(sensorId string, data float64) {
 
 // Deleta todas as Responses
 func DeleteAll() {
+	storage.mu.Lock()
+	defer storage.mu.Unlock()
+
 	for k := range storage.data {
 		delete(storage.data, k)
 	}
