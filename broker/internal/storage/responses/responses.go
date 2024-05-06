@@ -74,7 +74,7 @@ func AddContent(sensorId string, data float64) {
 	storage.mu.Lock()
 	defer storage.mu.Unlock()
 
-	response := storage.data[sensorId]
+	response := FindBySensorId(sensorId)
 	response.Content.Add(data)
 	response.UpdatedAt = *time.NewTimeNow()
 	storage.data[sensorId] = response
