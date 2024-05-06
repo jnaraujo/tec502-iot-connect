@@ -30,6 +30,10 @@ func Create(sensorID, name string) Response {
 	storage.mu.Lock()
 	defer storage.mu.Unlock()
 
+	if response, exists := storage.data[sensorID]; exists {
+		return response
+	}
+
 	response := Response{
 		SensorID:  sensorID,
 		Name:      name,
