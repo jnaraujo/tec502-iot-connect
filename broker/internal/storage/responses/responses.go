@@ -23,6 +23,7 @@ type SensorResponseStorage struct {
 // storage é uma instância de SensorResponseStorage que armazena as respostas dos sensores.
 var storage *SensorResponseStorage = &SensorResponseStorage{
 	data: make(map[string]Response),
+	mu:   sync.RWMutex{},
 }
 
 // Create cria uma nova resposta para um sensor.
