@@ -71,11 +71,11 @@ func FindSensorAddrById(id string) string {
 
 // DeleteSensorBySensorId deleta um sensor pelo seu ID.
 func DeleteSensorBySensorId(sensorId string) {
-	storage.mu.Lock()
-	defer storage.mu.Unlock()
-
 	addr := FindSensorAddrById(sensorId)
+
+	storage.mu.Lock()
 	delete(storage.addrs, addr)
+	storage.mu.Unlock()
 }
 
 // FindSensorIdByAddress encontra o ID de um sensor pelo seu endereço.
